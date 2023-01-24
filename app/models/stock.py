@@ -1,17 +1,22 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
-from flask_sqlalchemy import SQLAlchemy, DateTime
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-
-db = SQLAlchemy()
 
 class Stock(db.Model):
     __tablename__ = "stocks"
+
+    if environment == "production":
+        __table_args__ = {'schema': SCHEMA}
     
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(255))
-    company_name = db.Column(db.String(255))
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    symbol = db.Column(db.String(255), nullable=False)
+    company_name = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now())
+    updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
+
+    watchlists = db.relationship("Watchlist", back_populates="stock")
+    transactions = db.relationship("Transaction", back_populates="stock")
+    holdings = db.relationship("Holding", back_populates="stock")
 
     def to_dict(self):
         return {

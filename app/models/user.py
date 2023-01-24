@@ -1,7 +1,7 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from sqlalchemy import DateTime
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
@@ -14,15 +14,15 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     password_hash = db.Column(db.String(255), nullable=False)
-    name = db.Column(db.String(255), nullable=False)
+    username = db.Column(db.String(255), nullable=False)
     buying_power = db.Column(db.Float, nullable=False)
-    created_at = db.Column(DateTime, default=datetime.datetime.utcnow)
-    updated_at = db.Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now())
+    updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
 
-    transactions = relationship('Transaction', back_populates='user')
-    holdings = relationship('Holding', back_populates='user')
-    watchlist = relationship('Watchlist', back_populates='user')
-    news = relationship('News', back_populates='user')
+    transactions = relationship('Transaction', back_populates='users')
+    holdings = relationship('Holding', back_populates='users')
+    watchlist = relationship('Watchlist', back_populates='users')
+    news = relationship('News', back_populates='users')
 
     @property
     def password(self):
