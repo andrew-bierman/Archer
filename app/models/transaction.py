@@ -4,7 +4,7 @@ from datetime import datetime
 
 class Transaction(db.Model):
     __tablename__ = "transactions"
-    
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
@@ -12,6 +12,9 @@ class Transaction(db.Model):
     shares = db.Column(db.Float)
     price = db.Column(db.Float)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', back_populates='transactions')
+    stock = db.relationship('Stock', back_populates='transactions')
 
     def to_dict(self):
         return {

@@ -10,6 +10,9 @@ class Holding(db.Model):
     shares = db.Column(db.Float)
     avg_cost = db.Column(db.Float)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', back_populates='holdings')
+    stock = db.relationship('Stock', back_populates='holdings')
     
     def to_dict(self):
         return {

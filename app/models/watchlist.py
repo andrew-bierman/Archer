@@ -22,6 +22,8 @@ class Watchlist(db.Model):
             "user_id": self.user_id,
             "stock_id": self.stock_id,
             "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-            "updated_at": self.updated_at.strftime("%Y-%m-%d %H:%M:%S")
+            "updated_at": self.updated_at.strftime("%Y-%m-%d %H:%M:%S"),
+            "user": self.user.to_dict(),
+            "stocks": [stock.to_dict() for stock in self.stocks]
         }
             
