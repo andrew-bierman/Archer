@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import { getAllStocks,  } from '../../store/stockList';
 import { addStockToWatchlistThunk } from '../../store/watchlists';
 import './StockList.css';
 
-function StockList({watchlistId}) {
+function StockListSearch({watchlistId}) {
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const [loading, setLoading] = useState(true);
     const [selectedStockId, setSelectedStockId] = useState(0)
+    const [selectedStockSymbol, setSelectedStockSymbol] = useState('')
 
     const stocks = useSelector(state => state.stockList);
 
@@ -23,12 +26,18 @@ function StockList({watchlistId}) {
 
     const handleChange = (e) => {
         e.preventDefault();
-        setSelectedStockId(e.target.value)
+        // setSelectedStockId(e.target.value)
+        setSelectedStockSymbol(e.target.value)
     }
 
-    const handleAddToList = (e) => {
+    const handleStockSearch = (e) => {
         e.preventDefault();
-        dispatch(addStockToWatchlistThunk(watchlistId, selectedStockId))
+
+        if(selectedStockSymbol === '') return null;
+
+        setSelectedStockSymbol(selectedStockSymbol.toUpperCase())
+
+        history.push(`/stocks/${selectedStockSymbol}`)
     }
 
     return (
@@ -37,10 +46,10 @@ function StockList({watchlistId}) {
             ?
                 <div className='stock-list-container'>
                     <h6>All Stocks List</h6>
-                    <form onSubmit={handleAddToList} >
+                    <form onSubmit={handleStockSearch} >
                         <select onChange={handleChange}>
                             {Object.values(stocks)?.map((stock, idx) => (
-                                <option key={stock.id} value={stock.id}>
+                                <option key={stock.id} value={stock.symbol}>
                                     {stock.symbol}
                                     &nbsp;
                                     -
@@ -51,9 +60,9 @@ function StockList({watchlistId}) {
                             ))}
                         </select>
                         {
-                            watchlistId
+                            !watchlistId
                             ?
-                            <button type='submit'>Add to list</button>
+                            <button type='submit'>Search</button>
                             :
                             // <button onClick={() => handleStockSearch(stock.id)}>Go to Stock Page</button>
                             <></>
@@ -67,4 +76,4 @@ function StockList({watchlistId}) {
     );
 }
 
-export default StockList;
+export default StockListSearch;

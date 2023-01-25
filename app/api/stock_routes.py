@@ -34,6 +34,23 @@ def get_stock_by_symbol(symbol):
     return stock.to_dict()
 
 
+
+@stock_routes.route('/search/db/id/<int:stock_id>')
+def get_stock_by_id(stock_id):
+    """
+    Query the db for a stock by id and returns that data in a dictionary
+    """
+    stock = Stock.query.filter(Stock.symbol == stock_id).first()
+
+    # print('-------------')
+    # print(stock.to_dict())
+
+    if not stock:
+        return {'message': 'Stock not found'}, 404
+
+    return stock.to_dict()
+
+
 @stock_routes.route('/all')
 def get_all_stocks():
     """
