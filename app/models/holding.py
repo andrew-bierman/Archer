@@ -3,6 +3,13 @@ from .stock import Stock
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
+stocks_holdings = db.Table("holdings_stocks",
+
+    db.Column("stock_id", db.Integer, db.ForeignKey(add_prefix_for_prod("stocks.id")), primary_key=True),
+    db.Column("holding_id", db.Integer, db.ForeignKey(add_prefix_for_prod("holdings.id")), primary_key=True)
+)
+
+
 class Holding(db.Model):
     __tablename__ = "holdings"
 
@@ -17,7 +24,7 @@ class Holding(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now())
 
     user = db.relationship('User', back_populates='holdings')
-    stock = db.relationship('Stock', back_populates='holdings')
+    stock = db.relationship("Stock", secondary="holdings_stocks", back_populates="holdings")
     
     def to_dict(self):
         return {
@@ -27,5 +34,7 @@ class Holding(db.Model):
             'shares': self.shares,
             'avg_cost': self.avg_cost,
             'created_at': self.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+            'user': self.user.to_dict(),
+            'stock': self.stock.to_dict()
         }
 
