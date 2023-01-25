@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import ApexCharts from 'react-apexcharts'
 
 const StockChart = (props) => {
+    // const data = props?.stockData["Time Series (Daily)"];
     const [currentMarketPrice, setCurrentMarketPrice] = useState(true);
 
     // chart data and options
@@ -11,11 +12,16 @@ const StockChart = (props) => {
         name: "Stock Price",
         data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
     }]
+
+    
+    // const seriesData = Object.keys(data).map(date => ({ x: date, y: data[date]["4. close"] }));
+
     const options = {
         chart: {
             // id: "basic-bar",
             type: "line",
-            height: 200,
+            width: 200,
+            height: 100,
             parentHeightOffset: 0,
             events: {
               mouseLeave: () => setCurrentMarketPrice(true),
@@ -30,6 +36,11 @@ const StockChart = (props) => {
               enabled: false,
             },
           },
+        // series: [{
+        //     name: "Stock Price",
+        //     data: seriesData
+        // }],
+        // series: series,
         xaxis: {
             categories: [],
             labels: {
@@ -93,7 +104,9 @@ const StockChart = (props) => {
     }
 
     return (
-        <ApexCharts options={options} series={series} type="line" height={350} />
+      <div className='big-chart-container'>
+        <ApexCharts options={options} series={series}/>
+      </div>
     );
 }
 

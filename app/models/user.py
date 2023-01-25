@@ -15,14 +15,14 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), nullable=False, unique=True)
     password_hash = db.Column(db.String(255), nullable=False)
     username = db.Column(db.String(255), nullable=False)
-    buying_power = db.Column(db.Float, nullable=False)
+    buying_power = db.Column(db.Float, nullable=False, default=10000.00)
     created_at = db.Column(db.DateTime, default=datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
 
-    transactions = relationship('Transaction', back_populates='users')
-    holdings = relationship('Holding', back_populates='users')
-    watchlist = relationship('Watchlist', back_populates='users')
-    news = relationship('News', back_populates='users')
+    transactions = relationship('Transaction', back_populates='user')
+    holdings = relationship('Holding', back_populates='user')
+    watchlists = relationship('Watchlist', back_populates='user')
+    news = relationship('News', back_populates='user')
 
     @property
     def password(self):
@@ -40,8 +40,10 @@ class User(db.Model, UserMixin):
             'id': self.id,
             'username': self.username,
             'email': self.email,
-            'name': self.name,
             'buying_power': self.buying_power,
+            # 'holdings': [holding.to_dict() for holding in self.holdings],
+            # 'watchlists': [watchlist.to_dict() for watchlist in self.watchlists],
+            # 'news': [news.to_dict() for news in self.news],
             'created_at': self.created_at,
             'updated_at': self.updated_at
         }

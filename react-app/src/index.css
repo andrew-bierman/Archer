@@ -1,1 +1,27 @@
 /* TODO Add site wide styles */
+* {
+    /* font-family: 'Sen', 'Open Sans', sans-serif; */
+    font-family: 'Open Sans', sans-serif;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-center {
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-space-between {
+  justify-content: space-between;
+}

@@ -8,6 +8,42 @@ stock_routes = Blueprint('stocks', __name__)
 
 api_key = Config.AV_API_KEY
 
+@stock_routes.route('/search/<string:query>')
+def search_stocks(query):
+    """
+    Query the db for a stock by symbol and returns that data in a dictionary
+    """
+    stocks = Stock.query.filter(Stock.symbol.ilike(f'%{query}%')).all()
+
+    return {'stocks': [stock.to_dict() for stock in stocks]}
+
+
+@stock_routes.route('/search/db/<string:symbol>')
+def get_stock_by_symbol(symbol):
+    """
+    Query the db for a stock by symbol and returns that data in a dictionary
+    """
+    stock = Stock.query.filter(Stock.symbol == symbol.upper()).first()
+
+    # print('-------------')
+    # print(stock.to_dict())
+
+    if not stock:
+        return {'message': 'Stock not found'}, 404
+
+    return stock.to_dict()
+
+
+@stock_routes.route('/all')
+def get_all_stocks():
+    """
+    Query the db for all stocks and returns that data in a dictionary
+    """
+    stocks = Stock.query.all()
+
+    return {'stocks': [stock.to_dict() for stock in stocks]}
+
+
 @stock_routes.route('/data/<string:symbol>')
 def get_stock_data_by_symbol(symbol):
     """
@@ -34,7 +70,7 @@ def get_stock_data_by_symbol(symbol):
     return res
 
 
-@stock_routes.route('/company-info/<string:symbol')
+@stock_routes.route('/company-info/<string:symbol>')
 def get_company_info(symbol):
     """
     Query the AV API for a company info by symbol and returns that data in a dictionary

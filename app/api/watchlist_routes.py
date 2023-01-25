@@ -11,8 +11,7 @@ def get_user_watchlists():
     Query for all User watchlists and returns them in a list of watchlist dictionaries
     """
     watchlists = Watchlist.query.filter(Watchlist.user_id == current_user.id).all()
-    # watchlists = Watchlist.query.all()
-    # watchlists = Watchlist.query.all()
+
     return {'watchlists': [watchlist.to_dict() for watchlist in watchlists]}
 
 
@@ -22,16 +21,18 @@ def create_watchlist():
     """
     Creates a new watchlist and returns that watchlist in a dictionary
     """
+
     watchlist = Watchlist(
         name=request.json['name'],
         user_id=current_user.id
     )
+
     db.session.add(watchlist)
     db.session.commit()
     return watchlist.to_dict()
 
 
-@watchlist_routes.route('/<int:id>')
+@watchlist_routes.route('/<int:watchlist_id>')
 @login_required
 def get_watchlist_by_id(watchlist_id):
     """
@@ -47,7 +48,7 @@ def get_watchlist_by_id(watchlist_id):
 
 
 
-@watchlist_routes.route('/<int:id>', methods=['PUT'])
+@watchlist_routes.route('/<int:watchlist_id>', methods=['PUT'])
 @login_required
 def update_watchlist_name(watchlist_id):
     """
@@ -64,7 +65,7 @@ def update_watchlist_name(watchlist_id):
     return watchlist.to_dict()
 
 
-@watchlist_routes.route('/<int:id>', methods=['DELETE'])
+@watchlist_routes.route('/<int:watchlist_id>', methods=['DELETE'])
 @login_required
 def delete_watchlist(watchlist_id):
     """

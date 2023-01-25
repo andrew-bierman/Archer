@@ -28,4 +28,6 @@ class Transaction(db.Model):
             'shares': self.shares,
             'price': self.price,
             'created_at': self.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+            'user': self.user.to_dict(),
+            'stock': self.stock.to_dict()
         }

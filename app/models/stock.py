@@ -14,7 +14,7 @@ class Stock(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
 
-    watchlists = db.relationship("Watchlist", back_populates="stock")
+    watchlists = db.relationship("Watchlist", secondary="watchlists_stocks", back_populates="stocks")
     transactions = db.relationship("Transaction", back_populates="stock")
     holdings = db.relationship("Holding", back_populates="stock")
 
