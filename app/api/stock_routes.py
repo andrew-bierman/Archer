@@ -41,7 +41,10 @@ def get_all_stocks():
     """
     stocks = Stock.query.all()
 
-    return {'stocks': [stock.to_dict() for stock in stocks]}
+    return {
+        'stocks': [stock.to_dict() for stock in stocks],
+        'byId': [stock.to_dict() for stock in stocks]
+    }
 
 
 @stock_routes.route('/data/<string:symbol>')

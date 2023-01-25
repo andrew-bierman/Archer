@@ -11,6 +11,7 @@ import { authenticate } from './store/session';
 import StockChart from './components/StockChart';
 import StockPage from './components/StockPage';
 import Watchlists from './components/WatchLists';
+import StockList from './components/StockList';
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -49,6 +50,7 @@ function App() {
         <Route path='/' exact={true} >
           <h1>My Home Page</h1>
           <Watchlists />
+          <StockList />
           <StockChart />
         </Route>
       </Switch>

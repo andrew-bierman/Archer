@@ -2,10 +2,12 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import session from './session'
 import watchlists from './watchlists';
+import stockList from './stockList';
 
 const rootReducer = combineReducers({
   session,
-  watchlists
+  watchlists,
+  stockList
 });
 
 

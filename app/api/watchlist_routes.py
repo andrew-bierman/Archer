@@ -98,7 +98,7 @@ def get_watchlist_stocks(watchlist_id):
     return watchlist.stocks.to_dict()
 
 
-@watchlist_routes.route('/<int:id>/stocks', methods=['POST'])
+@watchlist_routes.route('/<int:watchlist_id>/stocks/<int:stock_id>', methods=['POST'])
 @login_required
 def add_stock_to_watchlist(watchlist_id, stock_id):
     """
@@ -116,7 +116,7 @@ def add_stock_to_watchlist(watchlist_id, stock_id):
     return watchlist.to_dict()
 
 
-@watchlist_routes.route('/<int:id>/stocks', methods=['DELETE'])
+@watchlist_routes.route('/<int:watchlist_id>/stocks/<int:stock_id>', methods=['DELETE'])
 @login_required
 def delete_stock_from_watchlist(watchlist_id, stock_id):
     """
