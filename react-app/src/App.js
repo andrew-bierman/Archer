@@ -48,10 +48,9 @@ function App() {
           <StockPage />
         </Route>
         <Route path='/' exact={true} >
-          <h1>My Home Page</h1>
           <Watchlists />
-          <StockList />
-          <StockChart />
+          {/* <StockList />
+          <StockChart /> */}
         </Route>
       </Switch>
     </BrowserRouter>
