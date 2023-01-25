@@ -9,7 +9,6 @@ from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
 from .api.stock_routes import stock_routes
 from .api.watchlist_routes import watchlist_routes
-# from .api.transaction_routes import transaction_routes
 # from .api.holding_routes import holding_routes
 # from .api.news_routes import news_routes
 

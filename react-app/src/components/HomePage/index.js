@@ -9,7 +9,6 @@ const HomePage = () => {
     return (
         <div>
             <StockListSearch />
-            <h1>Home Page</h1>
             <StockChart />
             <WatchLists />  
         </div>

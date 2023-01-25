@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getAllStocks,  } from '../../store/stockList';
+import { getAllStocks,  } from '../../store/stocks';
 import { addStockToWatchlistThunk } from '../../store/watchlists';
 import './StockList.css';
 
@@ -11,7 +11,7 @@ function StockList({watchlistId}) {
     const [loading, setLoading] = useState(true);
     const [selectedStockId, setSelectedStockId] = useState(0)
 
-    const stocks = useSelector(state => state.stockList);
+    const stocks = useSelector(state => state.stocks.allStocks.byId);
 
     useEffect(() => {
         console.log('BEFORE STOCKS',Object.values(stocks))

@@ -19,7 +19,6 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime, default=datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
 
-    transactions = relationship('Transaction', back_populates='user')
     holdings = relationship('Holding', back_populates='user')
     watchlists = relationship('Watchlist', back_populates='user')
     news = relationship('News', back_populates='user')

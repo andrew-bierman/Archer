@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-import { getAllStocks,  } from '../../store/stockList';
+import { getAllStocks,  } from '../../store/stocks';
 import { addStockToWatchlistThunk } from '../../store/watchlists';
 import './StockList.css';
 
@@ -14,7 +14,7 @@ function StockListSearch({watchlistId}) {
     const [selectedStockId, setSelectedStockId] = useState(0)
     const [selectedStockSymbol, setSelectedStockSymbol] = useState('')
 
-    const stocks = useSelector(state => state.stockList);
+    const stocks = useSelector(state => state.stocks.allStocks.byId);
 
     useEffect(() => {
         console.log('BEFORE STOCKS',Object.values(stocks))
