@@ -32,6 +32,11 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+    padding: 30px;
+}
+
+.stock-page-buy-sell-buy-inputs, .stock-page-buy-sell-sell-inputs {
+    width: 100%;
 }
 
 .stock-page-buy-sell-buy-inputs-quantity, .stock-page-buy-sell-sell-inputs-quantity {
