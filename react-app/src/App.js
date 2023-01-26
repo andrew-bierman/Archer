@@ -8,10 +8,12 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import UsersList from './components/UsersList';
 import User from './components/User';
 import { authenticate } from './store/session';
+import HomePage from './components/HomePage';
 import StockChart from './components/StockChart';
 import StockPage from './components/StockPage';
 import Watchlists from './components/WatchLists';
 import StockList from './components/StockList';
+import Profile from './components/Profile';
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -44,13 +46,14 @@ function App() {
         <ProtectedRoute path='/users/:userId' exact={true} >
           <User />
         </ProtectedRoute>
+        <ProtectedRoute path='/profile' exact={true} >
+          <Profile />
+        </ProtectedRoute>
         <Route path='/stocks/:symbol' exact={true} >
           <StockPage />
         </Route>
         <Route path='/' exact={true} >
-          <Watchlists />
-          {/* <StockList />
-          <StockChart /> */}
+          <HomePage />
         </Route>
       </Switch>
     </BrowserRouter>

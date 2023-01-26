@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
-
 import ApexCharts from 'react-apexcharts'
+
+import './StockChart.css';
 
 const StockChart = (props) => {
     // const data = props?.stockData["Time Series (Daily)"];
@@ -9,7 +10,7 @@ const StockChart = (props) => {
 
     // chart data and options
     const series = [{
-        name: "Stock Price",
+        name: '',
         data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
     }]
 
@@ -18,24 +19,24 @@ const StockChart = (props) => {
 
     const options = {
         chart: {
-            // id: "basic-bar",
-            type: "line",
-            width: 200,
-            height: 100,
-            parentHeightOffset: 0,
-            events: {
-              mouseLeave: () => setCurrentMarketPrice(true),
-            },
-            toolbar: {
-              show: false,
-            },
-            zoom: {
-              enabled: false,
-            },
-            animations: {
-              enabled: false,
-            },
+          // id: "basic-bar",
+          type: "line",
+          align: "center",
+          parentHeightOffset: 0,
+          events: {
+            mouseLeave: () => setCurrentMarketPrice(true),
           },
+          toolbar: {
+            show: false,
+          },
+          zoom: {
+            enabled: false,
+          },
+          animations: {
+            enabled: false,
+          },
+          redrawOnParentResize: true,
+        },
         // series: [{
         //     name: "Stock Price",
         //     data: seriesData
@@ -66,6 +67,7 @@ const StockChart = (props) => {
             show: false 
         },
         tooltip: {
+          enabled: true,
             x: {
                 format: 'dd/MM/yy HH:mm'
             },
@@ -79,15 +81,6 @@ const StockChart = (props) => {
         },
         toolbar: {
             show: false,
-        },
-        tooltip: {
-            enabled: true,
-            items: { 
-                display: 'none' 
-            },
-            x: { 
-                show: false 
-            },
         },
         legend: {
             show: false,
@@ -105,7 +98,7 @@ const StockChart = (props) => {
 
     return (
       <div className='big-chart-container'>
-        <ApexCharts options={options} series={series}/>
+        <ApexCharts options={options} series={series} width='500px'/>
       </div>
     );
 }

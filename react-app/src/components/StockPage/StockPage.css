@@ -1,0 +1,53 @@
+.stock-page-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+
+}
+
+.stock-page-core-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+
+    width: 100%;
+    height: 100%;
+
+    margin-right: auto;
+    margin-left: auto;
+
+}
+
+
+.stock-page-stock-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+
+}
+
+.stock-page-stock-info-percent-change-positive {
+    color: green;
+}
+
+.stock-page-stock-info-percent-change-negative {
+    color: red;
+}
+
+.stock-page-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 20%;
+    height: 100%;
+
+    right: 0;
+    padding-right: 30px;
+}
