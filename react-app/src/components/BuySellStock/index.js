@@ -43,6 +43,8 @@ const BuySellStock = ({stockInfo, stockCurrentPrice}) => {
     }, [dispatch]);
 
     const handleSwitch = (switchTo) => {
+        resetForm();
+        
         if (switchTo === 'buy') {
             setIsBuying(true);
             setIsSelling(false);
@@ -82,20 +84,20 @@ const BuySellStock = ({stockInfo, stockCurrentPrice}) => {
 
     const handleSell = async () => {
         // console.log('selling')
-        if (quantity > 0) {
+        if (parseFloat(quantity) > 0) {
             if (quantity < Object.values(currentHolding)[0].shares) {
                 dispatch(updateHolding(Object.values(currentHolding)[0].id, -quantity, stockCurrentPrice))
                 await dispatch(getHoldingByStockSymbol(stockInfo.symbol))
                 await dispatch(getAllUserHoldings())
                 await dispatch(getUserSession())
             } else if (parseFloat(quantity) === Object.values(currentHolding)[0].shares) {
-                dispatch(deleteHolding(Object.values(currentHolding)[0].id))
+                dispatch(deleteHolding(Object.values(currentHolding)[0].id, -quantity, stockCurrentPrice))
                 await dispatch(getAllUserHoldings())
                 await dispatch(getHoldingByStockSymbol(stockInfo.symbol))
                 await dispatch(getUserSession())
             } else {
-                console.log(typeof quantity)
-                console.log(typeof Object.values(currentHolding)[0].shares)
+                // console.log(typeof quantity)
+                // console.log(typeof Object.values(currentHolding)[0].shares)
                 alert('Not enough shares')
             }
         }
@@ -170,7 +172,7 @@ const BuySellStock = ({stockInfo, stockCurrentPrice}) => {
                                     </div>
                                     <div className="stock-page-buy-sell-sell-inputs-price">
                                         <h5>Price</h5>
-                                        <h5>${formatToCurrency(stockCurrentPrice)}</h5>
+                                        <h5>${formatToCurrency(stockCurrentPrice * 1)}</h5>
                                     </div>
                                     <div className="stock-page-buy-sell-sell-inputs-total">
                                         <h5>Total</h5>
@@ -190,11 +192,11 @@ const BuySellStock = ({stockInfo, stockCurrentPrice}) => {
                         isBuying
                         ?
                             <div className='stock-page-buy-sell-buying-power'>
-                                <h6>Buying Power ${formatToCurrency(buyingPower)}</h6>
+                                <h5>Buying Power ${formatToCurrency(buyingPower)}</h5>
                             </div>
                         :
                             <div className='stock-page-buy-sell-selling-power'>
-                                <h6>Available ${formatToCurrency(currentHoldingShares * stockCurrentPrice)}</h6>
+                                <h5>Available ${formatToCurrency(currentHoldingShares * stockCurrentPrice) || 0}</h5>
                             </div>
 
                     }

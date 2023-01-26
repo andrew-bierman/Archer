@@ -84,6 +84,12 @@ def delete_holding(holding_id):
         return jsonify({'message': "Unauthorized", 'statusCode': 401}), 401
 
     stock_price = request.json['stock_price']
+    quantity = request.json['quantity']
+
+    # Validate that the quantity of the holding is equal to the quantity being sold
+    if float(holding.shares) != float(quantity):
+        return jsonify({'message': "Invalid quantity", 'statusCode': 400}), 400
+
     shares = holding.shares
     revenue = float(stock_price) * float(shares)
 
@@ -95,7 +101,7 @@ def delete_holding(holding_id):
 
     db.session.delete(holding)
     db.session.commit()
-    return holding.to_dict()
+    return jsonify ({'message': "Holding deleted", 'statusCode': 200}), 200
 
 
 @holding_routes.route('/symbol/<string:symbol>')
@@ -112,7 +118,7 @@ def get_holdings_by_symbol(symbol):
             # print('------------------')
             return holding.to_dict()
         else:
-            return jsonify({'message': "No holdings for this stock and user", 'statusCode': 404}), 404
+            return jsonify({'message': "No holdings for this stock and user", 'statusCode': 204}), 204
     else:
         return jsonify({'message': "Stock not found", 'statusCode': 404}), 404
 

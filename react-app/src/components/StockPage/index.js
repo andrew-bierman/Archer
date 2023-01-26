@@ -24,7 +24,7 @@ function StockPage() {
     const stockCurrentPercentChange = useSelector(state => state.stocks.singleStock.CurrentPrice.percent_change);
     const state = useSelector(state => state);
 
-    console.log(state)
+    // console.log(state)
 
     const { symbol } = useParams();
 
