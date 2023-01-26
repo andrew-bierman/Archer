@@ -20,8 +20,42 @@
 .stock-page-buy-sell-top-buttons {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     flex-wrap: nowrap;
     width: 100%;
+
+    margin-top: 20px;
+    margin-left: 20px;
+    
+}
+
+.stock-page-buy-sell-top-buttons button {
+
+    background-color: transparent;
+
+    text-decoration: underline;
+
+    outline: none;
+    border: none;
+
+    margin-right: 20px;
+}
+
+.stock-page-buy-button-top{
+    color: green;
+
+}
+
+.stock-page-sell-button-top{
+    color: red;
+
+}
+
+.stock-page-buy {
+    color: green;
+}
+
+.stock-page-sell {
+    color: red;
 }

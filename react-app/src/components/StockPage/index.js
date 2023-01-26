@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import StockChart from '../StockChart';
 import { getSingleStockDataFromAPI, getSingleStockInfo, getSingleStockCurrentPriceFromAPI } from '../../store/stocks';
+import { resetCurrentHolding } from '../../store/holdings';
 import BuySellStock from '../BuySellStock';
 import './StockPage.css';
 
@@ -46,6 +47,11 @@ function StockPage() {
         fetchDbData();
         fetchApiData(symbol);
         setLoading(false);
+
+        return () => {
+          setLoading(true);
+          dispatch(resetCurrentHolding());
+        }
     }, []);
 
   return (

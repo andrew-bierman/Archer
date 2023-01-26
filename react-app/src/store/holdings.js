@@ -115,12 +115,13 @@ export const getHoldingById = (holdingId) => async (dispatch) => {
 }
 
 export const getHoldingByStockSymbol = (stockSymbol) => async (dispatch) => {
-    const response = await fetch(`/api/holdings/stock/${stockSymbol}`);
+    const response = await fetch(`/api/holdings/symbol/${stockSymbol}`);
     if (response.ok) {
         const data = await response.json();
         dispatch(getHoldingByStockSymbolAction(data));
     } else {
         console.log('Error fetching holding');
+        return {}
     }
 }
 
@@ -151,10 +152,7 @@ const holdingReducer = (state = initialState, action) => {
         case UPDATE_HOLDING:
             return {
                 ...state,
-                currentHolding: {
-                    ...state.currentHolding,
-                    [action.payload.id]: action.payload
-                }
+                currentHolding: {[action.payload.id]: action.payload}
             }
         case DELETE_HOLDING:
             const newState = { ...state };
@@ -164,18 +162,12 @@ const holdingReducer = (state = initialState, action) => {
         case GET_HOLDING_BY_ID:
             return {
                 ...state,
-                currentHolding: {
-                    ...state.currentHolding,
-                    [action.payload.id]: action.payload
-                }
+                currentHolding: {[action.payload.id]: action.payload}
             }
         case GET_HOLDING_BY_STOCK_SYMBOL:
             return {
                 ...state,
-                currentHolding: {
-                    ...state.currentHolding,
-                    [action.payload.id]: action.payload
-                }
+                currentHolding: {[action.payload.id]: action.payload}
             }
         case RESET_CURRENT_HOLDING:
             return {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
+import { getUserSession } from "../../store/session";
 import { getSingleStockInfo } from "../../store/stocks";
 import { getAllUserHoldings, createNewHolding, updateHolding, deleteHolding, getHoldingByStockSymbol, resetCurrentHolding } from "../../store/holdings";
 import './BuySellStock.css';
@@ -19,6 +20,7 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
 
     const userHoldings = useSelector(state => state.holdings.allHoldings);
     const currentHolding = useSelector(state => state.holdings.currentHolding);
+    const currentHoldingId = Object.values(currentHolding)[0]?.id
 
     const { symbol } = useParams();
 
@@ -26,10 +28,11 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
         dispatch(getAllUserHoldings());
         dispatch(getSingleStockInfo(symbol))
         dispatch(getHoldingByStockSymbol(symbol))
+        dispatch(getUserSession())
 
         return () => {
             resetForm();
-            dispatch(resetCurrentHolding());
+            // dispatch(resetCurrentHolding());
         }
 
     }, [dispatch]);
@@ -55,11 +58,16 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
         if (quantity > 0) {
             if (quantity * stockCurrentPrice <= buyingPower) {
                 if (!isObjectEmpty(currentHolding)) {
-                    console.log('updating holding', currentHolding.id)
-                    dispatch(updateHolding(currentHolding.id, quantity, stockCurrentPrice))
+                    // console.log('updating holding', Object.values(currentHolding)[0].id)
+                    await dispatch(updateHolding(Object.values(currentHolding)[0].id, quantity, stockCurrentPrice))
+                    await dispatch(getHoldingByStockSymbol(stockInfo.symbol))
+                    await dispatch(getAllUserHoldings())
+                    await dispatch(getUserSession())
                 } else {
                     await dispatch(createNewHolding(stockInfo.symbol, quantity, stockCurrentPrice))
                     await dispatch(getAllUserHoldings())
+                    await dispatch(getHoldingByStockSymbol(stockInfo.symbol))
+                    await dispatch(getUserSession())
                 }
             } else {
                 alert('Not enough buying power')
@@ -70,9 +78,19 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
     const handleSell = async () => {
         // console.log('selling')
         if (quantity > 0) {
-            if (quantity <= currentHolding.quantity) {
-                dispatch(updateHolding(currentHolding.id, -quantity, stockCurrentPrice))
+            if (quantity < Object.values(currentHolding)[0].shares) {
+                dispatch(updateHolding(Object.values(currentHolding)[0].id, -quantity, stockCurrentPrice))
+                await dispatch(getHoldingByStockSymbol(stockInfo.symbol))
+                await dispatch(getAllUserHoldings())
+                await dispatch(getUserSession())
+            } else if (parseFloat(quantity) === Object.values(currentHolding)[0].shares) {
+                dispatch(deleteHolding(Object.values(currentHolding)[0].id))
+                await dispatch(getAllUserHoldings())
+                await dispatch(getHoldingByStockSymbol(stockInfo.symbol))
+                await dispatch(getUserSession())
             } else {
+                console.log(typeof quantity)
+                console.log(typeof Object.values(currentHolding)[0].shares)
                 alert('Not enough shares')
             }
         }
@@ -106,10 +124,10 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
 
                 <div className="stock-page-buy-sell-container">
                     <div className="stock-page-buy-sell-top-buttons">
-                        <button onClick={() => handleSwitch('buy')}>
+                        <button onClick={() => handleSwitch('buy')} className='stock-page-buy-button-top'>
                             Buy {stockInfo.symbol}
                         </button>
-                        <button onClick={() => handleSwitch('sell')}>
+                        <button onClick={() => handleSwitch('sell')} className='stock-page-sell-button-top'>
                             Sell {stockInfo.symbol}
                         </button>
                     </div>
@@ -132,7 +150,7 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
                                     </div>
                                 </div>
                                 <div className="stock-page-buy-sell-buy-buttons">
-                                    <button onClick={() => handleBuy()}>Buy</button>
+                                    <button className='stock-page-buy' onClick={() => handleBuy()}>Buy</button>
                                     <button onClick={() => resetForm()}>Cancel</button>
                                 </div>
                             </div>
@@ -155,7 +173,7 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
                                     </div>
                                 </div>
                                 <div className="stock-page-buy-sell-sell-buttons">
-                                    <button onClick={() => handleSell()}>Sell</button>
+                                    <button className='stock-page-sell' onClick={() => handleSell()}>Sell</button>
                                     <button onClick={() => resetForm()}>Cancel</button>
                                 </div>
                             </div>

@@ -1,8 +1,8 @@
 """wip
 
-Revision ID: 40fda9dfe2d5
+Revision ID: efca8ce196e7
 Revises: 
-Create Date: 2023-01-25 21:44:43.485637
+Create Date: 2023-01-26 10:44:18.636185
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '40fda9dfe2d5'
+revision = 'efca8ce196e7'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -43,6 +43,7 @@ def upgrade():
     sa.Column('stock_id', sa.Integer(), nullable=False),
     sa.Column('shares', sa.Float(), nullable=False),
     sa.Column('avg_cost', sa.Float(), nullable=False),
+    sa.Column('total_cost', sa.Float(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['stock_id'], ['stocks.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),

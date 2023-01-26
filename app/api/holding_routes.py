@@ -57,7 +57,8 @@ def create_holding():
         stock_id=stock_id,
         user_id=current_user.id,
         shares=quantity,
-        avg_cost=stock_price
+        avg_cost=stock_price,
+        total_cost=cost
     )
 
     holding.stock.append(stock)
@@ -101,13 +102,15 @@ def delete_holding(holding_id):
 @login_required
 def get_holdings_by_symbol(symbol):
     """
-    Query for all holdings of a specific stock symbol and returns them in a list of holding dictionaries
+    Query for holdings of a specific stock symbol and returns them in a list of holding dictionaries
     """
     stock = Stock.query.filter_by(symbol=symbol).first()
     if stock:
-        holdings = Holding.query.filter(Holding.stock_id == stock.id, Holding.user_id == current_user.id).all()
-        if holdings:
-            return {'holdings': [holding.to_dict() for holding in holdings]}
+        holding = Holding.query.filter(Holding.stock_id == stock.id, Holding.user_id == current_user.id).first()
+        if holding:
+            # print(holding)
+            # print('------------------')
+            return holding.to_dict()
         else:
             return jsonify({'message': "No holdings for this stock and user", 'statusCode': 404}), 404
     else:
@@ -144,20 +147,44 @@ def update_holding_quantity(holding_id):
 
     # Retrieve the current user
     user = User.query.get(current_user.id)
-    buying_power = user.buying_power
+    buying_power = float(user.buying_power)
     new_quantity = request.json['quantity']
     stock_price = request.json['stock_price']
-    old_quantity = holding.quantity
-    cost = float(stock_price) * (float(new_quantity) - float(old_quantity))
-    if new_quantity > old_quantity:
+    old_quantity = holding.shares
+    # cost = float(stock_price) * (float(new_quantity) - float(old_quantity))
+    cost = float(stock_price) * float(new_quantity)
+
+    # For a buy order, quantity is positive
+    if (float(old_quantity) + float(new_quantity)) > 0 and float(new_quantity) > 0:
         if cost > buying_power:
             return jsonify({'message': "Not enough buying power", 'statusCode': 400}), 400
         user.buying_power -= cost
-    else:
-        revenue = float(stock_price) * (float(old_quantity) - float(new_quantity))
+        holding.total_cost += cost
+        holding.shares = (float(old_quantity) + float(new_quantity))
+        if holding.shares > 0:
+            holding.avg_cost = holding.total_cost / holding.shares
+
+    # For a sell order, quantity is negative for a sell order
+    elif (float(old_quantity) + float(new_quantity)) > 0 and float(new_quantity) < 0:
+        revenue = float(stock_price) * (float(old_quantity) + float(new_quantity))
         user.buying_power += revenue
-        
-    holding.shares = new_quantity
+        if holding.total_cost > revenue:
+            holding.total_cost -= revenue
+        holding.shares = (float(old_quantity) + float(new_quantity))
+        if holding.shares > 0:
+            holding.avg_cost = holding.total_cost / holding.shares
+
+    # If the user is trying to sell more shares than they own
+    elif (float(old_quantity) + float(new_quantity)) < 0:
+        return jsonify({'message': "Not enough shares to sell", 'statusCode': 400}), 400
+
+    # If the user is trying to sell all of their shares
+    elif (float(old_quantity) + float(new_quantity)) == 0:
+        revenue = float(stock_price) * float(old_quantity)
+        user.buying_power += revenue
+        db.session.delete(holding)
+
+    # holding.shares = new_quantity
 
     db.session.commit()
     return holding.to_dict()
