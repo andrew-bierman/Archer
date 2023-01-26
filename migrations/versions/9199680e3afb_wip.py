@@ -1,8 +1,8 @@
 """wip
 
-Revision ID: efca8ce196e7
+Revision ID: 9199680e3afb
 Revises: 
-Create Date: 2023-01-26 10:44:18.636185
+Create Date: 2023-01-26 12:41:32.712884
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'efca8ce196e7'
+revision = '9199680e3afb'
 down_revision = None
 branch_labels = None
 depends_on = None

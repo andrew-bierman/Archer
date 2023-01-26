@@ -9,6 +9,8 @@ stocks_watchlists = db.Table("watchlists_stocks",
     db.Column("watchlist_id", db.Integer, db.ForeignKey(add_prefix_for_prod("watchlists.id")), primary_key=True)
 )
 
+if environment == "production":
+    stocks_watchlists.schema = SCHEMA
 
 class Watchlist(db.Model):
     __tablename__ = "watchlists"
