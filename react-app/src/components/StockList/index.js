@@ -39,6 +39,7 @@ function StockList({watchlistId}) {
                     <h6>All Stocks List</h6>
                     <form onSubmit={handleAddToList} >
                         <select onChange={handleChange}>
+                            <option value=''>Select a Stock</option>
                             {Object.values(stocks)?.map((stock, idx) => (
                                 <option key={stock.id} value={stock.id}>
                                     {stock.symbol}

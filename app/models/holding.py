@@ -27,6 +27,7 @@ class Holding(db.Model):
     stock = db.relationship("Stock", secondary="holdings_stocks", back_populates="holdings")
     
     def to_dict(self):
+        # stocks = [stock.to_dict() for stock in self.stock]
         return {
             'id': self.id,
             'user_id': self.user_id,
@@ -35,6 +36,6 @@ class Holding(db.Model):
             'avg_cost': self.avg_cost,
             'created_at': self.created_at.strftime("%Y-%m-%d %H:%M:%S"),
             'user': self.user.to_dict(),
-            'stock': self.stock.to_dict()
+            'stock': [stock.to_dict() for stock in self.stock]
         }
 

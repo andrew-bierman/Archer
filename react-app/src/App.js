@@ -13,6 +13,7 @@ import StockChart from './components/StockChart';
 import StockPage from './components/StockPage';
 import Watchlists from './components/WatchLists';
 import StockList from './components/StockList';
+import Profile from './components/Profile';
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -44,6 +45,9 @@ function App() {
         </ProtectedRoute>
         <ProtectedRoute path='/users/:userId' exact={true} >
           <User />
+        </ProtectedRoute>
+        <ProtectedRoute path='/profile' exact={true} >
+          <Profile />
         </ProtectedRoute>
         <Route path='/stocks/:symbol' exact={true} >
           <StockPage />

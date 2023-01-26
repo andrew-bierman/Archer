@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import StockChart from '../StockChart';
 import { getSingleStockDataFromAPI, getSingleStockInfo, getSingleStockCurrentPriceFromAPI } from '../../store/stocks';
 import BuySellStock from '../BuySellStock';
+import './StockPage.css';
 
 function StockPage() {
 
@@ -48,23 +49,28 @@ function StockPage() {
     }, []);
 
   return (
-    <div>
+    <>
       {(!loading) 
       ? 
         (
-          <div>
-              <h2>{stockInfo?.symbol?.toUpperCase()}</h2>
-              <h2>${ parseFloat(stockCurrentPrice).toFixed(2)}</h2>
+          <div className='stock-page-core-container'>
+            <div className='stock-page-stock-info'>
+              {/* <h2>{stockInfo?.symbol?.toUpperCase()}</h2> */}
               <h2>{stockInfo.company_name}</h2>
-              <button>Add to List</button>
+              <h2>${ parseFloat(stockCurrentPrice).toFixed(2)}</h2>
+              <StockChart stockData={stockData} />
+            </div>
+            <div className='stock-page-sidebar'>
               <BuySellStock stockInfo={stockInfo} stockCurrentPrice={stockCurrentPrice} loading={loading}/>
+              <button>Add to List</button>
+            </div>
           </div>
         ) 
         : 
           (
             <p>Loading...</p>
           )}
-    </div>
+    </>
   );
 }
 

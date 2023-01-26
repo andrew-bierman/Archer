@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import { getSingleStockInfo } from "../../store/stocks";
+import { getAllUserHoldings, createNewHolding, updateHolding, deleteHolding, getHoldingByStockSymbol, resetCurrentHolding } from "../../store/holdings";
 import './BuySellStock.css';
 
 const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
@@ -14,24 +17,70 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
     const [isBuying, setIsBuying] = useState(true);
     const [isSelling, setIsSelling] = useState(false);
 
-    const handleSwitch = (switchFrom) => {
-        if (switchFrom === 'buy') {
-            setIsBuying(false);
-            setIsSelling(true);
+    const userHoldings = useSelector(state => state.holdings.allHoldings);
+    const currentHolding = useSelector(state => state.holdings.currentHolding);
+
+    const { symbol } = useParams();
+
+    useEffect(() => {
+        dispatch(getAllUserHoldings());
+        dispatch(getSingleStockInfo(symbol))
+        dispatch(getHoldingByStockSymbol(symbol))
+
+        return () => {
+            resetForm();
+            dispatch(resetCurrentHolding());
         }
-        if (switchFrom === 'sell') {
+
+    }, [dispatch]);
+
+    const handleSwitch = (switchTo) => {
+        if (switchTo === 'buy') {
             setIsBuying(true);
             setIsSelling(false);
         }
+        if (switchTo === 'sell') {
+            setIsBuying(false);
+            setIsSelling(true);
+        }
 
     }
 
-    const handleBuy = () => {
-        console.log('buying')
+    function isObjectEmpty(obj) {
+        return Object.keys(obj).length === 0;
     }
 
-    const handleSell = () => {
-        console.log('selling')
+    const handleBuy = async () => {
+        // console.log('buying')
+        if (quantity > 0) {
+            if (quantity * stockCurrentPrice <= buyingPower) {
+                if (!isObjectEmpty(currentHolding)) {
+                    console.log('updating holding', currentHolding.id)
+                    dispatch(updateHolding(currentHolding.id, quantity, stockCurrentPrice))
+                } else {
+                    await dispatch(createNewHolding(stockInfo.symbol, quantity, stockCurrentPrice))
+                    await dispatch(getAllUserHoldings())
+                }
+            } else {
+                alert('Not enough buying power')
+            }
+        }
+    }
+
+    const handleSell = async () => {
+        // console.log('selling')
+        if (quantity > 0) {
+            if (quantity <= currentHolding.quantity) {
+                dispatch(updateHolding(currentHolding.id, -quantity, stockCurrentPrice))
+            } else {
+                alert('Not enough shares')
+            }
+        }
+    }
+
+    const resetForm = () => {
+        setQuantity(0);
+        setTotal(0);
     }
 
     function isNumber(n) {
@@ -65,7 +114,7 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
                         </button>
                     </div>
                     <div>
-                        {isBuying && (stockCurrentPrice ) &&
+                        {isBuying &&
                             <div className="stock-page-buy-sell-buy">
                                 <h3>Buy {stockInfo.symbol}</h3>
                                 <div className="stock-page-buy-sell-buy-inputs">
@@ -83,12 +132,12 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
                                     </div>
                                 </div>
                                 <div className="stock-page-buy-sell-buy-buttons">
-                                    <button>Buy</button>
-                                    <button>Cancel</button>
+                                    <button onClick={() => handleBuy()}>Buy</button>
+                                    <button onClick={() => resetForm()}>Cancel</button>
                                 </div>
                             </div>
                         }
-                        {isSelling && (stockCurrentPrice ) &&
+                        {isSelling &&
                             <div className="stock-page-buy-sell-sell">
                                 <h3>Sell {stockInfo.symbol}</h3>
                                 <div className="stock-page-buy-sell-sell-inputs">
@@ -106,8 +155,8 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
                                     </div>
                                 </div>
                                 <div className="stock-page-buy-sell-sell-buttons">
-                                    <button>Sell</button>
-                                    <button>Cancel</button>
+                                    <button onClick={() => handleSell()}>Sell</button>
+                                    <button onClick={() => resetForm()}>Cancel</button>
                                 </div>
                             </div>
                         }
