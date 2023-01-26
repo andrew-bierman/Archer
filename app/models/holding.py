@@ -9,6 +9,8 @@ stocks_holdings = db.Table("holdings_stocks",
     db.Column("holding_id", db.Integer, db.ForeignKey(add_prefix_for_prod("holdings.id")), primary_key=True)
 )
 
+if environment == "production":
+    stocks_holdings.schema = SCHEMA
 
 class Holding(db.Model):
     __tablename__ = "holdings"

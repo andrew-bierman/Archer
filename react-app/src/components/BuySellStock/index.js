@@ -131,7 +131,7 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
                             Sell {stockInfo.symbol}
                         </button>
                     </div>
-                    <div>
+                    <div className="stock-page-buy-sell-details-container">
                         {isBuying &&
                             <div className="stock-page-buy-sell-buy">
                                 <h3>Buy {stockInfo.symbol}</h3>
@@ -151,7 +151,7 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
                                 </div>
                                 <div className="stock-page-buy-sell-buy-buttons">
                                     <button className='stock-page-buy' onClick={() => handleBuy()}>Buy</button>
-                                    <button onClick={() => resetForm()}>Cancel</button>
+                                    {/* <button onClick={() => resetForm()}>Cancel</button> */}
                                 </div>
                             </div>
                         }
@@ -174,7 +174,7 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
                                 </div>
                                 <div className="stock-page-buy-sell-sell-buttons">
                                     <button className='stock-page-sell' onClick={() => handleSell()}>Sell</button>
-                                    <button onClick={() => resetForm()}>Cancel</button>
+                                    {/* <button onClick={() => resetForm()}>Cancel</button> */}
                                 </div>
                             </div>
                         }
