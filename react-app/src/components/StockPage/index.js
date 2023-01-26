@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import StockChart from '../StockChart';
+import { addStockToWatchlistThunk } from '../../store/watchlists';
 import { getSingleStockDataFromAPI, getSingleStockInfo, getSingleStockCurrentPriceFromAPI } from '../../store/stocks';
 import { resetCurrentHolding } from '../../store/holdings';
 import BuySellStock from '../BuySellStock';
@@ -55,6 +56,12 @@ function StockPage() {
         }
     }, []);
 
+  
+  const handleAddToList = (e) => {
+      e.preventDefault();
+      // dispatch(addStockToWatchlistThunk(watchlistId, selectedStockId))
+  }
+
   return (
     <>
       {(!loading) 
@@ -75,7 +82,9 @@ function StockPage() {
             </div>
             <div className='stock-page-sidebar'>
               <BuySellStock stockInfo={stockInfo} stockCurrentPrice={stockCurrentPrice} loading={loading}/>
-              <button>Add to List</button>
+              <button onClick={() => handleAddToList()} className='stock-page-add-to-list-button'>
+                Add to List
+              </button>
             </div>
           </div>
         ) 
