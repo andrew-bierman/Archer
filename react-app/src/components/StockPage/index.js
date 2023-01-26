@@ -5,6 +5,9 @@ import StockChart from '../StockChart';
 import { addStockToWatchlistThunk } from '../../store/watchlists';
 import { getSingleStockDataFromAPI, getSingleStockInfo, getSingleStockCurrentPriceFromAPI } from '../../store/stocks';
 import { resetCurrentHolding } from '../../store/holdings';
+import OpenModalButton from '../OpenModalButton';
+import { Modal } from '../../context/Modal';
+import WatchlistsStockPage from '../WatchListsStockPage';
 import BuySellStock from '../BuySellStock';
 import './StockPage.css';
 
@@ -82,9 +85,15 @@ function StockPage() {
             </div>
             <div className='stock-page-sidebar'>
               <BuySellStock stockInfo={stockInfo} stockCurrentPrice={stockCurrentPrice} loading={loading}/>
-              <button onClick={() => handleAddToList()} className='stock-page-add-to-list-button'>
+              <div className='stock-page-add-to-list-modal-button'>
+                <OpenModalButton 
+                    buttonText={'Add to List'} 
+                    modalComponent={<WatchlistsStockPage/>}
+                  />
+              </div>
+              {/* <button onClick={() => handleAddToList()} className='stock-page-add-to-list-button'>
                 Add to List
-              </button>
+              </button> */}
             </div>
           </div>
         ) 
