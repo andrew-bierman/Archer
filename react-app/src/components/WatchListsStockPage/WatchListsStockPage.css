@@ -1,11 +1,12 @@
-.watchlist-container{
+.watchlist-modal-modal-container{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
-    margin-left: auto;
-    margin-right: 0;
+    /* position: absolute; */
+
+    /* margin: auto; */
 
     width: 300px;
     height: fit-content;
@@ -17,7 +18,7 @@
     border: 1px solid black;
 
 }
-.watchlist-individual {
+.watchlist-modal-individual {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -34,7 +35,7 @@
 
 }
 
-.watchlist-individual-header {
+.watchlist-modal-individual-header {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -42,7 +43,7 @@
 
 }
 
-.watchlist-individual .watchlist-stock-individual {
+.watchlist-modal-individual .watchlist-modal-stock-individual {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -54,7 +55,7 @@
     margin-top: 10px;
 }
 
-.watchlist-individual-name-buttons{
+.watchlist-modal-individual-name-buttons{
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -62,7 +63,7 @@
     flex-wrap: wrap;
 }
 
-.watchlist-individual-button {
+.watchlist-modal-individual-button {
     margin: 2px;
     width: 30px;
     height: 30px;

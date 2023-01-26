@@ -111,7 +111,7 @@ const Watchlists = () => {
                                     <i className="fa-solid fa-trash-can"></i>
                                 </button>
                             </div>
-                            <br></br>
+                            {/* <br></br> */}
                             <div className='watchlist-stock-list'>
                                 {watchlist?.stocks?.map(stock => (
                                     <div key={stock.id} value={stock.id} className='watchlist-stock-individual'>
@@ -129,10 +129,10 @@ const Watchlists = () => {
                                     </div>
                                 ))}
                             </div>
-                            <br></br>
+                            {/* <br></br>
                             <div>
                                 <StockList watchlistId={watchlist.id}/>
-                            </div>
+                            </div> */}
                         </div>
                         :
                         <></>

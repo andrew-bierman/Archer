@@ -71,6 +71,20 @@ nav a.active {
   align-items: center;
 }
 
+.navbar-right-side button {
+  font-weight: 500;
+
+  border-radius: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+
+  font-size: 15px;
+  border: 1px;
+}
+
+
 .flex {
   display: flex;
 }

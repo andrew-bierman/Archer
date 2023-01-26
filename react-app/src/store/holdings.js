@@ -93,9 +93,16 @@ export const updateHolding = (holdingId, quantity, stockCurrentPrice) => async (
     }
 }
 
-export const deleteHolding = (holdingId) => async (dispatch) => {
+export const deleteHolding = (holdingId, quantity, stockCurrentPrice) => async (dispatch) => {
     const response = await fetch(`/api/holdings/${holdingId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'quantity': quantity,
+            'stock_price': stockCurrentPrice
+        })
     });
     if (response.ok) {
         dispatch(deleteHoldingAction(holdingId));

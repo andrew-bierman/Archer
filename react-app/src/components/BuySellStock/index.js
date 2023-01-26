@@ -6,8 +6,10 @@ import { getSingleStockInfo } from "../../store/stocks";
 import { getAllUserHoldings, createNewHolding, updateHolding, deleteHolding, getHoldingByStockSymbol, resetCurrentHolding } from "../../store/holdings";
 import './BuySellStock.css';
 
-const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
+const BuySellStock = ({stockInfo, stockCurrentPrice}) => {
     const dispatch = useDispatch();
+
+    const [loading, setLoading] = useState(true);
 
     // const currentPrice = useSelector(state => state.stockInfo.CurrentPrice.close);
 
@@ -21,14 +23,17 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
     const userHoldings = useSelector(state => state.holdings.allHoldings);
     const currentHolding = useSelector(state => state.holdings.currentHolding);
     const currentHoldingId = Object.values(currentHolding)[0]?.id
+    const currentHoldingShares = Object.values(currentHolding)[0]?.shares
 
     const { symbol } = useParams();
 
     useEffect(() => {
+        setLoading(true);
         dispatch(getAllUserHoldings());
         dispatch(getSingleStockInfo(symbol))
         dispatch(getHoldingByStockSymbol(symbol))
         dispatch(getUserSession())
+        setLoading(false);
 
         return () => {
             resetForm();
@@ -38,6 +43,8 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
     }, [dispatch]);
 
     const handleSwitch = (switchTo) => {
+        resetForm();
+        
         if (switchTo === 'buy') {
             setIsBuying(true);
             setIsSelling(false);
@@ -77,20 +84,20 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
 
     const handleSell = async () => {
         // console.log('selling')
-        if (quantity > 0) {
+        if (parseFloat(quantity) > 0) {
             if (quantity < Object.values(currentHolding)[0].shares) {
                 dispatch(updateHolding(Object.values(currentHolding)[0].id, -quantity, stockCurrentPrice))
                 await dispatch(getHoldingByStockSymbol(stockInfo.symbol))
                 await dispatch(getAllUserHoldings())
                 await dispatch(getUserSession())
             } else if (parseFloat(quantity) === Object.values(currentHolding)[0].shares) {
-                dispatch(deleteHolding(Object.values(currentHolding)[0].id))
+                dispatch(deleteHolding(Object.values(currentHolding)[0].id, -quantity, stockCurrentPrice))
                 await dispatch(getAllUserHoldings())
                 await dispatch(getHoldingByStockSymbol(stockInfo.symbol))
                 await dispatch(getUserSession())
             } else {
-                console.log(typeof quantity)
-                console.log(typeof Object.values(currentHolding)[0].shares)
+                // console.log(typeof quantity)
+                // console.log(typeof Object.values(currentHolding)[0].shares)
                 alert('Not enough shares')
             }
         }
@@ -138,11 +145,11 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
                                 <div className="stock-page-buy-sell-buy-inputs">
                                     <div className="stock-page-buy-sell-buy-inputs-quantity">
                                         <h5>Quantity</h5>
-                                        <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)}></input>
+                                        <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} min={0}></input>
                                     </div>
                                     <div className="stock-page-buy-sell-buy-inputs-price">
                                         <h5>Price</h5>
-                                        <h5>${formatToCurrency(stockCurrentPrice)}</h5>
+                                        <h5>${formatToCurrency(stockCurrentPrice * 1)}</h5>
                                     </div>
                                     <div className="stock-page-buy-sell-buy-inputs-total">
                                         <h5>Total</h5>
@@ -161,11 +168,11 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
                                 <div className="stock-page-buy-sell-sell-inputs">
                                     <div className="stock-page-buy-sell-sell-inputs-quantity">
                                         <h5>Quantity</h5>
-                                        <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)}></input>
+                                        <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} max={currentHoldingShares}></input>
                                     </div>
                                     <div className="stock-page-buy-sell-sell-inputs-price">
                                         <h5>Price</h5>
-                                        <h5>${formatToCurrency(stockCurrentPrice)}</h5>
+                                        <h5>${formatToCurrency(stockCurrentPrice * 1)}</h5>
                                     </div>
                                     <div className="stock-page-buy-sell-sell-inputs-total">
                                         <h5>Total</h5>
@@ -180,9 +187,20 @@ const BuySellStock = ({stockInfo, stockCurrentPrice, loading}) => {
                         }
 
                     </div>
-                    <div className='stock-page-buy-sell-buying-power'>
-                        <h6>Buying Power ${formatToCurrency(buyingPower)}</h6>
-                    </div>
+                    <>
+                    {
+                        isBuying
+                        ?
+                            <div className='stock-page-buy-sell-buying-power'>
+                                <h5>Buying Power ${formatToCurrency(buyingPower)}</h5>
+                            </div>
+                        :
+                            <div className='stock-page-buy-sell-selling-power'>
+                                <h5>Available ${formatToCurrency(currentHoldingShares * stockCurrentPrice) || 0}</h5>
+                            </div>
+
+                    }
+                    </>
                 </div>
             }
         </>
