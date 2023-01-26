@@ -31,6 +31,14 @@
 
 }
 
+.stock-page-stock-info-percent-change-positive {
+    color: green;
+}
+
+.stock-page-stock-info-percent-change-negative {
+    color: red;
+}
+
 .stock-page-sidebar {
     display: flex;
     flex-direction: column;

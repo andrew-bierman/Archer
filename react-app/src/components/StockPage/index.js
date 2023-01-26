@@ -17,6 +17,7 @@ function StockPage() {
     // const [stockInfo, setStockInfo] = useState({});
     const stockInfo = useSelector(state => state.stocks.singleStock.Info);
     const stockCurrentPrice = useSelector(state => state.stocks.singleStock.CurrentPrice.close);
+    const stockCurrentPercentChange = useSelector(state => state.stocks.singleStock.CurrentPrice.percent_change);
     const state = useSelector(state => state);
 
     console.log(state)
@@ -64,6 +65,12 @@ function StockPage() {
               {/* <h2>{stockInfo?.symbol?.toUpperCase()}</h2> */}
               <h2>{stockInfo.company_name}</h2>
               <h2>${ parseFloat(stockCurrentPrice).toFixed(2)}</h2>
+              { (stockCurrentPercentChange > 0) ? 
+                <h3 className='stock-page-stock-info-percent-change-positive'>+{stockCurrentPercentChange}%</h3> 
+                : 
+                <h3 className='stock-page-stock-info-percent-change-negative'>
+                  {stockCurrentPercentChange}%</h3>
+              }
               <StockChart stockData={stockData} />
             </div>
             <div className='stock-page-sidebar'>
