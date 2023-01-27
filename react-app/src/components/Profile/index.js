@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllUserHoldings } from '../../store/holdings';
+import { formatToCurrency } from '../utility';
+import './Profile.css';
 
 
 const Profile = () => {
@@ -22,9 +24,13 @@ const Profile = () => {
         <>
             {
                 !loading ?
-                <div>
+                <div className='profile-page-container'>
                     <h1>Profile</h1>
-                    <h2>{user.username}</h2>
+                    <h2>
+                        <i className="fa-solid fa-circle-user"></i>
+                        &nbsp;
+                        {user.username}
+                    </h2>
                     <h3>Holdings</h3>
                     <ul>
                         {holdings.allHoldings.map(holding => (
@@ -41,7 +47,7 @@ const Profile = () => {
                                 &nbsp;
                                 -
                                 &nbsp;
-                                ${holding.avg_cost} avg. cost
+                                ${formatToCurrency(holding.avg_cost)} avg. cost
                             </li>
                         ))}
                     </ul>

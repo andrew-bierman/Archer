@@ -2,6 +2,7 @@ const GET_ALL_STOCKS_FROM_DB = 'stockList/GET_ALL_STOCKS_FROM_DB';
 const GET_SINGLE_STOCK_INFO_FROM_DB = 'stockList/GET_SINGLE_STOCK_INFO_FROM_DB';
 const GET_SINGLE_STOCK_DATA = 'stockList/GET_SINGLE_STOCK_DATA_FROM_API';
 const GET_SINGLE_STOCK_CURRENT_PRICE = 'stockList/GET_SINGLE_STOCK_CURRENT_PRICE';
+const RESET_SINGLE_STOCK_DATA = 'stockList/RESET_SINGLE_STOCK_DATA';
 
 const getAllStocksFromDB = (stocks) => ({
     type: GET_ALL_STOCKS_FROM_DB,
@@ -44,8 +45,22 @@ export const getSingleStockInfo = (symbol) => async (dispatch) => {
     }
 }
 
-export const getSingleStockDataFromAPI = (symbol) => async (dispatch) => {
-    const response = await fetch(`/api/stocks/data/${symbol}`);
+// export const getSingleStockDataFromAPI = (symbol) => async (dispatch) => {
+//     const response = await fetch(`/api/stocks/data/${symbol}`);
+//     if (response.ok) {
+//         const data = await response.json();
+//         dispatch(getSingleDataStock(data));
+//         return data;
+
+//     } else {
+//         console.log('Error fetching stock');
+//     }
+// }
+
+export const getSingleStockDataFromAPI = (symbol, filter) => async (dispatch) => {
+    if (!filter) filter = '1D';
+
+    const response = await fetch(`/api/stocks/data/time-series/${symbol}/${filter}`);
     if (response.ok) {
         const data = await response.json();
         dispatch(getSingleDataStock(data));
@@ -55,6 +70,7 @@ export const getSingleStockDataFromAPI = (symbol) => async (dispatch) => {
         console.log('Error fetching stock');
     }
 }
+
 
 export const getSingleStockCurrentPriceFromAPI = (symbol) => async (dispatch) => {
     const response = await fetch(`/api/stocks/data/current/${symbol}`);
@@ -67,6 +83,10 @@ export const getSingleStockCurrentPriceFromAPI = (symbol) => async (dispatch) =>
         console.log('Error fetching stock');
     }
 }
+
+export const resetSingleStockData = () => ({
+    type: RESET_SINGLE_STOCK_DATA
+});
 
 const initialState = {
     allStocks: {
@@ -90,11 +110,15 @@ const stockListReducer = (state = initialState, action) => {
                 }
         }
         case GET_SINGLE_STOCK_DATA:
+            console.log('action.payload', action.payload);
             return {
                 ...state,
                 singleStock: {
                     ...state.singleStock,
-                    Data: action.payload
+                    Data: {
+                        meta: action.payload.meta,
+                        values: action.payload.values
+                    } 
                 }
             }
         case GET_SINGLE_STOCK_INFO_FROM_DB:
@@ -112,6 +136,15 @@ const stockListReducer = (state = initialState, action) => {
                 singleStock: {
                     ...state.singleStock,
                     CurrentPrice: action.payload
+                }
+            }
+        
+        case RESET_SINGLE_STOCK_DATA:
+            return {
+                ...state,
+                singleStock: {
+                    ...state.singleStock,
+                    Data: {}
                 }
             }
 

@@ -13,3 +13,4 @@ class Config:
     SQLALCHEMY_ECHO = True
     AV_API_KEY = os.environ.get('AV_API_KEY')
     TWELVE_API_KEY = os.environ.get('TWELVE_API_KEY')
+    TWELVE_NATIVE_API_KEY = os.environ.get('TWELVE_NATIVE_API_KEY')

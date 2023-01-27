@@ -20,7 +20,7 @@
 .watchlist-individual {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
 
@@ -34,18 +34,29 @@
 
 }
 
-.watchlist-individual-header {
+.watchlist-individual button {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    flex-wrap: nowrap;
+
+}
+
+.watchlist-individual-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
 
 }
 
 .watchlist-individual .watchlist-stock-individual {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     flex-wrap: nowrap;
 
@@ -54,12 +65,24 @@
     margin-top: 10px;
 }
 
+.watchlist-individual .watchlist-stock-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+
+    width: 100%;
+}
+
 .watchlist-individual-name-buttons{
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+
+    width: 100%;
 }
 
 .watchlist-individual-button {
