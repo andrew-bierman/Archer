@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import StockChart from '../StockChart';
 import { addStockToWatchlistThunk } from '../../store/watchlists';
-import { getSingleStockDataFromAPI, getSingleStockInfo, getSingleStockCurrentPriceFromAPI } from '../../store/stocks';
+import { getSingleStockDataFromAPI, getSingleStockInfo, getSingleStockCurrentPriceFromAPI, resetSingleStockData } from '../../store/stocks';
 import { resetCurrentHolding } from '../../store/holdings';
 import OpenModalButton from '../OpenModalButton';
 import { Modal } from '../../context/Modal';
@@ -56,6 +56,7 @@ function StockPage() {
         return () => {
           setLoading(true);
           dispatch(resetCurrentHolding());
+          dispatch(resetSingleStockData());
         }
     }, []);
 

@@ -7,6 +7,7 @@
 
 a {
   text-decoration: none;
+  color: inherit;
 }
 
 a:hover {
@@ -25,6 +26,8 @@ nav {
   align-items: center;
   width: auto;
   padding: 30px 20px;
+
+  text-decoration: none;
 }
 
 nav ul {
@@ -57,7 +60,6 @@ nav a.active {
   align-items: center;
   font-size: larger;
   font-weight: 1000;
-  color: white;
 }
 
 .navbar-logo-and-name img{

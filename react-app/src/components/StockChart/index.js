@@ -1,106 +1,175 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getSingleStockDataFromAPI } from '../../store/stocks';
 
 import ApexCharts from 'react-apexcharts'
+import moment from 'moment';
+
+import { isObjectEmpty } from '../utility';
 
 import './StockChart.css';
 
 const StockChart = (props) => {
-    // const data = props?.stockData["Time Series (Daily)"];
-    const [currentMarketPrice, setCurrentMarketPrice] = useState(true);
+  const dispatch = useDispatch();
 
-    // chart data and options
-    const series = [{
-        name: '',
-        data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
-    }]
+  const [loading, setLoading] = useState(true);
+  const singleStockInfo = useSelector(state => state.stocks.singleStock.Info);
+  const [filter, setFilter] = useState('1D');
+  const [xaxisCategories, setXaxisCategories] = useState([]);
 
-    
-    // const seriesData = Object.keys(data).map(date => ({ x: date, y: data[date]["4. close"] }));
+  const [currentMarketPrice, setCurrentMarketPrice] = useState(true);
 
-    const options = {
-        chart: {
-          // id: "basic-bar",
-          type: "line",
-          align: "center",
-          parentHeightOffset: 0,
-          events: {
-            mouseLeave: () => setCurrentMarketPrice(true),
-          },
-          toolbar: {
-            show: false,
-          },
-          zoom: {
-            enabled: false,
-          },
-          animations: {
-            enabled: false,
-          },
-          redrawOnParentResize: true,
-        },
-        // series: [{
-        //     name: "Stock Price",
-        //     data: seriesData
-        // }],
-        // series: series,
-        xaxis: {
-            categories: [],
-            labels: {
-              show: false,
-              showAlways: false,
-            },
-        },
-        yaxis: {
-          show: false,
-          showAlways: false,
-          labels: {
-            show: false,
-          },
-          axisBorder: {
-            show: false,
-          },
-        },
-        colors: ["#00C805"],
-        stroke: {
-              width: 2.75
-        },
-        grid: { 
-            show: false 
-        },
-        tooltip: {
-          enabled: true,
-            x: {
-                format: 'dd/MM/yy HH:mm'
-            },
-            y: {
-                title: {
-                    formatter: function (val) {
-                        return "$" + val
-                    }
-                }
-            }
-        },
-        toolbar: {
-            show: false,
-        },
-        legend: {
-            show: false,
-          },
-        noData: {
-            text: "Loading...",
-            align: "center",
-            verticalAlign: "center",
-            style: {
-              color: "darkgray",
-              fontSize: "24px",
-            },
-          },
+  const timeSeriesData = useSelector(state => state.stocks.singleStock.Data.values);
+  const [tempData, setTempData] = useState();
+  const [series, setSeries] = useState([]);
+
+  // useEffect(() => {
+  //     setTempData([]);
+  //     setSeries([]);
+  // }, [filter])
+
+  useEffect(() => {
+    setLoading(true);
+    console.log('timeSeriesData: ', timeSeriesData)
+    if (timeSeriesData !== undefined) {
+      if (isObjectEmpty(timeSeriesData)) {
+        setLoading(true);
+      } else {
+        setLoading(false);
+        setTempData(timeSeriesData);
+      }
     }
+  }, [timeSeriesData]);
 
-    return (
-      <div className='big-chart-container'>
-        <ApexCharts options={options} series={series} width='500px'/>
-      </div>
-    );
+  useEffect(() => {
+    if (tempData) {
+      tempData.reverse(); // Reverse the order of the data
+      let seriesData = tempData.map(item => {
+        return { x: item.datetime, y: item.close }
+      });
+      setSeries([{ name: '', data: seriesData }])
+      setXaxisCategories(tempData.map(({ datetime }) => {
+        if (filter === '1D') {
+          return moment(datetime).format('HH:mm');
+        } else {
+          return moment(datetime).format('MMM DD');
+        }
+      }));
+    }
+  }, [tempData, filter])
+
+
+
+
+  const handleFilterChange = async (filter) => {
+    setFilter(filter);
+
+    setTempData([]);
+    setSeries([]);
+
+    // make API call with updated interval
+    dispatch(getSingleStockDataFromAPI(singleStockInfo.symbol, filter));
+  }
+
+
+  const options = {
+    chart: {
+      // id: "basic-bar",
+      type: "line",
+      align: "center",
+      parentHeightOffset: 0,
+      events: {
+        mouseLeave: () => setCurrentMarketPrice(true),
+      },
+      toolbar: {
+        show: false,
+      },
+      zoom: {
+        enabled: false,
+      },
+      animations: {
+        enabled: false,
+      },
+      redrawOnParentResize: true,
+    },
+
+    xaxis: {
+      categories: [],
+      labels: {
+        show: false,
+        showAlways: false,
+      },
+    },
+    yaxis: {
+      show: false,
+      showAlways: false,
+      labels: {
+        show: false,
+      },
+      axisBorder: {
+        show: false,
+      },
+    },
+    colors: ["#00C805"],
+    stroke: {
+      width: 2.75
+    },
+    grid: {
+      show: false
+    },
+    tooltip: {
+      enabled: true,
+      x: {
+        // format: 'dd/MM/yy HH:mm',
+        format: filter === '1D' ? 'HH:mm' : 'dd/MM/yy',
+      },
+      y: {
+        title: {
+          formatter: function (val) {
+            return "$"
+          }
+        }
+      }
+    },
+    toolbar: {
+      show: false,
+    },
+    legend: {
+      show: false,
+    },
+    noData: {
+      text: "Loading...",
+      align: "center",
+      verticalAlign: "center",
+      style: {
+        color: "darkgray",
+        fontSize: "24px",
+      },
+    },
+  }
+
+  return (
+    <>
+      {
+        !loading ?
+          <div>
+            <div className='big-chart-container'>
+              <ApexCharts options={options} series={series} width='500px' />
+            </div>
+            <div>
+              <button onClick={() => handleFilterChange('1D')}>1D</button>
+              <button onClick={() => handleFilterChange('1W')}>1W</button>
+              <button onClick={() => handleFilterChange('1M')}>1M</button>
+              <button onClick={() => handleFilterChange('3M')}>3M</button>
+              <button onClick={() => handleFilterChange('1Y')}>1Y</button>
+              <button onClick={() => handleFilterChange('5Y')}>5Y</button>
+            </div>
+          </div>
+          :
+          <></>
+      }
+    </>
+  );
 }
 
 export default StockChart;

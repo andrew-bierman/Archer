@@ -1,0 +1,11 @@
+.homepage-main-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    width: 96vw;
+    height: 100%;
+    margin-right: 20px;
+    margin-left: 20px;
+}

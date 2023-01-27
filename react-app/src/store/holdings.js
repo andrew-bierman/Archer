@@ -113,7 +113,7 @@ export const deleteHolding = (holdingId, quantity, stockCurrentPrice) => async (
 
 export const getHoldingById = (holdingId) => async (dispatch) => {
     const response = await fetch(`/api/holdings/${holdingId}`);
-    if (response.ok) {
+    if (response.ok && response.status !== 204) {
         const data = await response.json();
         dispatch(getHoldingByIdAction(data.holding));
     } else {
@@ -123,7 +123,7 @@ export const getHoldingById = (holdingId) => async (dispatch) => {
 
 export const getHoldingByStockSymbol = (stockSymbol) => async (dispatch) => {
     const response = await fetch(`/api/holdings/symbol/${stockSymbol}`);
-    if (response.ok) {
+    if (response.ok && response.status !== 204) {
         const data = await response.json();
         dispatch(getHoldingByStockSymbolAction(data));
     } else {
