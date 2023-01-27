@@ -34,6 +34,15 @@
 
 }
 
+.watchlist-individual button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+
+}
+
 .watchlist-individual-header {
     display: flex;
     flex-direction: row;
