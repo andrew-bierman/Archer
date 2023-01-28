@@ -130,21 +130,24 @@ def get_timeseries_stock_data_by_symbol(symbol, filter):
         outputsize = '288'
 
 
-    url = "https://twelve-data1.p.rapidapi.com/time_series"
+    # url = "https://twelve-data1.p.rapidapi.com/time_series"
+    url = 'https://api.twelvedata.com/time_series'
 
     querystring = {
         "symbol": symbol,
         "interval": interval,
         "outputsize": outputsize,
-        "format":"json"
+        "format":"json",
+        "apikey": twelve_native_api_key
     }
 
-    headers = {
-        "X-RapidAPI-Key": twelve_api_key,
-        "X-RapidAPI-Host": "twelve-data1.p.rapidapi.com"
-    }
+    # headers = {
+    #     "X-RapidAPI-Key": twelve_api_key,
+    #     "X-RapidAPI-Host": "twelve-data1.p.rapidapi.com"
+    # }
 
-    res = requests.get(url, headers=headers, params=querystring).json()
+    # res = requests.get(url, headers=headers, params=querystring).json()
+    res = requests.get(url, params=querystring).json()
 
     # if res.status_code != 200:
     #     return {'message': 'Stock not found'}, 404

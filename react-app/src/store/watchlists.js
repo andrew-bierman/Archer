@@ -11,6 +11,9 @@ const DELETE_WATCHLIST_BY_ID = 'watchlists/DELETE_WATCHLIST_BY_ID';
 const ADD_STOCK_TO_WATCHLIST = 'watchlists/ADD_STOCK_TO_WATCHLIST';
 const REMOVE_STOCK_FROM_WATCHLIST = 'watchlists/REMOVE_STOCK_FROM_WATCHLIST';
 
+const GET_WATCHLIST_STOCK_DATA = 'watchlists/GET_WATCHLIST_STOCK_DATA';
+const GET_WATCHLIST_STOCK_DATA_DAILY = 'watchlists/GET_WATCHLIST_STOCK_DATA_DAILY';
+
 const getAllUserWatchlists = (watchlists) => ({
     type: GET_ALL_USER_WATCHLISTS,
     payload: watchlists
@@ -45,6 +48,17 @@ const removeStockFromWatchlist = (watchlist) => ({
     type: REMOVE_STOCK_FROM_WATCHLIST,
     payload: watchlist
 });
+
+export const getWatchlistStockDataAction = (data) => ({
+    type: GET_WATCHLIST_STOCK_DATA,
+    payload: data
+});
+
+export const getWatchlistStockDataDailyAction = (data) => ({
+    type: GET_WATCHLIST_STOCK_DATA_DAILY,
+    payload: data
+});
+
 
 export const fetchWatchlists = () => async (dispatch) => {
     const response = await fetch('/api/watchlists/');
@@ -150,11 +164,41 @@ export const removeStockFromWatchlistThunk = (watchlistId, stockId) => async (di
     }
 };
 
+export const getWatchlistStockData = (stockSymbol) => async (dispatch) => {
+    if (!stockSymbol) return;
+    if(typeof stockSymbol !== 'string') return;
+
+    const response = await fetch(`api/stocks/data/current/${stockSymbol}`);
+    if (response.ok) {
+        const data = await response.json();
+        dispatch(getWatchlistStockDataAction(data));
+        return data
+    } else {
+        console.log('Error fetching watchlist stock data');
+    }
+};
+
+export const getWatchlistStockDataDaily = (stockSymbol) => async (dispatch) => {
+    if (!stockSymbol) return;
+    if(typeof stockSymbol !== 'string') return;
+
+    console.log('stockSymbol in data thunk', stockSymbol)
+
+    const response = await fetch(`api/stocks/data/time-series/${stockSymbol}/1D`);
+    if (response.ok) {
+        const data = await response.json();
+        dispatch(getWatchlistStockDataDailyAction(data));
+        return data
+    } else {
+        console.log('Error fetching watchlist stock data');
+    }
+};
 
   
 const initialState = {
     allWatchlists: [],
     currentWatchlist: {},
+    watchlistStockData: {}
 };
 
 const watchlistReducer = (state = initialState, action) => {
@@ -212,6 +256,30 @@ const watchlistReducer = (state = initialState, action) => {
                     }
                 })
             }
+        case GET_WATCHLIST_STOCK_DATA:
+            return {
+                ...state,
+                watchlistStockData: {
+                    ...state.watchlistStockData,
+                    [action.payload.symbol]: {
+                        ...state.watchlistStockData[action.payload.symbol],
+                        Info: action.payload
+                    }
+                }
+            }
+        case GET_WATCHLIST_STOCK_DATA_DAILY:
+            console.log('action.payload in reducer', action.payload)
+            return {
+                ...state,
+                watchlistStockData: {
+                    ...state.watchlistStockData,
+                    [action.payload.meta.symbol]: {
+                        ...state.watchlistStockData[action.payload.meta.symbol],
+                        dailyData: action.payload.values
+                    }
+                }
+            }
+
         default:
             return state;
     }

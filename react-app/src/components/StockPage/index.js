@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import StockChart from '../StockChart';
-import { addStockToWatchlistThunk } from '../../store/watchlists';
+import { addStockToWatchlistThunk, getWatchlistStockDataAction, getWatchlistStockDataDailyAction } from '../../store/watchlists';
 import { getSingleStockDataFromAPI, getSingleStockInfo, getSingleStockCurrentPriceFromAPI, resetSingleStockData } from '../../store/stocks';
 import { resetCurrentHolding } from '../../store/holdings';
 import OpenModalButton from '../OpenModalButton';
@@ -42,7 +42,13 @@ function StockPage() {
       // const data = await response.json()
       // setStockData(data);
       await dispatch(getSingleStockDataFromAPI(symbol))
-      await dispatch(getSingleStockCurrentPriceFromAPI(symbol))
+      .then((data) => {
+        console.log('data', data)
+        dispatch(getWatchlistStockDataDailyAction(data))
+      })
+      .then(async () => await dispatch(getSingleStockCurrentPriceFromAPI(symbol)))
+      .then((data) => dispatch(getWatchlistStockDataAction(data)))
+      
 
     }
 
