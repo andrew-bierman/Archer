@@ -25,7 +25,7 @@ const Watchlists = () => {
         if (watchlists.length > 0) {
             watchlists.forEach(watchlist => {
                 watchlist?.stocks?.forEach(async (stock) => {
-                    console.log(stock.symbol)
+                    // console.log(stock.symbol)
                     if(!watchListStockData[stock.symbol]){
                         await dispatch(getWatchlistStockData(stock.symbol))
                         await dispatch(getWatchlistStockDataDaily(stock.symbol))
@@ -66,10 +66,10 @@ const Watchlists = () => {
             // stockCurrentPrice = watchListStockData[watchlistStockSymbol]?.close;
             // stockCurrentPercentageChange = watchListStockData[watchlistStockSymbol]?.percent_change;
         }
-        console.log('watchlistStockSymbol: ', watchlistStockSymbol)
-        console.log('watchListStockData: ', watchListStockData)
-        console.log('stockCurrentPrice: ', stockCurrentPrice)
-        console.log('stockCurrentPercentageChange: ', stockCurrentPercentageChange)
+        // console.log('watchlistStockSymbol: ', watchlistStockSymbol)
+        // console.log('watchListStockData: ', watchListStockData)
+        // console.log('stockCurrentPrice: ', stockCurrentPrice)
+        // console.log('stockCurrentPercentageChange: ', stockCurrentPercentageChange)
         return [stockCurrentPrice, stockCurrentPercentageChange]
     }
 
@@ -216,7 +216,7 @@ const Watchlists = () => {
                                                                         </div>
                                                                         :
                                                                         <div className='watchlist-stock-individual-price-and-change-negative'>
-                                                                            -{parseFloat(watchListStockData[stock.symbol]?.Info?.percent_change).toFixed(2)}%
+                                                                            {parseFloat(watchListStockData[stock.symbol]?.Info?.percent_change).toFixed(2)}%
                                                                         </div>
                                                                     }
                                                                 </div>

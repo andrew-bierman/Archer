@@ -182,7 +182,7 @@ export const getWatchlistStockDataDaily = (stockSymbol) => async (dispatch) => {
     if (!stockSymbol) return;
     if(typeof stockSymbol !== 'string') return;
 
-    console.log('stockSymbol in data thunk', stockSymbol)
+    // console.log('stockSymbol in data thunk', stockSymbol)
 
     const response = await fetch(`api/stocks/data/time-series/${stockSymbol}/1D`);
     if (response.ok) {

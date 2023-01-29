@@ -43,38 +43,43 @@ const LoginForm = () => {
   };
 
   return (
-    <>
-      <form onSubmit={onLogin}>
-        <div>
-          {errors.map((error, ind) => (
-            <div key={ind}>{error}</div>
-          ))}
-        </div>
-        <div>
-          <label htmlFor='email'>Email</label>
-          <input
-            name='email'
-            type='text'
-            placeholder='Email'
-            value={email}
-            onChange={updateEmail}
-          />
-        </div>
-        <div>
-          <label htmlFor='password'>Password</label>
-          <input
-            name='password'
-            type='password'
-            placeholder='Password'
-            value={password}
-            onChange={updatePassword}
-          />
-          <button type='submit'>Login</button>
-        </div>
-      </form>
-      <button onClick={() => handleDemoUserClick()}>Demo User</button>
-      <button onClick={() => handleSignUpClick()}>Sign Up</button>
-    </>
+    <div className='login-form-page'>
+      <div className='login-page-splash-image-container'>
+
+      </div>
+      <div className='login-form-form-container'>
+        <form onSubmit={onLogin}>
+          <div>
+            {errors.map((error, ind) => (
+              <div key={ind}>{error}</div>
+            ))}
+          </div>
+          <div>
+            <label htmlFor='email'>Email</label>
+            <input
+              name='email'
+              type='text'
+              placeholder='Email'
+              value={email}
+              onChange={updateEmail}
+            />
+          </div>
+          <div>
+            <label htmlFor='password'>Password</label>
+            <input
+              name='password'
+              type='password'
+              placeholder='Password'
+              value={password}
+              onChange={updatePassword}
+            />
+            <button type='submit'>Login</button>
+          </div>
+        <button onClick={() => handleSignUpClick()}>Sign Up</button>
+        <button onClick={() => handleDemoUserClick()}>Demo User</button>
+        </form>
+      </div>
+    </div>
 
   );
 };

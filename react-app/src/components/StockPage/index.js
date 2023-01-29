@@ -43,7 +43,7 @@ function StockPage() {
       // setStockData(data);
       await dispatch(getSingleStockDataFromAPI(symbol))
       .then((data) => {
-        console.log('data', data)
+        // console.log('data', data)
         dispatch(getWatchlistStockDataDailyAction(data))
       })
       .then(async () => await dispatch(getSingleStockCurrentPriceFromAPI(symbol)))
@@ -64,7 +64,7 @@ function StockPage() {
           dispatch(resetCurrentHolding());
           dispatch(resetSingleStockData());
         }
-    }, []);
+    }, [symbol]);
 
   
   const handleAddToList = (e) => {

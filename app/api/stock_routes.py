@@ -152,6 +152,8 @@ def get_timeseries_stock_data_by_symbol(symbol, filter):
     # if res.status_code != 200:
     #     return {'message': 'Stock not found'}, 404
 
+    print('RESPONSE FOR STOCK DATA ------', res)
+
     return res
 
 

@@ -61,10 +61,12 @@ export const getSingleStockInfo = (symbol) => async (dispatch) => {
 
 export const getSingleStockDataFromAPI = (symbol, filter) => async (dispatch) => {
     if (!filter) filter = '1D';
+    console.log('IN SINGLE STOCK THUNK', symbol, filter)
 
     const response = await fetch(`/api/stocks/data/time-series/${symbol}/${filter}`);
     if (response.ok) {
         const data = await response.json();
+        console.log('data IN SINGLE STOCK THUNK', data)
         dispatch(getSingleDataStock(data));
         // if(filter === '1D'){
         //     dispatch(getWatchlistStockDataDailyAction(data));

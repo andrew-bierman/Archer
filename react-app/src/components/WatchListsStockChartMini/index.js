@@ -19,7 +19,7 @@ const WatchListStockChartMini = ({stockSymbol}) => {
   const [xaxisCategories, setXaxisCategories] = useState([]);
 
   const [currentMarketPrice, setCurrentMarketPrice] = useState(true);
-  console.log("stockSymbol in mini chart", stockSymbol)
+  // console.log("stockSymbol in mini chart", stockSymbol)
   const timeSeriesData = useSelector(state => state.watchlists.watchlistStockData[stockSymbol].dailyData);
   const [tempData, setTempData] = useState();
   const [series, setSeries] = useState([]);
