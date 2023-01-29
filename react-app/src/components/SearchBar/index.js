@@ -7,6 +7,7 @@ const SearchBar = () => {
 
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
+    const [matchingText, setMatchingText] = useState('');
     const [active, setActive] = useState('');
 
     const MAX_RESULTS = 5;
@@ -32,11 +33,12 @@ const SearchBar = () => {
         const data = await res.json();
         setResults(data.stocks);
         setActive('active');
+        setMatchingText(query.toUpperCase().split(''))
     }
 
     const handleSearchClick = (symbol) => {
-        
-        if(typeof symbol === 'string') {
+
+        if (typeof symbol === 'string') {
             setQuery('');
             setResults([]);
             symbol = symbol.toUpperCase();
@@ -54,7 +56,7 @@ const SearchBar = () => {
             <form onSubmit={handleFormSubmit}>
                 <i className="fa-solid fa-magnifying-glass"></i>
                 &nbsp;
-                <input type="search" onChange={e => setQuery(e.target.value)} value={query} 
+                <input type="search" onChange={e => setQuery(e.target.value)} value={query}
                     placeholder="Search for a stock"
                 />
                 {/* <button onClick={handleSearch}>
@@ -64,12 +66,31 @@ const SearchBar = () => {
             <div className={`search-results-dropdown ${results.length > 0 ? `${active}` : ''}`}>
                 <div id="search-results-ul">
                     {results.slice(0, MAX_RESULTS).map(result => (
-                        <p key={result.id} onClick={() => handleSearchClick(result.symbol)}>
+                        <div key={result.id} className='search-results-individual-result' onClick={() => handleSearchClick(result.symbol)}>
                             <Link to={`/stocks/${result.symbol}`}>
-                                {result.symbol} - {result.company_name}
+                                <span className='search-results-individual-result-symbol'>
+                                    {result.symbol.split('').map((text, i) => (
+                                        <span key={i} className={matchingText.includes(text.toUpperCase()) ? 'highlight' : ''}>
+                                            {text}
+                                        </span>
+                                    ))}
+                                    {/* {result.symbol} */}
+                                </span>
+                                &nbsp;
+                                -
+                                &nbsp;
+                                <span className='search-results-individual-result-name'>
+                                    {result.company_name.split('').map((text, i) => (
+                                        <span key={i} className={matchingText.includes(text.toUpperCase()) ? 'highlight' : ''}>
+                                            {text}
+                                        </span>
+                                    ))}
+                                    {/* {result.company_name} */}
+                                </span>
                             </Link>
-                        </p>
+                        </div>
                     ))}
+
                 </div>
             </div>
 

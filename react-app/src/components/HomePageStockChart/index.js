@@ -11,6 +11,7 @@ const HomePageStockChart = (props) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const userBuyingPower = useSelector(state => state.session.user.buying_power);
+  const [portfolioValueLatest, setPortfolioValueLatest] = useState(0);
 
   const [filter, setFilter] = useState('1D');
 
@@ -77,7 +78,9 @@ const HomePageStockChart = (props) => {
   }, [dispatch, holdings]);
 
   useEffect(() => {
+    // debugger
     setSeries([{ name: '', data: stockData }])
+    setPortfolioValueLatest(stockData.slice(-1)[0]?.y)
   }, [stockData])
 
   useEffect(() => {
@@ -117,7 +120,7 @@ const HomePageStockChart = (props) => {
               aggregateData[dataPoint.datetime] = {
                 x: dataPoint.datetime,
                 // y: (dataPoint.close * holdings[i].total_cost) / holdings[i].shares
-                y: dataPoint.close * holdings[i].shares //+ userBuyingPower
+                y: parseFloat(dataPoint.close * holdings[i].shares + userBuyingPower).toFixed(2)
               };
             } else {
               aggregateData[dataPoint.datetime].y += (dataPoint.close * holdings[i].shares)
@@ -127,7 +130,7 @@ const HomePageStockChart = (props) => {
       }
       setStockData(Object.values(aggregateData));
       setSeries([{ name: '', data: stockData }])
-      console.log({series})
+      console.log({ series })
     };
     fetchData();
   }, [holdings, dispatch, loading, filter]);
@@ -233,7 +236,7 @@ const HomePageStockChart = (props) => {
       y: {
         title: {
           formatter: function (val) {
-            return "$" + val
+            return "$"
           }
         }
       }
@@ -257,17 +260,18 @@ const HomePageStockChart = (props) => {
 
   return (
     <div>
-      <h2>Portfolio</h2>
+      <h2>{portfolioValueLatest ? `$${[portfolioValueLatest]}` : ''}</h2>
       <div className='big-chart-container'>
         <ApexCharts options={options} series={series} width='600px' />
       </div>
-      <div>
-        <button onClick={() => handleFilterChange('1D')}>1D</button>
-        <button onClick={() => handleFilterChange('1W')}>1W</button>
-        <button onClick={() => handleFilterChange('1M')}>1M</button>
-        <button onClick={() => handleFilterChange('3M')}>3M</button>
-        <button onClick={() => handleFilterChange('1Y')}>1Y</button>
-        <button onClick={() => handleFilterChange('5Y')}>5Y</button>
+      <div className='stock-chart-filter-buttons-container'>
+        <button onClick={() => handleFilterChange('1D')} className={filter === '1D' ? 'active-filter-button' : ''} id='filter-button'>1D</button>
+        <button onClick={() => handleFilterChange('1W')} className={filter === '1W' ? 'active-filter-button' : ''}>1W</button>
+        <button onClick={() => handleFilterChange('1M')} className={filter === '1M' ? 'active-filter-button' : ''}>1M</button>
+        <button onClick={() => handleFilterChange('3M')} className={filter === '3M' ? 'active-filter-button' : ''}>3M</button>
+        <button onClick={() => handleFilterChange('1Y')} className={filter === '1Y' ? 'active-filter-button' : ''}>1Y</button>
+        <button onClick={() => handleFilterChange('5Y')} className={filter === '5Y' ? 'active-filter-button' : ''}>5Y</button>
+
       </div>
     </div>
   );

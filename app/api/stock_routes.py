@@ -17,7 +17,11 @@ def search_stocks(query):
     """
     Query the db for a stock by symbol and returns that data in a dictionary
     """
+
+    #  this filters stocks by symbol or company name (case insensitive) and prioritize symbol matches over company name matches
+
     stocks = Stock.query.filter(Stock.symbol.ilike(f'%{query}%')).all()
+    stocks += Stock.query.filter(Stock.symbol.ilike(f'%{query}%') == False, Stock.company_name.ilike(f'%{query}%')).all()
 
     return {'stocks': [stock.to_dict() for stock in stocks]}
 
