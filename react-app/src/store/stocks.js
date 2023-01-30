@@ -1,3 +1,5 @@
+import { getWatchlistStockDataAction, getWatchlistStockDataDailyAction } from "./watchlists";
+
 const GET_ALL_STOCKS_FROM_DB = 'stockList/GET_ALL_STOCKS_FROM_DB';
 const GET_SINGLE_STOCK_INFO_FROM_DB = 'stockList/GET_SINGLE_STOCK_INFO_FROM_DB';
 const GET_SINGLE_STOCK_DATA = 'stockList/GET_SINGLE_STOCK_DATA_FROM_API';
@@ -59,11 +61,16 @@ export const getSingleStockInfo = (symbol) => async (dispatch) => {
 
 export const getSingleStockDataFromAPI = (symbol, filter) => async (dispatch) => {
     if (!filter) filter = '1D';
+    console.log('IN SINGLE STOCK THUNK', symbol, filter)
 
     const response = await fetch(`/api/stocks/data/time-series/${symbol}/${filter}`);
     if (response.ok) {
         const data = await response.json();
+        console.log('data IN SINGLE STOCK THUNK', data)
         dispatch(getSingleDataStock(data));
+        // if(filter === '1D'){
+        //     dispatch(getWatchlistStockDataDailyAction(data));
+        // }
         return data;
 
     } else {
@@ -77,6 +84,7 @@ export const getSingleStockCurrentPriceFromAPI = (symbol) => async (dispatch) =>
     if (response.ok) {
         const data = await response.json();
         dispatch(getSingleStockCurrentPrice(data));
+        // dispatch(getWatchlistStockDataAction(data));
         return data;
 
     } else {

@@ -5,6 +5,7 @@ const DELETE_HOLDING = 'holding/DELETE_HOLDING';
 const GET_HOLDING_BY_ID = 'holding/GET_HOLDING_BY_ID';
 const GET_HOLDING_BY_STOCK_SYMBOL = 'holding/GET_HOLDING_BY_STOCK_ID';
 const RESET_CURRENT_HOLDING = 'holding/RESET_CURRENT_HOLDING';
+const GET_HOLDING_STOCK_DATA = 'holding/GET_HOLDING_STOCK_DATA';
 
 const getUserHoldingsFromDBAction = (holdings) => ({
     type: GET_USER_HOLDINGS_FROM_DB,
@@ -34,6 +35,11 @@ const getHoldingByIdAction = (holding) => ({
 const getHoldingByStockSymbolAction = (holding) => ({
     type: GET_HOLDING_BY_STOCK_SYMBOL,
     payload: holding
+});
+
+const getHoldingStockDataAction = (stockData) => ({
+    type: GET_HOLDING_STOCK_DATA,
+    payload: stockData
 });
 
 const resetCurrentHoldingAction = () => ({
@@ -132,13 +138,46 @@ export const getHoldingByStockSymbol = (stockSymbol) => async (dispatch) => {
     }
 }
 
+export const getHoldingStockData = (stockSymbol) => async (dispatch) => {
+    console.log('HOLDINGS STOCK THUNK TOp -', stockSymbol)
+    try {
+        const response = await fetch(`/api/stocks/data/time-series/${stockSymbol}/1D`);
+        // debugger
+        if (response.ok) {
+            const data = await response.json();
+            
+            console.log('HOLDINGS STOCK THUNK', data)
+            dispatch(getHoldingStockDataAction(data));
+            return data;
+        } else {
+            console.log('Error fetching stock data');
+        }
+
+    } catch(e) {
+        console.log('Error fetching stock data', e);
+    }
+}
+
+
+// export const getHoldingStockDataBatch = (stockSymbols) => async (dispatch) => {
+//     const response = await fetch(`/api/stocks/data/time-series/${stockSymbols}/1D`);
+//     if (response.ok) {
+//         const data = await response.json();
+//         dispatch(getHoldingStockDataAction(data));
+//         return data;
+//     } else {
+//         console.log('Error fetching stock data');
+//     }
+// }
+
 export const resetCurrentHolding = () => async (dispatch) => {
     dispatch(resetCurrentHoldingAction());
 }
 
 const initialState = {
     allHoldings: [],
-    currentHolding: {}
+    currentHolding: {},
+    stockData: {}
 };
 
 const holdingReducer = (state = initialState, action) => {
@@ -175,6 +214,14 @@ const holdingReducer = (state = initialState, action) => {
             return {
                 ...state,
                 currentHolding: {[action.payload.id]: action.payload}
+            }
+        case GET_HOLDING_STOCK_DATA:
+            return {
+                ...state,
+                stockData: {
+                    ...state.stockData,
+                    [action.payload.meta.symbol]: action.payload
+                }
             }
         case RESET_CURRENT_HOLDING:
             return {

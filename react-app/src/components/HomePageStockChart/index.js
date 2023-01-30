@@ -1,125 +1,280 @@
-import React, { useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSingleStockDataFromAPI, getSingleStockCurrentPriceFromAPI } from '../../store/stocks';
+import { getHoldingStockData, getAllUserHoldings } from '../../store/holdings';
 import ApexCharts from 'react-apexcharts'
 
 import './HomePageStockChart.css';
 
 const HomePageStockChart = (props) => {
-    // const data = props?.stockData["Time Series (Daily)"];
-    const [currentMarketPrice, setCurrentMarketPrice] = useState(true);
+  // const data = props?.stockData["Time Series (Daily)"];
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
+  const userBuyingPower = useSelector(state => state.session.user.buying_power);
+  const [portfolioValueLatest, setPortfolioValueLatest] = useState(0);
 
-    function aggregateHoldingsData(holdings) {
-        let aggregateData = {};
-        // holdings.forEach(holding => {
-        //     let stockData = retrieveStockData(holding.stock_id); // retrieve historical data for the stock
-        //     stockData.forEach(dataPoint => {
-        //         if (!aggregateData[dataPoint.datetime]) {
-        //             aggregateData[dataPoint.datetime] = {
-        //                 x: dataPoint.datetime,
-        //                 y: (dataPoint.close * holding.total_cost) / holding.shares
-        //             };
-        //         } else {
-        //             aggregateData[dataPoint.datetime].y += (dataPoint.close * holding.total_cost) / holding.shares;
-        //         }
-        //     });
-        // });
-        // return Object.values(aggregateData);
+  const [filter, setFilter] = useState('1D');
+
+  const [currentMarketPrice, setCurrentMarketPrice] = useState(true);
+
+  const [stockData, setStockData] = useState([]);
+  const [series, setSeries] = useState([]);
+
+  // let stock
+
+
+  const holdings = useSelector(state => state.holdings.allHoldings);
+  const holdingsStockData = useSelector(state => state.holdings.stockData);
+
+  const handleFilterChange = async (filter) => {
+    setFilter(filter);
+
+    setStockData([]);
+    setSeries([]);
+
+    // make API call with updated interval
+    // dispatch(getSingleStockDataFromAPI(singleStockInfo.symbol, filter));
+  }
+
+
+
+  const getHoldingStockData2 = async (stockSymbol, filter) => {
+    // console.log('HOLDINGS STOCK THUNK TOp -', stockSymbol)
+    try {
+      const response = await fetch(`/api/stocks/data/time-series/${stockSymbol}/${filter}`);
+      // debugger
+      if (response.ok) {
+        const data = await response.json();
+        // console.log('HOLDINGS STOCK THUNK', data)
+        dispatch({ type: 'holding/GET_HOLDING_STOCK_DATA', payload: data });
+        return data;
+      } else {
+        console.log('Error fetching stock data');
+      }
+
+    } catch (e) {
+      console.log('Error fetching stock data', e);
     }
-   
+  }
 
-    // chart data and options
-    const series = [{
-        name: '',
-        data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
-    }]
+  // const getHoldingDataFromAPI = async () => {
+  //   let symbolsStr = '';
+  //   holdings.forEach(holding => {
+  //     symbolsStr += `${holding.stock.symbol},`;
+  //   });
+  //   symbolsStr = symbolsStr.slice(0, -1);
+  //   const res = await dispatch(getHoldingStockDataBatch(symbolsStr));
 
-    
-    // const seriesData = Object.keys(data).map(date => ({ x: date, y: data[date]["4. close"] }));
+  //   return res;
+  // }
 
-    const options = {
-        chart: {
-          // id: "basic-bar",
-          type: "line",
-          align: "center",
-          parentHeightOffset: 0,
-          events: {
-            mouseLeave: () => setCurrentMarketPrice(true),
-          },
-          toolbar: {
-            show: false,
-          },
-          zoom: {
-            enabled: false,
-          },
-          animations: {
-            enabled: false,
-          },
-          redrawOnParentResize: true,
-        },
-        // series: [{
-        //     name: "Stock Price",
-        //     data: seriesData
-        // }],
-        // series: series,
-        xaxis: {
-            categories: [],
-            labels: {
-              show: false,
-              showAlways: false,
-            },
-        },
-        yaxis: {
-          show: false,
-          showAlways: false,
-          labels: {
-            show: false,
-          },
-          axisBorder: {
-            show: false,
-          },
-        },
-        colors: ["#00C805"],
-        stroke: {
-              width: 2.75
-        },
-        grid: { 
-            show: false 
-        },
-        tooltip: {
-          enabled: true,
-            x: {
-                format: 'dd/MM/yy HH:mm'
-            },
-            y: {
-                title: {
-                    formatter: function (val) {
-                        return "$" + val
-                    }
-                }
+  useEffect(() => {
+    if (!holdings || holdings.length === 0) {
+      setLoading(true);
+      dispatch(getAllUserHoldings())
+    } else {
+      setLoading(false);
+    }
+  }, [dispatch, holdings]);
+
+  useEffect(() => {
+    // debugger
+    setSeries([{ name: '', data: stockData }])
+    setPortfolioValueLatest(stockData.slice(-1)[0]?.y)
+  }, [stockData])
+
+  useEffect(() => {
+    if (!holdings || holdings.length === 0) {
+      return;
+    }
+    if (loading) {
+      return;
+    }
+    let aggregateData = {};
+    const fetchData = async () => {
+      console.log('holdings at top of async func', holdings)
+      // console.log(holdings && holdings.length > 0)
+      // debugger
+      if (holdings && holdings.length > 0) {
+        for (let i = 0; i < holdings.length; i++) {
+
+          console.log('CALLING getHoldingStockData')
+
+          // await dispatch(getHoldingStockData(holdings[i].stock[0].symbol, '1D'))
+
+          // dispatch(getHoldingStockData(holdings[i].stock[0].symbol, '1D'))
+
+          const stock = await getHoldingStockData2(holdings[i].stock[0].symbol, filter)
+          // let stock = []
+          // let stock = holdingsStockData[holdings[i].stock[0].symbol]
+
+          console.log('stock from selector', stock)
+          // await getHoldingStockData(holdings[i].stock[0].symbol, '1D')
+
+          let data = stock.values;
+          data.reverse()
+          // debugger
+          data.forEach(dataPoint => {
+            // debugger
+            if (!aggregateData[dataPoint.datetime]) {
+              aggregateData[dataPoint.datetime] = {
+                x: dataPoint.datetime,
+                // y: (dataPoint.close * holdings[i].total_cost) / holdings[i].shares
+                y: parseFloat(dataPoint.close * holdings[i].shares + userBuyingPower).toFixed(2)
+              };
+            } else {
+              aggregateData[dataPoint.datetime].y += (dataPoint.close * holdings[i].shares)
             }
-        },
-        toolbar: {
-            show: false,
-        },
-        legend: {
-            show: false,
-          },
-        noData: {
-            text: "Loading...",
-            align: "center",
-            verticalAlign: "center",
-            style: {
-              color: "darkgray",
-              fontSize: "24px",
-            },
-          },
-    }
+          });
+        }
+      }
+      setStockData(Object.values(aggregateData));
+      setSeries([{ name: '', data: stockData }])
+      console.log({ series })
+    };
+    fetchData();
+  }, [holdings, dispatch, loading, filter]);
 
-    return (
+  /*
+  const aggregateHoldingsData = async (holdings) => {
+    let aggregateData = {};
+    holdings.forEach(holding => {
+      let stockData = getSingleStockDataFromAPI(holding.stock.symbol); // retrieve historical data for the stock
+      stockData = stockData["values"];
+      console.log('stockData', stockData)
+      stockData?.forEach(dataPoint => {
+        if (!aggregateData[dataPoint.datetime]) {
+          aggregateData[dataPoint.datetime] = {
+            x: dataPoint.datetime,
+            y: (dataPoint.close * holding.total_cost) / holding.shares
+          };
+        } else {
+          aggregateData[dataPoint.datetime].y += (dataPoint.close * holding.total_cost) / holding.shares;
+        }
+      });
+    });
+    return Object.values(aggregateData);
+  }
+  */
+
+  // chart data and options
+  // let data = [];
+  // let series = [];
+  // if (holdings.length > 0 && !loading) {
+  //   data = aggregateHoldingsData(holdings);
+  //   series = [{
+  //     name: 'Portfolio Value',
+  //     data: data
+  //   }]
+  // }
+
+  // const series = [{
+  //   name: '',
+  //   data: stockData
+  // }]
+
+  // console.log(series)
+
+
+
+  // const seriesData = Object.keys(data).map(date => ({ x: date, y: data[date]["4. close"] }));
+
+  const options = {
+    chart: {
+      // id: "basic-bar",
+      type: "line",
+      align: "center",
+      parentHeightOffset: 0,
+      events: {
+        mouseLeave: () => setCurrentMarketPrice(true),
+      },
+      toolbar: {
+        show: false,
+      },
+      zoom: {
+        enabled: false,
+      },
+      animations: {
+        enabled: false,
+      },
+      redrawOnParentResize: true,
+    },
+    // series: [{
+    //     name: "Stock Price",
+    //     data: seriesData
+    // }],
+    // series: series,
+    xaxis: {
+      categories: [],
+      labels: {
+        show: false,
+        showAlways: false,
+      },
+    },
+    yaxis: {
+      show: false,
+      showAlways: false,
+      labels: {
+        show: false,
+      },
+      axisBorder: {
+        show: false,
+      },
+    },
+    colors: ["#00C805"],
+    stroke: {
+      width: 2.75
+    },
+    grid: {
+      show: false
+    },
+    tooltip: {
+      enabled: true,
+      x: {
+        format: 'dd/MM/yy HH:mm'
+      },
+      y: {
+        title: {
+          formatter: function (val) {
+            return "$"
+          }
+        }
+      }
+    },
+    toolbar: {
+      show: false,
+    },
+    legend: {
+      show: false,
+    },
+    noData: {
+      text: "Loading...",
+      align: "center",
+      verticalAlign: "center",
+      style: {
+        color: "darkgray",
+        fontSize: "24px",
+      },
+    },
+  }
+
+  return (
+    <div>
+      <h2>{portfolioValueLatest ? `$${[portfolioValueLatest]}` : ''}</h2>
       <div className='big-chart-container'>
-        <ApexCharts options={options} series={series} width='500px'/>
+        <ApexCharts options={options} series={series} width='600px' />
       </div>
-    );
+      <div className='stock-chart-filter-buttons-container'>
+        <button onClick={() => handleFilterChange('1D')} className={filter === '1D' ? 'active-filter-button' : ''} id='filter-button'>1D</button>
+        <button onClick={() => handleFilterChange('1W')} className={filter === '1W' ? 'active-filter-button' : ''}>1W</button>
+        <button onClick={() => handleFilterChange('1M')} className={filter === '1M' ? 'active-filter-button' : ''}>1M</button>
+        <button onClick={() => handleFilterChange('3M')} className={filter === '3M' ? 'active-filter-button' : ''}>3M</button>
+        <button onClick={() => handleFilterChange('1Y')} className={filter === '1Y' ? 'active-filter-button' : ''}>1Y</button>
+        <button onClick={() => handleFilterChange('5Y')} className={filter === '5Y' ? 'active-filter-button' : ''}>5Y</button>
+
+      </div>
+    </div>
+  );
 }
 
 export default HomePageStockChart;

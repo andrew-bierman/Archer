@@ -17,11 +17,11 @@ function StockListSearch({watchlistId}) {
     const stocks = useSelector(state => state.stocks.allStocks.byId);
 
     useEffect(() => {
-        console.log('BEFORE STOCKS',Object.values(stocks))
+        // console.log('BEFORE STOCKS',Object.values(stocks))
         setLoading(true);
         // dispatch(getAllStocks());
         setLoading(false);
-        console.log('AFTER STOCKS',Object.values(stocks))
+        // console.log('AFTER STOCKS',Object.values(stocks))
     }, [dispatch]);
 
     const handleChange = (e) => {

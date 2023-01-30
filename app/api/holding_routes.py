@@ -83,11 +83,14 @@ def delete_holding(holding_id):
     if holding.user_id != current_user.id:
         return jsonify({'message': "Unauthorized", 'statusCode': 401}), 401
 
+
+    # Note quantity is negative for delete routes
+
     stock_price = request.json['stock_price']
     quantity = request.json['quantity']
 
     # Validate that the quantity of the holding is equal to the quantity being sold
-    if float(holding.shares) != float(quantity):
+    if (float(holding.shares) + float(quantity) != 0):
         return jsonify({'message': "Invalid quantity", 'statusCode': 400}), 400
 
     shares = holding.shares
@@ -172,7 +175,7 @@ def update_holding_quantity(holding_id):
 
     # For a sell order, quantity is negative for a sell order
     elif (float(old_quantity) + float(new_quantity)) > 0 and float(new_quantity) < 0:
-        revenue = float(stock_price) * (float(old_quantity) + float(new_quantity))
+        revenue = float(stock_price) * (float(new_quantity) * -1)
         user.buying_power += revenue
         if holding.total_cost > revenue:
             holding.total_cost -= revenue

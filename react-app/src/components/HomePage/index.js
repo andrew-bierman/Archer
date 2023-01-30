@@ -10,7 +10,7 @@ const HomePage = () => {
     return (
         <div className="homepage-main-container">
             <div>
-                <StockListSearch />
+                {/* <StockListSearch /> */}
                 <HomePageStockChart />
             </div>
             <div>

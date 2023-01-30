@@ -7,27 +7,23 @@ import moment from 'moment';
 
 import { isObjectEmpty } from '../utility';
 
-import './StockChart.css';
+import './WatchListStockChart.css';
 
-const StockChart = (props) => {
+const WatchListStockChartMini = ({stockSymbol}) => {
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState('1D');
-  const singleStockInfo = useSelector(state => state.stocks.singleStock.Info);
+//   const singleStockInfo = useSelector(state => state.stocks.singleStock.Info);
+
   const [filter, setFilter] = useState('1D');
   const [xaxisCategories, setXaxisCategories] = useState([]);
 
   const [currentMarketPrice, setCurrentMarketPrice] = useState(true);
-
-  const timeSeriesData = useSelector(state => state.stocks.singleStock.Data.values);
+  // console.log("stockSymbol in mini chart", stockSymbol)
+  const timeSeriesData = useSelector(state => state.watchlists.watchlistStockData[stockSymbol].dailyData);
   const [tempData, setTempData] = useState();
   const [series, setSeries] = useState([]);
 
-  // useEffect(() => {
-  //     setTempData([]);
-  //     setSeries([]);
-  // }, [filter])
 
   useEffect(() => {
     setLoading(true);
@@ -50,27 +46,10 @@ const StockChart = (props) => {
       });
       setSeries([{ name: '', data: seriesData }])
       setXaxisCategories(tempData.map(({ datetime }) => {
-        if (filter === '1D') {
-          return moment(datetime).format('HH:mm');
-        } else {
-          return moment(datetime).format('MMM DD');
-        }
+        return moment(datetime).format('HH:mm');
       }));
     }
   }, [tempData, filter])
-
-
-
-
-  const handleFilterChange = async (filter) => {
-    setFilter(filter);
-
-    setTempData([]);
-    setSeries([]);
-
-    // make API call with updated interval
-    dispatch(getSingleStockDataFromAPI(singleStockInfo.symbol, filter));
-  }
 
 
   const options = {
@@ -113,24 +92,13 @@ const StockChart = (props) => {
     },
     colors: ["#00C805"],
     stroke: {
-      width: 2.75
+      width: 2
     },
     grid: {
       show: false
     },
     tooltip: {
-      enabled: true,
-      x: {
-        // format: 'dd/MM/yy HH:mm',
-        format: filter === '1D' ? 'HH:mm' : 'dd/MM/yy',
-      },
-      y: {
-        title: {
-          formatter: function (val) {
-            return "$"
-          }
-        }
-      }
+      enabled: false,
     },
     toolbar: {
       show: false,
@@ -154,16 +122,8 @@ const StockChart = (props) => {
       {
         !loading ?
           <div>
-            <div className='big-chart-container'>
-              <ApexCharts options={options} series={series} width='500px' />
-            </div>
-            <div className='stock-chart-filter-buttons-container'>
-              <button onClick={() => handleFilterChange('1D')} className={filter === '1D' ? 'active-filter-button' : '' } id='filter-button'>1D</button>
-              <button onClick={() => handleFilterChange('1W')} className={filter === '1W' ? 'active-filter-button' : '' }>1W</button>
-              <button onClick={() => handleFilterChange('1M')} className={filter === '1M' ? 'active-filter-button' : '' }>1M</button>
-              <button onClick={() => handleFilterChange('3M')} className={filter === '3M' ? 'active-filter-button' : '' }>3M</button>
-              <button onClick={() => handleFilterChange('1Y')} className={filter === '1Y' ? 'active-filter-button' : '' }>1Y</button>
-              <button onClick={() => handleFilterChange('5Y')} className={filter === '5Y' ? 'active-filter-button' : '' }>5Y</button>
+            <div className='watchlist-stock-chart-container'>
+              <ApexCharts options={options} series={series} width='140px' />
             </div>
           </div>
           :
@@ -173,4 +133,4 @@ const StockChart = (props) => {
   );
 }
 
-export default StockChart;
+export default WatchListStockChartMini;

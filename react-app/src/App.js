@@ -14,6 +14,7 @@ import StockPage from './components/StockPage';
 import Watchlists from './components/WatchLists';
 import StockList from './components/StockList';
 import Profile from './components/Profile';
+import LandingPage from './components/LandingPage';
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -59,7 +60,7 @@ function App() {
             user ?
             <HomePage />
             :
-            <Redirect to='/login' />
+            <LandingPage />
           }
         </Route>
       </Switch>

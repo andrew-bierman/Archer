@@ -40,7 +40,7 @@ const BuySellStock = ({stockInfo, stockCurrentPrice}) => {
             // dispatch(resetCurrentHolding());
         }
 
-    }, [dispatch]);
+    }, [dispatch, symbol]);
 
     const handleSwitch = (switchTo) => {
         resetForm();

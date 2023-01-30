@@ -19,6 +19,8 @@ const SignUpForm = () => {
       if (data) {
         setErrors(data)
       }
+    } else {
+      setErrors(['Confirm Password field must be the same as the Password field'])
     }
   };
 
@@ -50,54 +52,60 @@ const SignUpForm = () => {
   };
 
   return (
-    <>
-      <form onSubmit={onSignUp}>
-        <div>
-          {errors.map((error, ind) => (
-            <div key={ind}>{error}</div>
-          ))}
-        </div>
-        <div>
-          <label>User Name</label>
-          <input
-            type='text'
-            name='username'
-            onChange={updateUsername}
-            value={username}
-          ></input>
-        </div>
-        <div>
-          <label>Email</label>
-          <input
-            type='text'
-            name='email'
-            onChange={updateEmail}
-            value={email}
-          ></input>
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type='password'
-            name='password'
-            onChange={updatePassword}
-            value={password}
-          ></input>
-        </div>
-        <div>
-          <label>Repeat Password</label>
-          <input
-            type='password'
-            name='repeat_password'
-            onChange={updateRepeatPassword}
-            value={repeatPassword}
-            required={true}
-          ></input>
-        </div>
-        <button type='submit'>Sign Up</button>
-      </form>
-      <button onClick={() => handleDemoUserClick()}>Demo User</button>
-    </>
+    <div className='signup-page-container'>
+      <div className='signup-page-splash-image-container'>
+        <h1>Sign Up</h1>
+      </div>
+      <div className='signup-form-container'>
+        <form onSubmit={onSignUp}>
+          <div className='signup-form-errors'>
+            {errors.map((error, ind) => (
+              <div key={ind}>{error}</div>
+            ))}
+          </div>
+          <div>
+            <label>User Name</label>
+            <input
+              type='text'
+              name='username'
+              onChange={updateUsername}
+              value={username}
+            ></input>
+          </div>
+          <div>
+            <label>Email</label>
+            <input
+              type='text'
+              name='email'
+              onChange={updateEmail}
+              value={email}
+            ></input>
+          </div>
+          <div>
+            <label>Password</label>
+            <input
+              type='password'
+              name='password'
+              onChange={updatePassword}
+              value={password}
+            ></input>
+          </div>
+          <div>
+            <label>Repeat Password</label>
+            <input
+              type='password'
+              name='repeat_password'
+              onChange={updateRepeatPassword}
+              value={repeatPassword}
+              required={true}
+            ></input>
+          </div>
+          <button type='submit'>Sign Up</button>
+          <button onClick={() => handleDemoUserClick()}>Demo User</button>
+        </form>
+
+      </div>
+    </div>
   );
 };
 
