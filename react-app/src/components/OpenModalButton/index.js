@@ -19,7 +19,7 @@ function OpenModalButton({
 
   return (
     faIcon ? 
-      <button onClick={onClick}><i className={faIcon}></i></button>
+      <button onClick={onClick}><i className={`${faIcon}`}></i></button>
       :
       <button onClick={onClick}>{buttonText}</button>
   );

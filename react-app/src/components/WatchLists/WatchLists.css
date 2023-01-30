@@ -28,6 +28,13 @@
     padding-right: 20px;
 }
 
+.watchlist-container button:first-of-type{
+    /* margin-left: 5px; */
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
 
 .watchlist-all-watchlists-container{
     display: flex;
@@ -63,6 +70,10 @@
     justify-content: center;
     align-items: center;
     flex-wrap: nowrap;
+
+    background-color: transparent;
+    border: none;
+    outline: none;
 
 }
 
@@ -137,6 +148,12 @@
 }
 
 .watchlist-individual-button {
+    margin: 2px;
+    width: 30px;
+    height: 30px;
+}
+
+.watchlist-individual-button button {
     margin: 2px;
     width: 30px;
     height: 30px;
