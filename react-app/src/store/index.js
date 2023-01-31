@@ -5,12 +5,14 @@ import watchlists from './watchlists';
 // import stockList from './stockList';
 import stocks from './stocks';
 import holdings from './holdings';
+import news from './news';
 
 const rootReducer = combineReducers({
   session,
   watchlists,
   stocks, 
-  holdings
+  holdings,
+  news
 });
 
 

@@ -8,6 +8,7 @@ function OpenModalButton({
   onButtonClick, // optional: callback function that will be called once the button that opens the modal is clicked
   onModalClose, // optional: callback function that will be called once the modal is closed
   faIcon, // optional: font awesome icon to render inside the button
+  disabled = false, // optional: boolean to disable the button
 }) {
   const { setModalContent, setOnModalClose } = useModal();
 
@@ -19,9 +20,9 @@ function OpenModalButton({
 
   return (
     faIcon ? 
-      <button onClick={onClick}><i className={`${faIcon}`}></i></button>
+      <button onClick={onClick} disabled={disabled}><i className={`${faIcon}`}></i></button>
       :
-      <button onClick={onClick}>{buttonText}</button>
+      <button onClick={onClick} disabled={disabled}>{buttonText}</button>
   );
 }
 

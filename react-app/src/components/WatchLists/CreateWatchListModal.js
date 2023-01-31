@@ -12,6 +12,8 @@ const CreateWatchListModal = () => {
     const dispatch = useDispatch();
     const { closeModal } = useModal();
 
+    const [errors, setErrors] = useState([]);
+
     const [newWatchlistName, setNewWatchlistName] = useState('');
     const [loading, setLoading] = useState(true);
     const [isAdding, setIsAdding] = useState(false);
@@ -23,8 +25,13 @@ const CreateWatchListModal = () => {
         setLoading(true);
         setIsAdding(true)
 
+        if (newWatchlistName.length < 1) {
+            setErrors(['Watchlist name cannot be empty'])
+            return;
+        }
+
         await dispatch(createNewWatchlist(newWatchlistName))
-        .then(async () => await dispatch(fetchWatchlists()))
+            .then(async () => await dispatch(fetchWatchlists()))
 
         setNewWatchlistName('');
         setLoading(false);
@@ -38,13 +45,18 @@ const CreateWatchListModal = () => {
             <div className='create-watchlist-modal-content'>
                 <h3>Create List</h3>
                 <form onSubmit={(e) => handleWatchlistCreate(e)}>
+                    <div>
+                        {errors.length > 0 && errors.map((error, ind) => (
+                            <div key={ind} className='watchlist-modal-error'>{error}</div>
+                        ))}
+                    </div>
                     <input
-                    type="text"
-                    value={newWatchlistName}
-                    onChange={event => setNewWatchlistName(event.target.value)}
-                    minLength="1"
-                    maxLength="255"
-                    placeholder="Create Watchlist"
+                        type="text"
+                        value={newWatchlistName}
+                        onChange={event => setNewWatchlistName(event.target.value)}
+                        minLength="1"
+                        maxLength="255"
+                        placeholder="Create Watchlist"
                     />
                     <button type="submit">
                         <i className="fa-solid fa-plus"></i>

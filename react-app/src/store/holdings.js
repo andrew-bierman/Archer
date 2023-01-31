@@ -143,7 +143,7 @@ export const getHoldingStockData = (stockSymbol) => async (dispatch) => {
     try {
         const response = await fetch(`/api/stocks/data/time-series/${stockSymbol}/1D`);
         // debugger
-        if (response.ok) {
+        if (response.ok && response.status !== 429) {
             const data = await response.json();
             
             console.log('HOLDINGS STOCK THUNK', data)

@@ -141,7 +141,7 @@ export const addStockToWatchlistThunk = (watchlistId, stockId) => async (dispatc
             'Content-Type': 'application/json'
         }
     });
-    if (response.ok) {
+    if (response.ok && response.status !== 204 && response.status !== 429) {
         const data = await response.json();
         dispatch(addStockToWatchlist(data));
     } else {
@@ -169,7 +169,7 @@ export const getWatchlistStockData = (stockSymbol) => async (dispatch) => {
     if(typeof stockSymbol !== 'string') return;
 
     const response = await fetch(`api/stocks/data/current/${stockSymbol}`);
-    if (response.ok) {
+    if (response.ok && response.status !== 204 && response.status !== 429) {
         const data = await response.json();
         dispatch(getWatchlistStockDataAction(data));
         return data
@@ -185,7 +185,7 @@ export const getWatchlistStockDataDaily = (stockSymbol) => async (dispatch) => {
     // console.log('stockSymbol in data thunk', stockSymbol)
 
     const response = await fetch(`api/stocks/data/time-series/${stockSymbol}/1D`);
-    if (response.ok) {
+    if (response.ok && response.status !== 204 && response.status !== 429) {
         const data = await response.json();
         dispatch(getWatchlistStockDataDailyAction(data));
         return data

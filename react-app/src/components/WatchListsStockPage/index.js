@@ -111,19 +111,21 @@ const WatchlistsStockPage = () => {
   return (
     <div className='watchlist-modal-container'>
       <p>Lists</p>
-      <form onSubmit={(e) => handleWatchlistCreate(e)}>
-            <button type="submit">
-                <i className="fa-solid fa-plus"></i>
-            </button>
-            <input
-                type="text"
-                value={newWatchlistName}
-                onChange={event => setNewWatchlistName(event.target.value)}
-                minLength="1"
-                maxLength="255"
-                placeholder="Create Watchlist"
-                />
-        </form>
+      <div className='watchlist-modal-create-watchlist-stock-page-button-and-input-container'>
+        <form onSubmit={(e) => handleWatchlistCreate(e)}>
+                <button type="submit">
+                    <i className="fa-solid fa-plus"></i>
+                </button>
+                <input
+                    type="text"
+                    value={newWatchlistName}
+                    onChange={event => setNewWatchlistName(event.target.value)}
+                    minLength="1"
+                    maxLength="255"
+                    placeholder="Create Watchlist"
+                    />
+            </form>
+      </div>
           <div>
             <form onSubmit={(e) => handleAddStockToWatchlistSubmit(e)}>
                 <>

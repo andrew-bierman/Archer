@@ -23,7 +23,14 @@
     /* background-color:white; */
     border-radius: 20px;
 
+    width: 100%;
+
   }
+
+  .watchlist-modal-error {
+    color: red;
+  }
+
 
 
   .create-watchlist-modal-content input {

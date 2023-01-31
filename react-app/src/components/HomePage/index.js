@@ -4,6 +4,7 @@ import StockList from "../StockList";
 import WatchLists from "../WatchLists";
 import StockListSearch from "../Search";
 import HomePageStockChart from "../HomePageStockChart";
+import HomePageNewsFeed from "../HomePageNewsFeed";
 import './HomePage.css';
 
 const HomePage = () => {
@@ -12,6 +13,7 @@ const HomePage = () => {
             <div>
                 {/* <StockListSearch /> */}
                 <HomePageStockChart />
+                {/* <HomePageNewsFeed /> */}
             </div>
             <div>
                 <WatchLists />  

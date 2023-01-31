@@ -5,11 +5,14 @@ import { getHoldingStockData, getAllUserHoldings } from '../../store/holdings';
 import ApexCharts from 'react-apexcharts'
 
 import './HomePageStockChart.css';
+import { formatToCurrency } from '../utility';
 
 const HomePageStockChart = (props) => {
   // const data = props?.stockData["Time Series (Daily)"];
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const [userHasNoHoldings, setUserHasNoHoldings] = useState(false);
+
   const userBuyingPower = useSelector(state => state.session.user.buying_power);
   const [portfolioValueLatest, setPortfolioValueLatest] = useState(0);
 
@@ -68,10 +71,16 @@ const HomePageStockChart = (props) => {
   //   return res;
   // }
 
+  // useEffect(() => {
+  //   setLoading(true);
+  //   dispatch(getAllUserHoldings())
+  // }, [dispatch, holdings]);
+
   useEffect(() => {
-    if (!holdings || holdings.length === 0) {
+    if (!holdings || holdings.length === 0 && userHasNoHoldings === false) {
       setLoading(true);
       dispatch(getAllUserHoldings())
+      setUserHasNoHoldings(true);
     } else {
       setLoading(false);
     }
@@ -120,10 +129,10 @@ const HomePageStockChart = (props) => {
               aggregateData[dataPoint.datetime] = {
                 x: dataPoint.datetime,
                 // y: (dataPoint.close * holdings[i].total_cost) / holdings[i].shares
-                y: parseFloat(dataPoint.close * holdings[i].shares + userBuyingPower).toFixed(2)
+                y: Math.round(parseFloat(dataPoint.close * holdings[i].shares + userBuyingPower) * 100) / 100
               };
             } else {
-              aggregateData[dataPoint.datetime].y += (dataPoint.close * holdings[i].shares)
+              aggregateData[dataPoint.datetime].y += (Math.round(parseFloat(dataPoint.close * holdings[i].shares) * 100) / 100)
             }
           });
         }
@@ -175,7 +184,7 @@ const HomePageStockChart = (props) => {
 
   // console.log(series)
 
-
+  console.log(typeof portfolioValueLatest)
 
   // const seriesData = Object.keys(data).map(date => ({ x: date, y: data[date]["4. close"] }));
 
@@ -233,13 +242,18 @@ const HomePageStockChart = (props) => {
       x: {
         format: 'dd/MM/yy HH:mm'
       },
-      y: {
+      y: [{
         title: {
           formatter: function (val) {
             return "$"
           }
+        },
+        labels: {
+          formatter: function (val) {
+            return val.toFixed(2)
+          }
         }
-      }
+      }]
     },
     toolbar: {
       show: false,
@@ -248,7 +262,7 @@ const HomePageStockChart = (props) => {
       show: false,
     },
     noData: {
-      text: "Loading...",
+      text: !userHasNoHoldings ? "Loading..." : "You have no holdings",
       align: "center",
       verticalAlign: "center",
       style: {
@@ -260,7 +274,7 @@ const HomePageStockChart = (props) => {
 
   return (
     <div>
-      <h2>{portfolioValueLatest ? `$${[portfolioValueLatest]}` : ''}</h2>
+      <h2>{portfolioValueLatest ? `$${(portfolioValueLatest)}` : ''}</h2>
       <div className='big-chart-container'>
         <ApexCharts options={options} series={series} width='600px' />
       </div>
