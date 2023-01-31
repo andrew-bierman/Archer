@@ -104,6 +104,8 @@ def get_timeseries_stock_data_by_symbol(symbol, filter):
     """
     Query the TWELVE API for a stock by symbol and returns that data in a dictionary
     """
+    useRapid = True
+
     # filter = request.args.get('filter') or '1D'
     if not filter:
         filter = '1D'
@@ -134,32 +136,55 @@ def get_timeseries_stock_data_by_symbol(symbol, filter):
         outputsize = '288'
 
 
-    # url = "https://twelve-data1.p.rapidapi.com/time_series"
-    url = 'https://api.twelvedata.com/time_series'
+    if not useRapid:
 
-    querystring = {
-        "symbol": symbol,
-        "interval": interval,
-        "outputsize": outputsize,
-        "format":"json",
-        "apikey": twelve_native_api_key
-    }
+        # url = "https://twelve-data1.p.rapidapi.com/time_series"
+        url = 'https://api.twelvedata.com/time_series'
 
-    # headers = {
-    #     "X-RapidAPI-Key": twelve_api_key,
-    #     "X-RapidAPI-Host": "twelve-data1.p.rapidapi.com"
-    # }
+        querystring = {
+            "symbol": symbol,
+            "interval": interval,
+            "outputsize": outputsize,
+            "format":"json",
+            "apikey": twelve_native_api_key
+        }
 
-    # res = requests.get(url, headers=headers, params=querystring).json()
-    res = requests.get(url, params=querystring).json()
+        # headers = {
+        #     "X-RapidAPI-Key": twelve_api_key,
+        #     "X-RapidAPI-Host": "twelve-data1.p.rapidapi.com"
+        # }
 
-    # if res.status_code != 200:
-    #     return {'message': 'Stock not found'}, 404
+        # res = requests.get(url, headers=headers, params=querystring).json()
+        res = requests.get(url, params=querystring, timeout=20).json()
 
-    print('RESPONSE FOR STOCK DATA ------', res)
+        # if res.status_code != 200:
+        #     return {'message': 'Stock not found'}, 404
+
+        # print('RESPONSE FOR STOCK DATA ------', res)
+
+    else: 
+        url = "https://twelve-data1.p.rapidapi.com/time_series"
+
+        querystring = {
+            "symbol": symbol,
+            "interval": interval,
+            "outputsize": outputsize,
+            "format":"json"
+        }
+
+        headers = {
+            "X-RapidAPI-Key": twelve_api_key,
+            "X-RapidAPI-Host": "twelve-data1.p.rapidapi.com"
+        }
+
+        res = requests.get(url, headers=headers, params=querystring).json()
+
+        # if res.status_code != 200:
+        #     return {'message': 'Stock not found'}, 404
+
+        # print('RESPONSE FOR STOCK DATA ------', res)
 
     return res
-
 
 
 @stock_routes.route('/data/<string:symbol>')
@@ -198,13 +223,18 @@ def get_company_info(symbol):
 
     res = requests.get(url).json()
 
-    if (res.keys().length == 0):
+    print(res)
+
+    # if (res.keys().length == 0):
+    #     return {'error': 'No company info found'}
+
+    if (res.keys() == 0):
         return {'error': 'No company info found'}
 
-    elif (res['error']):
+    elif 'error' in res:
         return {'error': res['error']}
 
-    elif (res["Description"]):
+    elif 'Description' in res:
         return res
 
     return res

@@ -4,6 +4,7 @@ const GET_ALL_STOCKS_FROM_DB = 'stockList/GET_ALL_STOCKS_FROM_DB';
 const GET_SINGLE_STOCK_INFO_FROM_DB = 'stockList/GET_SINGLE_STOCK_INFO_FROM_DB';
 const GET_SINGLE_STOCK_DATA = 'stockList/GET_SINGLE_STOCK_DATA_FROM_API';
 const GET_SINGLE_STOCK_CURRENT_PRICE = 'stockList/GET_SINGLE_STOCK_CURRENT_PRICE';
+const GET_SINGLE_STOCK_COMPANY_INFO = 'stockList/GET_SINGLE_STOCK_COMPANY_INFO';
 const RESET_SINGLE_STOCK_DATA = 'stockList/RESET_SINGLE_STOCK_DATA';
 
 const getAllStocksFromDB = (stocks) => ({
@@ -23,6 +24,11 @@ const getSingleDataStock = (stock) => ({
 
 const getSingleStockCurrentPrice = (data) => ({
     type: GET_SINGLE_STOCK_CURRENT_PRICE,
+    payload: data
+});
+
+const getSingleStockCompanyInfo = (data) => ({
+    type: GET_SINGLE_STOCK_COMPANY_INFO,
     payload: data
 });
 
@@ -64,7 +70,7 @@ export const getSingleStockDataFromAPI = (symbol, filter) => async (dispatch) =>
     console.log('IN SINGLE STOCK THUNK', symbol, filter)
 
     const response = await fetch(`/api/stocks/data/time-series/${symbol}/${filter}`);
-    if (response.ok) {
+    if (response.ok && response.status !== 429) {
         const data = await response.json();
         console.log('data IN SINGLE STOCK THUNK', data)
         dispatch(getSingleDataStock(data));
@@ -81,12 +87,24 @@ export const getSingleStockDataFromAPI = (symbol, filter) => async (dispatch) =>
 
 export const getSingleStockCurrentPriceFromAPI = (symbol) => async (dispatch) => {
     const response = await fetch(`/api/stocks/data/current/${symbol}`);
-    if (response.ok) {
+    if (response.ok && response.status !== 429) {
         const data = await response.json();
         dispatch(getSingleStockCurrentPrice(data));
         // dispatch(getWatchlistStockDataAction(data));
         return data;
 
+    } else {
+        console.log('Error fetching stock');
+    }
+}
+
+export const getSingleStockCompanyInfoFromAPI = (symbol) => async (dispatch) => {
+    const response = await fetch(`/api/stocks/company-info/${symbol}`);
+    if (response.ok && response.status !== 429) {
+        const data = await response.json();
+        dispatch(getSingleStockCompanyInfo(data));
+        return data;
+        
     } else {
         console.log('Error fetching stock');
     }
@@ -102,8 +120,10 @@ const initialState = {
     },
     singleStock: {
         Info: {},
+        CompanyInfo: {},
         CurrentPrice: {},
-        Data: {}
+        Data: {},
+        News: {}
     }
 };
 
@@ -144,6 +164,15 @@ const stockListReducer = (state = initialState, action) => {
                 singleStock: {
                     ...state.singleStock,
                     CurrentPrice: action.payload
+                }
+            }
+
+        case GET_SINGLE_STOCK_COMPANY_INFO:
+            return {
+                ...state,
+                singleStock: {
+                    ...state.singleStock,
+                    CompanyInfo: action.payload
                 }
             }
         

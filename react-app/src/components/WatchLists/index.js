@@ -13,6 +13,7 @@ import './WatchLists.css';
 const Watchlists = () => {
     const [loading, setLoading] = useState(true);
     const [isAdding, setIsAdding] = useState(false);
+    const [showStocks, setShowStocks] = useState(0);
 
     const [isEditing, setIsEditing] = useState(0);
     const [edittedWatchlistName, setEdittedWatchlistName] = useState('');
@@ -196,68 +197,79 @@ const Watchlists = () => {
                                                 <button className='watchlist-individual-header  watchlist-individual-button' onClick={() => handleWatchlistDelete(watchlist.id)}>
                                                     <i className="fa-solid fa-trash-can"></i>
                                                 </button> */}
+                                                <button>
+                                                    {
+                                                        (showStocks === watchlist.id) ?
+                                                            <i className="fa-solid fa-angle-down" onClick={(() => setShowStocks(0))}></i>
+                                                            :
+                                                            <i className="fa-solid fa-angle-right" onClick={() => setShowStocks(watchlist.id)}></i>
+                                                    }
+                                                </button>
                                             </div>
                                         </div>
-                                        <div className='watchlist-stock-list'>
-                                            {watchlist?.stocks?.map(stock => (
-                                                <div key={stock.id} value={stock.id} className='watchlist-stock-individual'>
-                                                    <div className='watchlist-stock-individual-symbol'>
+                                        {showStocks === watchlist.id &&
+                                            <div className='watchlist-stock-list'>
+                                                {watchlist?.stocks?.map(stock => (
+                                                    <div key={stock.id} value={stock.id} className='watchlist-stock-individual'>
                                                         <div className='watchlist-stock-individual-symbol'>
-                                                            {stock.symbol}
+                                                            <div className='watchlist-stock-individual-symbol'>
+                                                                {stock.symbol}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div className='watchlist-stock-individual-chart'>
+                                                        <div className='watchlist-stock-individual-chart'>
+                                                            <div>
+                                                                {
+                                                                    (watchListStockData[stock.symbol]?.dailyData?.length > 1) ?
+                                                                        <WatchListStockChartMini stockSymbol={stock.symbol} />
+                                                                        :
+                                                                        <p>Loading...</p>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <div className='watchlist-stock-individual-price-and-change'>
+                                                            <>
+                                                                {
+                                                                    watchListStockData[stock.symbol] ?
+                                                                        <div>
+                                                                            <div>
+                                                                                {
+                                                                                    <div>
+                                                                                        ${parseFloat(watchListStockData[stock.symbol]?.Info?.close).toFixed(2)}
+                                                                                    </div>
+                                                                                }
+                                                                            </div>
+                                                                            <div>
+                                                                                {
+                                                                                    watchListStockData[stock.symbol]?.percent_change > 0 ?
+                                                                                        <div className='watchlist-stock-individual-price-and-change-positive'>
+                                                                                            +{parseFloat(watchListStockData[stock.symbol]?.Info?.percent_change).toFixed(2)}%
+                                                                                        </div>
+                                                                                        :
+                                                                                        <div className='watchlist-stock-individual-price-and-change-negative'>
+                                                                                            {parseFloat(watchListStockData[stock.symbol]?.Info?.percent_change).toFixed(2)}%
+                                                                                        </div>
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                        :
+                                                                        <div className='watchlist-stock-individual-delete-button'>
+                                                                            <button onClick={() => formatWatchlistStockData(stock.symbol)}>
+                                                                                <i className="fa-solid fa-sync"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                }
+                                                            </>
+                                                        </div>
                                                         <div>
-                                                            {
-                                                                (watchListStockData[stock.symbol]?.dailyData?.length > 1) ?
-                                                                    <WatchListStockChartMini stockSymbol={stock.symbol} />
-                                                                    :
-                                                                    <p>Loading...</p>
-                                                            }
+                                                            <button className='watchlist-stock-individual-button' onClick={() => handleWatchlistStockDelete(watchlist.id, stock.id)}>
+                                                                <i className="fa-solid fa-xmark"></i>
+                                                            </button>
                                                         </div>
                                                     </div>
-                                                    <div className='watchlist-stock-individual-price-and-change'>
-                                                        <>
-                                                            {
-                                                                watchListStockData[stock.symbol] ?
-                                                                    <div>
-                                                                        <div>
-                                                                            {
-                                                                                <div>
-                                                                                    ${parseFloat(watchListStockData[stock.symbol]?.Info?.close).toFixed(2)}
-                                                                                </div>
-                                                                            }
-                                                                        </div>
-                                                                        <div>
-                                                                            {
-                                                                                watchListStockData[stock.symbol]?.percent_change > 0 ?
-                                                                                    <div className='watchlist-stock-individual-price-and-change-positive'>
-                                                                                        +{parseFloat(watchListStockData[stock.symbol]?.Info?.percent_change).toFixed(2)}%
-                                                                                    </div>
-                                                                                    :
-                                                                                    <div className='watchlist-stock-individual-price-and-change-negative'>
-                                                                                        {parseFloat(watchListStockData[stock.symbol]?.Info?.percent_change).toFixed(2)}%
-                                                                                    </div>
-                                                                            }
-                                                                        </div>
-                                                                    </div>
-                                                                    :
-                                                                    <div className='watchlist-stock-individual-delete-button'>
-                                                                        <button onClick={() => formatWatchlistStockData(stock.symbol)}>
-                                                                            <i className="fa-solid fa-sync"></i>
-                                                                        </button>
-                                                                    </div>
-                                                            }
-                                                        </>
-                                                    </div>
-                                                    <div>
-                                                        <button className='watchlist-stock-individual-button' onClick={() => handleWatchlistStockDelete(watchlist.id, stock.id)}>
-                                                            <i className="fa-solid fa-xmark"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
+                                                ))}
+                                            </div>
+
+                                        }
                                     </div>
                                     :
                                     <></>

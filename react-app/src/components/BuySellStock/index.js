@@ -4,9 +4,13 @@ import { useParams } from "react-router-dom";
 import { getUserSession } from "../../store/session";
 import { getSingleStockInfo } from "../../store/stocks";
 import { getAllUserHoldings, createNewHolding, updateHolding, deleteHolding, getHoldingByStockSymbol, resetCurrentHolding } from "../../store/holdings";
+import OpenModalButton from "../OpenModalButton";
+import { Modal } from "../../context/Modal";
+import BuyConfirmationModal from "./BuyConfirmationModal";
+import SellConfirmationModal from "./SellConfirmationModal";
 import './BuySellStock.css';
 
-const BuySellStock = ({stockInfo, stockCurrentPrice}) => {
+const BuySellStock = ({ stockInfo, stockCurrentPrice }) => {
     const dispatch = useDispatch();
 
     const [loading, setLoading] = useState(true);
@@ -44,7 +48,7 @@ const BuySellStock = ({stockInfo, stockCurrentPrice}) => {
 
     const handleSwitch = (switchTo) => {
         resetForm();
-        
+
         if (switchTo === 'buy') {
             setIsBuying(true);
             setIsSelling(false);
@@ -112,15 +116,15 @@ const BuySellStock = ({stockInfo, stockCurrentPrice}) => {
         return typeof n === 'number' && isFinite(n);
     }
 
-    function formatToCurrency(amount){
-        if(amount === null || amount === undefined || amount === NaN) return '';
+    function formatToCurrency(amount) {
+        if (amount === null || amount === undefined || amount === NaN) return '';
 
-        if(!isNumber(amount)) return amount;
+        if (!isNumber(amount)) return amount;
 
-        return (amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'); 
+        return (amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
 
-
+    // console.log(quantity)
 
 
 
@@ -157,7 +161,18 @@ const BuySellStock = ({stockInfo, stockCurrentPrice}) => {
                                     </div>
                                 </div>
                                 <div className="stock-page-buy-sell-buy-buttons">
-                                    <button className='stock-page-buy' onClick={() => handleBuy()}>Buy</button>
+                                    <div className='stock-page-buy'>
+                                        {(parseFloat(quantity) === 0 || (stockCurrentPrice * quantity > buyingPower)) ?
+                                            <button className='stock-page-buy' disabled>
+                                                Buy
+                                            </button>
+                                            :
+                                            <OpenModalButton className='stock-page-buy' buttonText='Buy' disabled={(parseFloat(quantity) === 0 || (stockCurrentPrice * quantity > buyingPower))} onClose={resetForm} modalComponent=
+                                                {<BuyConfirmationModal stockInfo={stockInfo} purchaseInfo={{ quantity, stockCurrentPrice, buyingPower, stockCurrentPrice }} />}
+                                            />
+                                        }
+                                    </div>
+                                    {/* <button className='stock-page-buy' onClick={() => handleBuy()}>Buy</button> */}
                                     {/* <button onClick={() => resetForm()}>Cancel</button> */}
                                 </div>
                             </div>
@@ -168,7 +183,7 @@ const BuySellStock = ({stockInfo, stockCurrentPrice}) => {
                                 <div className="stock-page-buy-sell-sell-inputs">
                                     <div className="stock-page-buy-sell-sell-inputs-quantity">
                                         <h5>Quantity</h5>
-                                        <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} max={currentHoldingShares}></input>
+                                        <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} min={0} max={currentHoldingShares}></input>
                                     </div>
                                     <div className="stock-page-buy-sell-sell-inputs-price">
                                         <h5>Price</h5>
@@ -180,7 +195,18 @@ const BuySellStock = ({stockInfo, stockCurrentPrice}) => {
                                     </div>
                                 </div>
                                 <div className="stock-page-buy-sell-sell-buttons">
-                                    <button className='stock-page-sell' onClick={() => handleSell()}>Sell</button>
+                                    <div className='stock-page-sell'>
+                                        {((parseFloat(quantity) === 0) || (quantity > currentHoldingShares)) ?
+                                            <button className='stock-page-sell' disabled>
+                                                Sell
+                                            </button>
+                                            :
+                                            <OpenModalButton className='stock-page-sell' buttonText='Sell' disabled={(parseFloat(quantity) === 0) || (quantity > currentHoldingShares)} onClose={resetForm} modalComponent=
+                                                {<SellConfirmationModal stockInfo={stockInfo} purchaseInfo={{ quantity, stockCurrentPrice, buyingPower, stockCurrentPrice }} />}
+                                            />
+                                        }
+                                    </div>
+                                    {/* <button className='stock-page-sell' onClick={() => handleSell()}>Sell</button> */}
                                     {/* <button onClick={() => resetForm()}>Cancel</button> */}
                                 </div>
                             </div>
@@ -188,18 +214,18 @@ const BuySellStock = ({stockInfo, stockCurrentPrice}) => {
 
                     </div>
                     <>
-                    {
-                        isBuying
-                        ?
-                            <div className='stock-page-buy-sell-buying-power'>
-                                <h5>Buying Power ${formatToCurrency(buyingPower)}</h5>
-                            </div>
-                        :
-                            <div className='stock-page-buy-sell-selling-power'>
-                                <h5>Available ${formatToCurrency(currentHoldingShares * stockCurrentPrice) || 0}</h5>
-                            </div>
+                        {
+                            isBuying
+                                ?
+                                <div className='stock-page-buy-sell-buying-power'>
+                                    <h5>Buying Power ${formatToCurrency(buyingPower)}</h5>
+                                </div>
+                                :
+                                <div className='stock-page-buy-sell-selling-power'>
+                                    <h5>Available ${formatToCurrency(currentHoldingShares * stockCurrentPrice) || 0}</h5>
+                                </div>
 
-                    }
+                        }
                     </>
                 </div>
             }
