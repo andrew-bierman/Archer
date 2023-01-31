@@ -107,17 +107,19 @@ const HomePageStockChart = (props) => {
       if (holdings && holdings.length > 0) {
         for (let i = 0; i < holdings.length; i++) {
 
-          console.log('CALLING getHoldingStockData')
+          // console.log('CALLING getHoldingStockData')
 
           // await dispatch(getHoldingStockData(holdings[i].stock[0].symbol, '1D'))
 
           // dispatch(getHoldingStockData(holdings[i].stock[0].symbol, '1D'))
 
+          if (holdings[i]?.stock[0]?.symbol === undefined) return
+
           const stock = await getHoldingStockData2(holdings[i].stock[0].symbol, filter)
           // let stock = []
           // let stock = holdingsStockData[holdings[i].stock[0].symbol]
 
-          console.log('stock from selector', stock)
+          // console.log('stock from selector', stock)
           // await getHoldingStockData(holdings[i].stock[0].symbol, '1D')
 
           let data = stock.values;

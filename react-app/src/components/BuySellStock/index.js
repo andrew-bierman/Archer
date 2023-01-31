@@ -124,7 +124,10 @@ const BuySellStock = ({ stockInfo, stockCurrentPrice }) => {
         return (amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
 
-    // console.log(quantity)
+    // console.log({quantity})
+    // console.log({currentHoldingShares})
+    // console.log( parseFloat(quantity) > currentHoldingShares )
+    // console.log(typeof currentHoldingShares === 'undefined', 'typeof check')
 
 
 
@@ -162,12 +165,12 @@ const BuySellStock = ({ stockInfo, stockCurrentPrice }) => {
                                 </div>
                                 <div className="stock-page-buy-sell-buy-buttons">
                                     <div className='stock-page-buy'>
-                                        {(parseFloat(quantity) === 0 || (stockCurrentPrice * quantity > buyingPower)) ?
+                                        {(parseFloat(quantity) === 0 || ((stockCurrentPrice * parseFloat(quantity)) > buyingPower)) ?
                                             <button className='stock-page-buy' disabled>
                                                 Buy
                                             </button>
                                             :
-                                            <OpenModalButton className='stock-page-buy' buttonText='Buy' disabled={(parseFloat(quantity) === 0 || (stockCurrentPrice * quantity > buyingPower))} onClose={resetForm} modalComponent=
+                                            <OpenModalButton className='stock-page-buy' buttonText='Buy' disabled={((parseFloat(quantity) === 0 || ((stockCurrentPrice * parseFloat(quantity)) > buyingPower)))} onClose={resetForm} modalComponent=
                                                 {<BuyConfirmationModal stockInfo={stockInfo} purchaseInfo={{ quantity, stockCurrentPrice, buyingPower, stockCurrentPrice }} />}
                                             />
                                         }
@@ -196,12 +199,12 @@ const BuySellStock = ({ stockInfo, stockCurrentPrice }) => {
                                 </div>
                                 <div className="stock-page-buy-sell-sell-buttons">
                                     <div className='stock-page-sell'>
-                                        {((parseFloat(quantity) === 0) || (quantity > currentHoldingShares)) ?
+                                        {((parseFloat(quantity) === 0) || (parseFloat(quantity) > parseFloat(currentHoldingShares)) || typeof currentHoldingShares === 'undefined') ?
                                             <button className='stock-page-sell' disabled>
                                                 Sell
                                             </button>
                                             :
-                                            <OpenModalButton className='stock-page-sell' buttonText='Sell' disabled={(parseFloat(quantity) === 0) || (quantity > currentHoldingShares)} onClose={resetForm} modalComponent=
+                                            <OpenModalButton className='stock-page-sell' buttonText='Sell' disabled={((parseFloat(quantity) === 0) || (parseFloat(quantity) > currentHoldingShares) || typeof currentHoldingShares === 'undefined')} onClose={resetForm} modalComponent=
                                                 {<SellConfirmationModal stockInfo={stockInfo} purchaseInfo={{ quantity, stockCurrentPrice, buyingPower, stockCurrentPrice }} />}
                                             />
                                         }
