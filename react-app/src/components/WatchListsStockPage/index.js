@@ -10,6 +10,8 @@ const WatchlistsStockPage = () => {
     const dispatch = useDispatch();
 
     const [loading, setLoading] = useState(true);
+    const [errors, setErrors] = useState([]);
+
     const [isEditing, setIsEditing] = useState(0);
     const [edittedWatchlistName, setEdittedWatchlistName] = useState('');
     const { closeModal } = useModal();
@@ -26,7 +28,7 @@ const WatchlistsStockPage = () => {
     const getDataAndPrecheck = async () => {
         setLoading(true);
         await dispatch(fetchWatchlists());
-        await dispatch(getAllStocks());
+        // await dispatch(getAllStocks());
         // preCheckWatchlists(stockId);
         setLoading(false);
     }
@@ -44,6 +46,12 @@ const WatchlistsStockPage = () => {
         e.preventDefault();
 
         setLoading(true);
+
+        if (newWatchlistName.length < 1) {
+            setErrors(['Watchlist name cannot be empty'])
+            setLoading(false);
+            return;
+        }
 
         await dispatch(createNewWatchlist(newWatchlistName))
         .then(() => dispatch(fetchWatchlists()))
@@ -111,6 +119,9 @@ const WatchlistsStockPage = () => {
   return (
     <div className='watchlist-modal-container'>
       <p>Lists</p>
+      <div className='watchlist-modal-create-errors'>
+        { errors.length > 0 && errors.map(error => <p>{error}</p>) }
+      </div>
       <div className='watchlist-modal-create-watchlist-stock-page-button-and-input-container'>
         <form onSubmit={(e) => handleWatchlistCreate(e)}>
                 <button type="submit">

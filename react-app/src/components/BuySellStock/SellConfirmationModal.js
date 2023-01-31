@@ -55,7 +55,7 @@ const SellConfirmationModal = ({ purchaseInfo, stockInfo }) => {
     return (
         <div className='watchlist-modal-container'>
             <div className='create-watchlist-modal-content'>
-                <h3>Confirm Purchase</h3>
+                <h3>Confirm Sale</h3>
                 {/* <div className='watchlist-individual-header'> */}
                     <form onSubmit={handleFormSubmit}>
                         <button className='watchlist-modal-cancel-button' onClick={() => closeModal()}>

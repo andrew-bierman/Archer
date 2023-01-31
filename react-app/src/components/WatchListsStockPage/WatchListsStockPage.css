@@ -25,6 +25,10 @@
     margin-bottom: 10px;
 }
 
+.watchlist-modal-create-errors p{
+    color: red;
+}
+
 .watchlist-modal-create-watchlist-stock-page-button-and-input-container{
     display: flex;
     flex-direction: row;
