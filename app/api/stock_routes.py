@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from app.models import db, User, Watchlist, Stock, Holding, News
 from app.config import Config
 import requests
+import time
 
 stock_routes = Blueprint('stocks', __name__)
 
@@ -184,6 +185,8 @@ def get_timeseries_stock_data_by_symbol(symbol, filter):
 
         # print('RESPONSE FOR STOCK DATA ------', res)
 
+    time.sleep(1)
+
     return res
 
 
@@ -236,6 +239,8 @@ def get_company_info(symbol):
 
     elif 'Description' in res:
         return res
+
+    time.sleep(1)
 
     return res
 

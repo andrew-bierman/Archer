@@ -10,12 +10,12 @@ import './HomePage.css';
 const HomePage = () => {
     return (
         <div className="homepage-main-container">
-            <div>
+            <div className="homepage-main-left-side">
                 {/* <StockListSearch /> */}
                 <HomePageStockChart />
-                {/* <HomePageNewsFeed /> */}
+                <HomePageNewsFeed />
             </div>
-            <div>
+            <div className="homepage-main-right-side">
                 <WatchLists />  
             </div>
         </div>

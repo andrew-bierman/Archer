@@ -5,10 +5,10 @@ import { openInNewTab } from "../utility";
 import { getAllNewsForHomePage } from "../../store/news";
 import NewsCard from "../NewsCard";
 
-import "./HomePageNewsFeed.css";
+import "./StockPageNewsFeed.css";
 
 
-const HomePageNewsFeed = () => {
+const StockPageNewsFeed = () => {
     const dispatch = useDispatch();
 
     const [loading, setLoading] = useState(true);
@@ -23,30 +23,6 @@ const HomePageNewsFeed = () => {
             }
             );
     }, []);
-    // const getNews = async () => {
-    //     const response = await fetch("/api/news/external/all");
-    //     const data = await response.json();
-    //     return data['feed'];
-    // };
-
-    // let allNews
-
-    // async function fetchData() {
-    //     allNews = await getNews();
-    //     if(allNews?.length > 0) {
-    //         setLoading(false);
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     setLoading(true);
-    //     if(allNews?.length === 0 || !allNews){
-    //         fetchData();
-    //     }
-    //     // fetchData();
-
-    // }, [allNews]);
-
 
     return (
         <div className="news-feed-container">
@@ -66,4 +42,4 @@ const HomePageNewsFeed = () => {
     );
 }
 
-export default HomePageNewsFeed;
+export default StockPageNewsFeed;

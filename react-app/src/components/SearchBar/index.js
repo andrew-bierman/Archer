@@ -4,6 +4,7 @@ import './SearchBar.css';
 
 const SearchBar = () => {
     const history = useHistory();
+    const [loading, setLoading] = useState(false);
 
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
@@ -13,12 +14,23 @@ const SearchBar = () => {
     const MAX_RESULTS = 5;
 
     useEffect(() => {
+        let timer;
+        setLoading(true);
+
         if (query.length > 0) {
-            handleSearch();
+            setLoading(true);
+            setActive('active');
+            timer = setTimeout(() => {
+                handleSearch();
+            }, 250);
         } else {
             setResults([]);
             setActive('');
+            clearTimeout(timer);
         }
+
+        return () => clearTimeout(timer);
+
     }, [query]);
 
 
@@ -29,11 +41,15 @@ const SearchBar = () => {
 
     async function handleSearch(e) {
         // e.preventDefault();
+        setLoading(true);
+
         const res = await fetch(`/api/stocks/search/${query}`);
         const data = await res.json();
         setResults(data.stocks);
         setActive('active');
         setMatchingText(query.toUpperCase().split(''))
+
+        setLoading(false);
     }
 
     const handleSearchClick = (symbol) => {
@@ -65,6 +81,16 @@ const SearchBar = () => {
             </form>
             <div className={`search-results-dropdown ${results.length > 0 ? `${active}` : ''}`}>
                 <div id="search-results-ul">
+                    {loading && 
+                    <div className='search-results-individual-result'>
+                        <span className='search-results-individual-result-symbol'>
+                            <i class="fa-solid fa-circle-notch fa-spin"></i>
+                            &nbsp;
+                            Loading...
+                        </span>
+                    </div>
+                    }
+
                     {results.slice(0, MAX_RESULTS).map(result => (
                         <div key={result.id} className='search-results-individual-result' onClick={() => handleSearchClick(result.symbol)}>
                             <Link to={`/stocks/${result.symbol}`}>
@@ -90,7 +116,6 @@ const SearchBar = () => {
                             </Link>
                         </div>
                     ))}
-
                 </div>
             </div>
 

@@ -6,6 +6,7 @@ const GET_HOLDING_BY_ID = 'holding/GET_HOLDING_BY_ID';
 const GET_HOLDING_BY_STOCK_SYMBOL = 'holding/GET_HOLDING_BY_STOCK_ID';
 const RESET_CURRENT_HOLDING = 'holding/RESET_CURRENT_HOLDING';
 const GET_HOLDING_STOCK_DATA = 'holding/GET_HOLDING_STOCK_DATA';
+const RESET_ALL_HOLDINGS = 'holding/RESET_ALL_HOLDINGS';
 
 const getUserHoldingsFromDBAction = (holdings) => ({
     type: GET_USER_HOLDINGS_FROM_DB,
@@ -44,6 +45,10 @@ const getHoldingStockDataAction = (stockData) => ({
 
 const resetCurrentHoldingAction = () => ({
     type: RESET_CURRENT_HOLDING,
+});
+
+const resetAllHoldingsAction = () => ({
+    type: RESET_ALL_HOLDINGS,
 });
 
 export const getAllUserHoldings = () => async (dispatch) => {
@@ -174,6 +179,10 @@ export const resetCurrentHolding = () => async (dispatch) => {
     dispatch(resetCurrentHoldingAction());
 }
 
+export const resetAllHoldings = () => async (dispatch) => {
+    dispatch(resetAllHoldingsAction());
+}
+
 const initialState = {
     allHoldings: [],
     currentHolding: {},
@@ -227,6 +236,13 @@ const holdingReducer = (state = initialState, action) => {
             return {
                 ...state,
                 currentHolding: {}
+            }
+        case RESET_ALL_HOLDINGS:
+            return {
+                ...state,
+                allHoldings: [],
+                currentHolding: {},
+                stockData: {}
             }
         default:
             return state;

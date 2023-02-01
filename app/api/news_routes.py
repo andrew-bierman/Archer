@@ -39,23 +39,21 @@ def get_news_by_symbol(symbol):
     return news.to_dict()
 
 
-# @news_routes.route('/external/<string:symbol>')
-# def get_external_news(symbol):
-#     """
-#     Query the API for a stock by symbol and returns that data in a dictionary
-#     """
-#     'https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=AAPL&apikey=demo'
-#     url = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers={symbol}&apikey={av_api_key}"
+@news_routes.route('/external/stock/<string:symbol>')
+def get_external_news(symbol):
+    """
+    Query the API for a stock by symbol and returns that data in a dictionary
+    """
+    'https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=AAPL&apikey=demo'
+    url = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers={symbol}&apikey={av_api_key}"
     
-#     response = requests.get(url)
-#     data = response.json()
+    response = requests.get(url)
+    data = response.json()
 
-#     # check the db to make sure the URL is not already in the db, if not then add to db
+    # check the db to make sure the URL is not already in the db, if not then add to db
     
 
-
-
-#     return data
+    return data
 
 
 @news_routes.route('/external/all')
@@ -94,3 +92,46 @@ def get_all_external_news():
 
     return data
 
+
+@news_routes.route('/internal/stock/<string:symbol>/create', methods=['POST'])
+def create_news(symbol):
+    """
+    Save the news from the request to the db
+    """
+
+    data = request.json
+
+    # check the db to make sure the URL is not already in the db for the current user, if not then add to db
+    if not News.query.filter(News.url == data['url'], News.user_id == current_user.id).first():
+        new = News(
+            user_id=current_user.id,
+            symbol=data['symbol'],
+            company_name=data['company_name'],
+            url=data['url'],
+            title=data['title'],
+            text=data['summary'],
+            image_link=data['image'],
+        )
+        db.session.add(new)
+        db.session.commit()
+
+    return {'message': 'News created successfully'}, 201
+
+
+@news_routes.route('/<int:id>', methods=['DELETE'])
+def delete_news(id):
+    """
+    Delete a news from the db
+    """
+    news = News.query.get(id)
+  
+    if not news:
+        return {'message': 'News not found'}, 404
+
+    if news.user_id != current_user.id:
+        return {'message': 'Unauthorized'}, 401
+
+    db.session.delete(news)
+    db.session.commit()
+
+    return {'message': 'News deleted successfully'}, 200

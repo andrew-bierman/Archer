@@ -77,10 +77,13 @@ const HomePageStockChart = (props) => {
   // }, [dispatch, holdings]);
 
   useEffect(() => {
-    if (!holdings || holdings.length === 0 && userHasNoHoldings === false) {
+    if ((!holdings || holdings.length === 0) && userHasNoHoldings === false) {
       setLoading(true);
       dispatch(getAllUserHoldings())
       setUserHasNoHoldings(true);
+    } else if (holdings && holdings.length > 0 && userHasNoHoldings === true) {
+      setLoading(false);
+      setUserHasNoHoldings(false);
     } else {
       setLoading(false);
     }
@@ -113,14 +116,17 @@ const HomePageStockChart = (props) => {
 
           // dispatch(getHoldingStockData(holdings[i].stock[0].symbol, '1D'))
 
-          if (holdings[i]?.stock[0]?.symbol === undefined) return
+          if (typeof holdings[i]?.stock[0]?.symbol === 'undefined') return
 
           const stock = await getHoldingStockData2(holdings[i].stock[0].symbol, filter)
+            .catch(e => console.log('error in getHoldingStockData2', e))
           // let stock = []
           // let stock = holdingsStockData[holdings[i].stock[0].symbol]
 
           // console.log('stock from selector', stock)
           // await getHoldingStockData(holdings[i].stock[0].symbol, '1D')
+
+          if (typeof stock === 'undefined') return
 
           let data = stock.values;
           data.reverse()
@@ -275,21 +281,40 @@ const HomePageStockChart = (props) => {
   }
 
   return (
-    <div>
-      <h2>{portfolioValueLatest ? `$${(portfolioValueLatest)}` : ''}</h2>
-      <div className='big-chart-container'>
-        <ApexCharts options={options} series={series} width='600px' />
-      </div>
-      <div className='stock-chart-filter-buttons-container'>
-        <button onClick={() => handleFilterChange('1D')} className={filter === '1D' ? 'active-filter-button' : ''} id='filter-button'>1D</button>
-        <button onClick={() => handleFilterChange('1W')} className={filter === '1W' ? 'active-filter-button' : ''}>1W</button>
-        <button onClick={() => handleFilterChange('1M')} className={filter === '1M' ? 'active-filter-button' : ''}>1M</button>
-        <button onClick={() => handleFilterChange('3M')} className={filter === '3M' ? 'active-filter-button' : ''}>3M</button>
-        <button onClick={() => handleFilterChange('1Y')} className={filter === '1Y' ? 'active-filter-button' : ''}>1Y</button>
-        <button onClick={() => handleFilterChange('5Y')} className={filter === '5Y' ? 'active-filter-button' : ''}>5Y</button>
+    <>
+      {
+        loading ?
+          <h1>
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+            &nbsp;
+            Loading...
+          </h1 >
+          :
+          <div className='homepage-stock-chart-entire-comp-container'>
+            <h2>{portfolioValueLatest ? `$${(portfolioValueLatest)}` : ''}</h2>
+            <div className='big-chart-container'>
+              <ApexCharts options={options} series={series} width='900px' height='300px'/>
+            </div>
 
-      </div>
-    </div>
+            <div className='stock-chart-filter-buttons-container'>
+              <button onClick={() => handleFilterChange('1D')} className={filter === '1D' ? 'active-filter-button' : ''} id='filter-button'>1D</button>
+              <button onClick={() => handleFilterChange('1W')} className={filter === '1W' ? 'active-filter-button' : ''}>1W</button>
+              <button onClick={() => handleFilterChange('1M')} className={filter === '1M' ? 'active-filter-button' : ''}>1M</button>
+              <button onClick={() => handleFilterChange('3M')} className={filter === '3M' ? 'active-filter-button' : ''}>3M</button>
+              <button onClick={() => handleFilterChange('1Y')} className={filter === '1Y' ? 'active-filter-button' : ''}>1Y</button>
+              <button onClick={() => handleFilterChange('5Y')} className={filter === '5Y' ? 'active-filter-button' : ''}>5Y</button>
+            </div>
+            <div className="home-page-stock-chart-buying-power-container">
+              <h3>
+                Buying Power:
+              </h3>
+              <h3>
+                ${formatToCurrency(userBuyingPower)}
+              </h3>
+            </div>
+          </div>
+      }
+    </>
   );
 }
 
