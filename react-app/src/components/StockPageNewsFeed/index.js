@@ -1,43 +1,51 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { openInNewTab } from "../utility";
-import { getAllNewsForHomePage } from "../../store/news";
+import { getNewsForStockPage, getUserBookmarkedNews } from "../../store/news";
 import NewsCard from "../NewsCard";
 
-import "./StockPageNewsFeed.css";
+// import "./StockPageNewsFeed.css";
 
 
-const StockPageNewsFeed = () => {
+const StockPageNewsFeed = ({ stockInfo }) => {
     const dispatch = useDispatch();
 
     const [loading, setLoading] = useState(true);
 
-    const allNews = useSelector((state) => state.news.allNews);
+    const stockNews = useSelector((state) => state.news.singleStockNews);
+    // const stockSymbol = useSelector((state) => state.stocks.singleStock.Info.symbol);
+    const { symbol } = useParams()
 
     useEffect(() => {
         setLoading(true);
-        dispatch(getAllNewsForHomePage())
+        dispatch(getUserBookmarkedNews())
+        dispatch(getNewsForStockPage(symbol))
             .then(() => {
                 setLoading(false);
+                console.log('stocknews', stockNews)
             }
             );
-    }, []);
+    }, [symbol]);
+
+    useEffect(() => {
+        console.log('stocknews', stockNews)
+    }, [stockNews])
 
     return (
         <div className="news-feed-container">
             <div className="news-feed-header">
                 <h2>News</h2>
             </div>
-            <div>
+            <>
                 {
-                    (!loading && allNews?.length > 0) && allNews.map((article, idx) => {
+                    (!loading && stockNews?.length > 0) && stockNews.map((article, idx) => {
                         return (
                             <NewsCard article={article} key={idx} />
                         )
                     })
                 }
-            </div>
+            </>
         </div>
     );
 }

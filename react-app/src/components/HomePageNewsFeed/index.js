@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { openInNewTab } from "../utility";
-import { getAllNewsForHomePage } from "../../store/news";
+import { getAllNewsForHomePage, getUserBookmarkedNews } from "../../store/news";
 import NewsCard from "../NewsCard";
 
 import "./HomePageNewsFeed.css";
@@ -19,6 +19,7 @@ const HomePageNewsFeed = () => {
         setLoading(true);
         dispatch(getAllNewsForHomePage())
             .then(() => {
+                dispatch(getUserBookmarkedNews())
                 setLoading(false);
             }
             );
@@ -53,7 +54,7 @@ const HomePageNewsFeed = () => {
             <div className="news-feed-header">
                 <h2>News</h2>
             </div>
-            <div>
+            <>
                 {
                     (!loading && allNews?.length > 0) && allNews.map((article, idx) => {
                         return (
@@ -61,7 +62,7 @@ const HomePageNewsFeed = () => {
                         )
                     })
                 }
-            </div>
+            </>
         </div>
     );
 }

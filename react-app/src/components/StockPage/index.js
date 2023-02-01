@@ -10,6 +10,7 @@ import { Modal } from '../../context/Modal';
 import WatchlistsStockPage from '../WatchListsStockPage';
 import BuySellStock from '../BuySellStock';
 import StockPageAboutCompany from '../StockPageAboutCompany';
+import StockPageNewsFeed from '../StockPageNewsFeed';
 import './StockPage.css';
 
 function StockPage() {
@@ -81,33 +82,50 @@ function StockPage() {
       {(!loading)
         ?
         (
-            <div className='stock-page-core-container'>
-              <div className='stock-page-stock-info'>
-                {/* <h2>{stockInfo?.symbol?.toUpperCase()}</h2> */}
-                <h2>{stockInfo.company_name}</h2>
-                <h2>${parseFloat(stockCurrentPrice).toFixed(2)}</h2>
-                {(stockCurrentPercentChange > 0) ?
-                  <h3 className='stock-page-stock-info-percent-change-positive'>+{stockCurrentPercentChange}%</h3>
-                  :
-                  <h3 className='stock-page-stock-info-percent-change-negative'>
-                    {stockCurrentPercentChange}%</h3>
+          <div className='stock-page-core-container'>
+            <div className='stock-page-stock-info'>
+              {/* <h2>{stockInfo?.symbol?.toUpperCase()}</h2> */}
+              <h2>{stockInfo.company_name}</h2>
+              <h2>
+                {
+                  (stockCurrentPrice > -1 && !isNaN(stockCurrentPrice)) ?
+                    <>
+                      ${parseFloat(stockCurrentPrice).toFixed(2)}
+                    </>
+                    :
+                    <></>
                 }
-                <StockChart stockData={stockData} />
-                <StockPageAboutCompany stockInfo={stockInfo} />
-              </div>
-              <div className='stock-page-sidebar'>
-                <BuySellStock stockInfo={stockInfo} stockCurrentPrice={stockCurrentPrice} loading={loading} />
-                <div className='stock-page-add-to-list-modal-button'>
-                  <OpenModalButton
-                    buttonText={'Add to List'}
-                    modalComponent={<WatchlistsStockPage />}
-                  />
-                </div>
-                {/* <button onClick={() => handleAddToList()} className='stock-page-add-to-list-button'>
+              </h2>
+              {(stockCurrentPercentChange > 0) ?
+                <h3 className='stock-page-stock-info-percent-change-positive'>+{stockCurrentPercentChange}%</h3>
+                :
+                <h3 className='stock-page-stock-info-percent-change-negative'>
+                  {stockCurrentPercentChange}%</h3>
+              }
+              <StockChart stockData={stockData} />
+              <StockPageAboutCompany stockInfo={stockInfo} />
+              <StockPageNewsFeed stockInfo={stockInfo} />
+            </div>
+            <div className='stock-page-sidebar'>
+              {
+                (stockCurrentPrice > -1 && !isNaN(stockCurrentPrice)) ?
+                  <>
+                    <BuySellStock stockInfo={stockInfo} stockCurrentPrice={stockCurrentPrice} loading={loading} />
+                    <div className='stock-page-add-to-list-modal-button'>
+                      <OpenModalButton
+                        buttonText={'Add to List'}
+                        modalComponent={<WatchlistsStockPage />}
+                      />
+                    </div>
+                  </>
+                  :
+                  <></>
+              }
+              {/* <button onClick={() => handleAddToList()} className='stock-page-add-to-list-button'>
                   Add to List
                 </button> */}
-              </div>             
             </div>
+          </div>
         )
         :
         (

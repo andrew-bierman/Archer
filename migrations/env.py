@@ -11,10 +11,6 @@ from alembic import context
 # access to the values within the .ini file in use.
 config = context.config
 
-import os
-environment = os.getenv("FLASK_ENV")
-SCHEMA = os.environ.get("SCHEMA")
-
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
@@ -85,14 +81,7 @@ def run_migrations_online():
             **current_app.extensions['migrate'].configure_args
         )
 
-        # Create a schema (only in production)
-        if environment == "production":
-            connection.execute(f"CREATE SCHEMA IF NOT EXISTS {SCHEMA}")
-
-        # Set search path to your schema (only in production)
         with context.begin_transaction():
-            if environment == "production":
-                context.execute(f"SET search_path TO {SCHEMA}")
             context.run_migrations()
 
 

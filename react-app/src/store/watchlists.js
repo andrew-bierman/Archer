@@ -14,6 +14,8 @@ const REMOVE_STOCK_FROM_WATCHLIST = 'watchlists/REMOVE_STOCK_FROM_WATCHLIST';
 const GET_WATCHLIST_STOCK_DATA = 'watchlists/GET_WATCHLIST_STOCK_DATA';
 const GET_WATCHLIST_STOCK_DATA_DAILY = 'watchlists/GET_WATCHLIST_STOCK_DATA_DAILY';
 
+const RESET_WATCHLIST_STORE = 'watchlists/RESET_WATCHLIST_STORE';
+
 const getAllUserWatchlists = (watchlists) => ({
     type: GET_ALL_USER_WATCHLISTS,
     payload: watchlists
@@ -57,6 +59,10 @@ export const getWatchlistStockDataAction = (data) => ({
 export const getWatchlistStockDataDailyAction = (data) => ({
     type: GET_WATCHLIST_STOCK_DATA_DAILY,
     payload: data
+});
+
+export const resetWatchlistStoreAction = () => ({
+    type: RESET_WATCHLIST_STORE
 });
 
 
@@ -194,6 +200,10 @@ export const getWatchlistStockDataDaily = (stockSymbol) => async (dispatch) => {
     }
 };
 
+export const resetWatchlistStore = () => async (dispatch) => {
+    dispatch(resetWatchlistStoreAction());
+};
+
   
 const initialState = {
     allWatchlists: [],
@@ -278,6 +288,14 @@ const watchlistReducer = (state = initialState, action) => {
                         dailyData: action.payload.values
                     }
                 }
+            }
+
+        case RESET_WATCHLIST_STORE:
+            return {
+                ...state,
+                allWatchlists: [],
+                currentWatchlist: {},
+                watchlistStockData: {}
             }
 
         default:

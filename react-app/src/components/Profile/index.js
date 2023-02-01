@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllUserHoldings } from '../../store/holdings';
 import { formatToCurrency } from '../utility';
+import './ProfileNewsFeed'
 import './Profile.css';
+import ProfileNewsFeed from './ProfileNewsFeed';
 
 
 const Profile = () => {
@@ -51,6 +53,7 @@ const Profile = () => {
                             </li>
                         ))}
                     </ul>
+                    <ProfileNewsFeed/>
                 </div>
             :
             <></>

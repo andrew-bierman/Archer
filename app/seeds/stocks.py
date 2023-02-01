@@ -28,6 +28,7 @@ def seed_stocks():
     
     with app.app_context():
         stock_dict = {}
+
         with open(f'{os.path.dirname(__file__)}/av_active_stocks.csv', 'r') as readfile:
             reader = csv.reader(readfile, delimiter=',')
             next(reader) # skip the header row
@@ -38,8 +39,9 @@ def seed_stocks():
             reader = csv.reader(readfile, delimiter=';')
             next(reader)  # skip the header row
             for row in reader:
-                symbol, name, currency, *_ = row
-                if currency == 'USD' and symbol in stock_dict and stock_dict[symbol] == name:
+                symbol, name, currency, exchange, mic_code, country, *_ = row
+                # if currency == 'USD' and symbol in stock_dict and stock_dict[symbol] == name:
+                if currency == 'USD' and country == 'United States' and symbol in stock_dict:
                     db.session.add(Stock(symbol=symbol, company_name=name))
 
         db.session.commit()

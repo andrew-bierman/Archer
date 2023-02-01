@@ -94,6 +94,22 @@ const StockChart = (props) => {
       redrawOnParentResize: true,
     },
 
+    responsive: [
+      {
+        // breakpoint: 900,
+        // options: {
+        //   plotOptions: {
+        //     bar: {
+        //       horizontal: false
+        //     }
+        //   },
+        //   legend: {
+        //     position: "bottom"
+        //   }
+        // }
+      }
+    ],
+
     xaxis: {
       categories: [],
       labels: {
@@ -155,7 +171,7 @@ const StockChart = (props) => {
         !loading ?
           <div>
             <div className='big-chart-container'>
-              <ApexCharts options={options} series={series} width='500px' />
+              <ApexCharts options={options} series={series}  width='800px' height='300px' />
             </div>
             <div className='stock-chart-filter-buttons-container'>
               <button onClick={() => handleFilterChange('1D')} className={filter === '1D' ? 'active-filter-button' : '' } id='filter-button'>1D</button>
