@@ -13,6 +13,7 @@ const ProfileNewsFeed = () => {
 
     const [loading, setLoading] = useState(true);
 
+
     const userNews = useSelector((state) => state.news.userBookmarkedNews);
 
     const formatArticles = userNews?.map((article) => {
