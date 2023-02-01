@@ -14,6 +14,8 @@ const REMOVE_STOCK_FROM_WATCHLIST = 'watchlists/REMOVE_STOCK_FROM_WATCHLIST';
 const GET_WATCHLIST_STOCK_DATA = 'watchlists/GET_WATCHLIST_STOCK_DATA';
 const GET_WATCHLIST_STOCK_DATA_DAILY = 'watchlists/GET_WATCHLIST_STOCK_DATA_DAILY';
 
+const RESET_WATCHLIST_STORE = 'watchlists/RESET_WATCHLIST_STORE';
+
 const getAllUserWatchlists = (watchlists) => ({
     type: GET_ALL_USER_WATCHLISTS,
     payload: watchlists
@@ -57,6 +59,10 @@ export const getWatchlistStockDataAction = (data) => ({
 export const getWatchlistStockDataDailyAction = (data) => ({
     type: GET_WATCHLIST_STOCK_DATA_DAILY,
     payload: data
+});
+
+export const resetWatchlistStoreAction = () => ({
+    type: RESET_WATCHLIST_STORE
 });
 
 
@@ -171,6 +177,10 @@ export const getWatchlistStockData = (stockSymbol) => async (dispatch) => {
     const response = await fetch(`api/stocks/data/current/${stockSymbol}`);
     if (response.ok && response.status !== 204 && response.status !== 429) {
         const data = await response.json();
+        if (typeof data['message'] === 'string') {
+            console.log('Error fetching watchlist stock data', data)
+            return
+        }
         dispatch(getWatchlistStockDataAction(data));
         return data
     } else {
@@ -187,11 +197,20 @@ export const getWatchlistStockDataDaily = (stockSymbol) => async (dispatch) => {
     const response = await fetch(`api/stocks/data/time-series/${stockSymbol}/1D`);
     if (response.ok && response.status !== 204 && response.status !== 429) {
         const data = await response.json();
+        if (typeof data['message'] === 'string') {
+            // {message: "You have exceeded the rate limit per minute for your plan, BASIC, by the API provider"}
+            console.log('Error fetching watchlist stock data', data)
+            return
+        }
         dispatch(getWatchlistStockDataDailyAction(data));
         return data
     } else {
         console.log('Error fetching watchlist stock data');
     }
+};
+
+export const resetWatchlistStore = () => async (dispatch) => {
+    dispatch(resetWatchlistStoreAction());
 };
 
   
@@ -278,6 +297,14 @@ const watchlistReducer = (state = initialState, action) => {
                         dailyData: action.payload.values
                     }
                 }
+            }
+
+        case RESET_WATCHLIST_STORE:
+            return {
+                ...state,
+                allWatchlists: [],
+                currentWatchlist: {},
+                watchlistStockData: {}
             }
 
         default:

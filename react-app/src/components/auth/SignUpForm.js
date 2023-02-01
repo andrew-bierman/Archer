@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import { signUp, login } from '../../store/session';
+import { isEmail } from '../utility';
 
 const SignUpForm = () => {
   const [errors, setErrors] = useState([]);
@@ -14,10 +15,17 @@ const SignUpForm = () => {
 
   const onSignUp = async (e) => {
     e.preventDefault();
+
+    if(isEmail(email) === false) {
+      setErrors(['Please enter a valid email address'])
+      return;
+    }
+
     if (password === repeatPassword) {
       const data = await dispatch(signUp(username, email, password));
       if (data) {
         setErrors(data)
+        // setErrors(['Invalid credentials. Please try again.'])
       }
     } else {
       setErrors(['Confirm Password field must be the same as the Password field'])
@@ -70,6 +78,9 @@ const SignUpForm = () => {
               name='username'
               onChange={updateUsername}
               value={username}
+              minLength='1'
+              maxLength='255'
+              required
             ></input>
           </div>
           <div>
@@ -79,6 +90,9 @@ const SignUpForm = () => {
               name='email'
               onChange={updateEmail}
               value={email}
+              minLength='1'
+              maxLength='255'
+              required
             ></input>
           </div>
           <div>
@@ -88,6 +102,9 @@ const SignUpForm = () => {
               name='password'
               onChange={updatePassword}
               value={password}
+              minLength='1'
+              maxLength='255'
+              required
             ></input>
           </div>
           <div>
@@ -98,6 +115,8 @@ const SignUpForm = () => {
               onChange={updateRepeatPassword}
               value={repeatPassword}
               required={true}
+              minLength='1'
+              maxLength='255'
             ></input>
           </div>
           <button type='submit'>Sign Up</button>

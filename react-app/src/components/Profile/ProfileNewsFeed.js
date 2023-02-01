@@ -13,7 +13,8 @@ const ProfileNewsFeed = () => {
 
     const [loading, setLoading] = useState(true);
 
-    const userNews = useSelector((state) => state.news.userNews);
+
+    const userNews = useSelector((state) => state.news.userBookmarkedNews);
 
     const formatArticles = userNews?.map((article) => {
         const { title, summary, url, symbol, image_link, sourc } = article;
@@ -45,7 +46,7 @@ const ProfileNewsFeed = () => {
             </div>
             <>
                 {
-                    (!loading && userNews?.length > 0) && formatArticles.map((article, idx) => {
+                    (!loading && formatArticles?.length > 0) && formatArticles?.reverse().map((article, idx) => {
                         return (
                             <NewsCard article={article} key={idx} />
                         )

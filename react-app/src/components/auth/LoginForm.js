@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect, useHistory } from 'react-router-dom';
 import { login } from '../../store/session';
+import { isEmail } from '../utility';
 
 const LoginForm = () => {
   const [errors, setErrors] = useState([]);
@@ -13,9 +14,16 @@ const LoginForm = () => {
 
   const onLogin = async (e) => {
     e.preventDefault();
+
+    if(isEmail(email) === false) {
+      setErrors(['Please enter a valid email address'])
+      return;
+    }
+
     const data = await dispatch(login(email, password));
     if (data) {
-      setErrors(data);
+      // setErrors(data);
+      setErrors(['Invalid credentials. Please try again.'])
     }
   };
 
@@ -62,6 +70,7 @@ const LoginForm = () => {
               placeholder='Email'
               value={email}
               onChange={updateEmail}
+              required={true}
             />
           </div>
           <div>
@@ -72,6 +81,7 @@ const LoginForm = () => {
               placeholder='Password'
               value={password}
               onChange={updatePassword}
+              required={true}
             />
             <button type='submit'>Login</button>
           </div>

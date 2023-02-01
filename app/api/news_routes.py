@@ -8,6 +8,16 @@ news_routes = Blueprint('news', __name__)
 
 av_api_key = Config.AV_API_KEY
 
+@news_routes.route('/user/bookmarked')
+@login_required
+def get_user_news():
+    """
+    Query for all User news that is bookmarked and returns them in a list of news dictionaries
+    """
+    news = News.query.filter(News.user_id == current_user.id, News.bookmark == True).all()
+
+    return {'news': [new.to_dict() for new in news]}
+
 
 @news_routes.route('/search/<string:symbol>')
 def search_news(symbol):
@@ -93,29 +103,55 @@ def get_all_external_news():
     return data
 
 
-@news_routes.route('/internal/stock/<string:symbol>/create', methods=['POST'])
-def create_news(symbol):
+@news_routes.route('/internal/stock/create', methods=['POST'])
+def create_news():
     """
     Save the news from the request to the db
     """
 
     data = request.json
+    print(data)
 
     # check the db to make sure the URL is not already in the db for the current user, if not then add to db
     if not News.query.filter(News.url == data['url'], News.user_id == current_user.id).first():
         new = News(
             user_id=current_user.id,
             symbol=data['symbol'],
-            company_name=data['company_name'],
+            # company_name=data['company_name'],
             url=data['url'],
             title=data['title'],
-            text=data['summary'],
-            image_link=data['image'],
+            summary=data['summary'],
+            image_link=data['banner_image'],
+            source=data['source'],
+            bookmark=True
         )
         db.session.add(new)
         db.session.commit()
 
     return {'message': 'News created successfully'}, 201
+
+
+@news_routes.route('/internal/byURL/delete/bookmark', methods=['DELETE'])
+def delete_bookmark():
+    """
+    Delete a news from the db
+    """
+    data = request.json
+
+    news = News.query.filter(News.url == data['url'], News.user_id == current_user.id).first()
+  
+    if not news:
+        return {'message': 'News not found'}, 404
+
+    if news.user_id != current_user.id:
+        return {'message': 'Unauthorized'}, 401
+    
+    news.bookmark = False
+
+    db.session.delete(news)
+    db.session.commit()
+
+    return {'message': 'News deleted successfully'}, 200
 
 
 @news_routes.route('/<int:id>', methods=['DELETE'])
