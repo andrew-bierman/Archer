@@ -64,19 +64,22 @@ export const getUserBookmarkedNews = () => async (dispatch) => {
     }
 }
 
-export const createAndBookmarkNews = (news) => async (dispatch) => {
+export const createAndBookmarkNews = (article) => async (dispatch) => {
     // console.log(JSON.stringify({
     //     // ...news,
     //     'symbol': news.ticker_sentiment[0].ticker
     // }))
+    if (article.ticker_sentiment.length === 0) {
+        article.ticker_sentiment.push({ 'ticker': 'N/A' })
+    }
     const response = await fetch('/api/news/internal/stock/create', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            ...news,
-            'symbol': news.ticker_sentiment[0].ticker
+            ...article,
+            'symbol': article.ticker_sentiment[0].ticker
         })
     });
     if (response.ok) {

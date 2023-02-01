@@ -22,9 +22,9 @@ def seed_watchlists():
 def seed_watchlist_stocks():
     demo1wl = Watchlist.query.get(1)
 
-    demo1stock1 = Stock.query.get(10)
+    demo1stock1 = Stock.query.get(18)
 
-    demo1stock2 = Stock.query.get(1640)
+    demo1stock2 = Stock.query.get(4402)
 
     demo1wl.stocks.append(demo1stock1)
 
@@ -32,13 +32,13 @@ def seed_watchlist_stocks():
 
     demo2wl = Watchlist.query.get(2)
 
-    demo2stock1 = Stock.query.get(291)
+    demo2stock1 = Stock.query.get(1595)
 
     demo2wl.stocks.append(demo2stock1)
 
     demo3wl = Watchlist.query.get(3)
 
-    demo3stock1 = Stock.query.get(45)
+    demo3stock1 = Stock.query.get(407)
 
     demo3wl.stocks.append(demo3stock1)
 

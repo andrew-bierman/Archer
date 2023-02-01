@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { openInNewTab } from "../utility";
 import { getAllNewsForHomePage, getUserBookmarkedNews } from "../../store/news";
+import { getAllStocks } from "../../store/stocks";
 import NewsCard from "../NewsCard";
 
 import "./HomePageNewsFeed.css";
@@ -17,6 +18,7 @@ const HomePageNewsFeed = () => {
 
     useEffect(() => {
         setLoading(true);
+        dispatch(getAllStocks())
         dispatch(getAllNewsForHomePage())
             .then(() => {
                 dispatch(getUserBookmarkedNews())

@@ -177,6 +177,10 @@ export const getWatchlistStockData = (stockSymbol) => async (dispatch) => {
     const response = await fetch(`api/stocks/data/current/${stockSymbol}`);
     if (response.ok && response.status !== 204 && response.status !== 429) {
         const data = await response.json();
+        if (typeof data['message'] === 'string') {
+            console.log('Error fetching watchlist stock data', data)
+            return
+        }
         dispatch(getWatchlistStockDataAction(data));
         return data
     } else {
@@ -193,6 +197,11 @@ export const getWatchlistStockDataDaily = (stockSymbol) => async (dispatch) => {
     const response = await fetch(`api/stocks/data/time-series/${stockSymbol}/1D`);
     if (response.ok && response.status !== 204 && response.status !== 429) {
         const data = await response.json();
+        if (typeof data['message'] === 'string') {
+            // {message: "You have exceeded the rate limit per minute for your plan, BASIC, by the API provider"}
+            console.log('Error fetching watchlist stock data', data)
+            return
+        }
         dispatch(getWatchlistStockDataDailyAction(data));
         return data
     } else {

@@ -106,6 +106,7 @@ def get_timeseries_stock_data_by_symbol(symbol, filter):
     Query the TWELVE API for a stock by symbol and returns that data in a dictionary
     """
     useRapid = True
+    delay = 0
 
     # filter = request.args.get('filter') or '1D'
     if not filter:
@@ -135,6 +136,11 @@ def get_timeseries_stock_data_by_symbol(symbol, filter):
     else:
         interval = '5min'
         outputsize = '288'
+
+    if filter == '1D':
+        delay = 0.5
+    else:
+        delay = 3
 
 
     if not useRapid:
@@ -183,9 +189,12 @@ def get_timeseries_stock_data_by_symbol(symbol, filter):
         # if res.status_code != 200:
         #     return {'message': 'Stock not found'}, 404
 
+        if 'message' in res:
+            return {'message': 'Stock not found'}, 404
+
         # print('RESPONSE FOR STOCK DATA ------', res)
 
-    time.sleep(1)
+    time.sleep(delay)
 
     return res
 

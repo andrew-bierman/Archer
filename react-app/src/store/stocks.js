@@ -72,6 +72,10 @@ export const getSingleStockDataFromAPI = (symbol, filter) => async (dispatch) =>
     const response = await fetch(`/api/stocks/data/time-series/${symbol}/${filter}`);
     if (response.ok && response.status !== 429) {
         const data = await response.json();
+        if (typeof data['message'] === 'string') {
+            console.log('Error fetching watchlist stock data', data)
+            return
+        }
         console.log('data IN SINGLE STOCK THUNK', data)
         dispatch(getSingleDataStock(data));
         // if(filter === '1D'){
@@ -89,6 +93,10 @@ export const getSingleStockCurrentPriceFromAPI = (symbol) => async (dispatch) =>
     const response = await fetch(`/api/stocks/data/current/${symbol}`);
     if (response.ok && response.status !== 429) {
         const data = await response.json();
+        if (typeof data['message'] === 'string') {
+            console.log('Error fetching watchlist stock data', data)
+            return
+        }
         dispatch(getSingleStockCurrentPrice(data));
         // dispatch(getWatchlistStockDataAction(data));
         return data;

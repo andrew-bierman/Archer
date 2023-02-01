@@ -10,21 +10,45 @@ const NewsCard = ({ article }) => {
     const dispatch = useDispatch();
 
     const userBookmarkedNews = useSelector(state => state.news.userBookmarkedNews);
+    const allStocks = useSelector(state => state.stocks.allStocks.byId);
 
     const sameUrl = (news) => news.url === article.url;
     const isBookmarked = userBookmarkedNews.some(sameUrl);
     // const isBookmarked = userBookmarkedNews?.filter((news) => news.url === article.url);
     // const isBookmarked = false
 
+    // const doesStockExistInDB = async (symbol) => {
+    //     const res = await fetch(`/api/stocks/search/db/${symbol}`);
+    //     const data = await res.json();
+    //     if (res.ok && typeof data['message'] === 'undefined') {
+    //         return true
+    //     } else {
+    //         return false
+    //     }
+    // }
+
+    const doesStockExistInDB = (symbol) => {
+        if (!allStocks || allStocks?.length === 0) return false;
+
+        const stock = allStocks?.find(stock => stock.symbol === symbol);
+
+        if (stock) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     const handleBookmarkClickAdd = () => {
         // e.preventDefault();
         // e.stopPropagation();
+        console.log('article clicked: ', article)
         if (isBookmarked) {
             dispatch(removeAndDeleteNewsFromBookmarks(article))
-            .then(() => dispatch(getUserBookmarkedNews()));
+                .then(() => dispatch(getUserBookmarkedNews()));
         } else {
             dispatch(createAndBookmarkNews(article))
-            .then(() => dispatch(getUserBookmarkedNews()));
+                .then(() => dispatch(getUserBookmarkedNews()));
         }
     }
 
@@ -33,7 +57,7 @@ const NewsCard = ({ article }) => {
         // e.stopPropagation();
         if (isBookmarked) {
             dispatch(removeAndDeleteNewsFromBookmarks(article))
-            .then(() => dispatch(getUserBookmarkedNews()));
+                .then(() => dispatch(getUserBookmarkedNews()));
         }
     }
 
@@ -53,12 +77,15 @@ const NewsCard = ({ article }) => {
                     {
                         article.ticker_sentiment && article.ticker_sentiment.map((ticker) => {
                             return (
-                                <Link to={`/stocks/${ticker.ticker}`}>
-                                    <span>
-                                        {ticker.ticker}
-                                    </span>
-                                    &nbsp;
-                                </Link>
+                                doesStockExistInDB(ticker.ticker) ?
+                                    <Link to={`/stocks/${ticker.ticker}`}>
+                                        <span>
+                                            {ticker.ticker}
+                                        </span>
+                                        &nbsp;
+                                    </Link>
+                                    :
+                                    <></>
                             )
                         })
                     }

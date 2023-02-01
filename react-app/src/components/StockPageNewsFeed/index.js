@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { openInNewTab } from "../utility";
 import { getNewsForStockPage, getUserBookmarkedNews } from "../../store/news";
 import NewsCard from "../NewsCard";
+import { getAllStocks } from "../../store/stocks";
 
 // import "./StockPageNewsFeed.css";
 
@@ -21,6 +22,7 @@ const StockPageNewsFeed = ({ stockInfo }) => {
         setLoading(true);
         dispatch(getUserBookmarkedNews())
         dispatch(getNewsForStockPage(symbol))
+        dispatch(getAllStocks())
             .then(() => {
                 setLoading(false);
                 console.log('stocknews', stockNews)
