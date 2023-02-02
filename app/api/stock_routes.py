@@ -3,14 +3,18 @@ from flask_login import login_required, current_user
 from app.models import db, User, Watchlist, Stock, Holding, News
 from app.config import Config
 import requests
+import time
+import finnhub
 
 stock_routes = Blueprint('stocks', __name__)
 
 av_api_key = Config.AV_API_KEY
 twelve_api_key = Config.TWELVE_API_KEY
 twelve_native_api_key = Config.TWELVE_NATIVE_API_KEY
+finn_hub_api_key = Config.FINN_HUB_API_KEY
 
-
+# Setup client
+finnhub_client = finnhub.Client(api_key=finn_hub_api_key)
 
 @stock_routes.route('/search/<string:query>')
 def search_stocks(query):
@@ -72,6 +76,21 @@ def get_all_stocks():
     }
 
 
+@stock_routes.route('/data/finn-hub/current/<string:symbol>')
+def get_current_stock_data_by_symbol_finn_hubb(symbol):
+    """
+    Query the TWELVE API for a stock by symbol and returns that data in a dictionary
+    """
+    res = finnhub_client.quote(symbol)
+
+    # if res.status_code != 200:
+    #     return {'message': 'Stock not found'}, 404
+
+    print('finn hub res', res)
+
+    return res
+
+
 @stock_routes.route('/data/current/<string:symbol>')
 def get_current_stock_data_by_symbol(symbol):
     """
@@ -99,12 +118,15 @@ def get_current_stock_data_by_symbol(symbol):
     return res
 
 
+
+
 @stock_routes.route('/data/time-series/<string:symbol>/<string:filter>')
 def get_timeseries_stock_data_by_symbol(symbol, filter):
     """
     Query the TWELVE API for a stock by symbol and returns that data in a dictionary
     """
     useRapid = True
+    delay = 0
 
     # filter = request.args.get('filter') or '1D'
     if not filter:
@@ -134,6 +156,11 @@ def get_timeseries_stock_data_by_symbol(symbol, filter):
     else:
         interval = '5min'
         outputsize = '288'
+
+    if filter == '1D':
+        delay = 1
+    else:
+        delay = 3
 
 
     if not useRapid:
@@ -182,7 +209,12 @@ def get_timeseries_stock_data_by_symbol(symbol, filter):
         # if res.status_code != 200:
         #     return {'message': 'Stock not found'}, 404
 
+        if 'message' in res:
+            return {'message': 'Minutely API Limit Reached'}, 429
+
         # print('RESPONSE FOR STOCK DATA ------', res)
+
+    time.sleep(delay)
 
     return res
 
@@ -223,7 +255,7 @@ def get_company_info(symbol):
 
     res = requests.get(url).json()
 
-    print(res)
+    # print(res)
 
     # if (res.keys().length == 0):
     #     return {'error': 'No company info found'}
@@ -236,6 +268,8 @@ def get_company_info(symbol):
 
     elif 'Description' in res:
         return res
+
+    time.sleep(1)
 
     return res
 

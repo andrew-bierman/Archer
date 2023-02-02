@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { openInNewTab } from "../utility";
-import { getAllNewsForHomePage } from "../../store/news";
+import { getAllNewsForHomePage, getUserBookmarkedNews } from "../../store/news";
+import { getAllStocks } from "../../store/stocks";
+import NewsCard from "../NewsCard";
 
 import "./HomePageNewsFeed.css";
 
@@ -16,8 +18,10 @@ const HomePageNewsFeed = () => {
 
     useEffect(() => {
         setLoading(true);
+        dispatch(getAllStocks())
         dispatch(getAllNewsForHomePage())
             .then(() => {
+                dispatch(getUserBookmarkedNews())
                 setLoading(false);
             }
             );
@@ -49,45 +53,18 @@ const HomePageNewsFeed = () => {
 
     return (
         <div className="news-feed-container">
-            <h1>News</h1>
-            <div>
+            <div className="news-feed-header">
+                <h2>News</h2>
+            </div>
+            <>
                 {
                     (!loading && allNews?.length > 0) && allNews.map((article, idx) => {
                         return (
-                            <div className='news-feed-individual-news' id={`${article.url}`}>
-                                <div className="news-feed-individual-left-side">
-                                    <h3 onClick={() => openInNewTab(article.url)}>{article.title}</h3>
-                                    <h5>{article.source}</h5>
-                                    <p>{article.summary}</p>
-                                    <div className="news-feed-individual-ticker-row">
-                                        {
-                                            article.ticker_sentiment && article.ticker_sentiment.map((ticker) => {
-                                                return (
-                                                    <Link to={`/stocks/${ticker.ticker}`}>
-                                                        <span>
-                                                            {ticker.ticker}
-                                                        </span>
-                                                        &nbsp;
-                                                    </Link>
-                                                )
-                                            })
-                                        }
-                                    </div>
-                                </div>
-                                <div className="news-feed-individual-news-img-and-bookmark">
-                                    <h1>
-                                        <i className="fa-solid fa-bookmark"></i>
-                                        <i className="fa-regular fa-bookmark"></i>
-                                    </h1>
-                                    <div className="news-feed-individual-news-img">
-                                        <img src={article.banner_image} />
-                                    </div>
-                                </div>
-                            </div>
+                            <NewsCard article={article} key={idx} />
                         )
                     })
                 }
-            </div>
+            </>
         </div>
     );
 }

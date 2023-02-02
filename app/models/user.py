@@ -16,6 +16,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(255), nullable=False)
     username = db.Column(db.String(255), nullable=False)
     buying_power = db.Column(db.Float, nullable=False, default=10000.00)
+    dark_mode_pref = db.Column(db.Boolean, nullable=False, default=False)
     created_at = db.Column(db.DateTime, default=datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
 
@@ -40,6 +41,7 @@ class User(db.Model, UserMixin):
             'username': self.username,
             'email': self.email,
             'buying_power': self.buying_power,
+            'dark_mode_pref': self.dark_mode_pref,
             # 'holdings': [holding.to_dict() for holding in self.holdings],
             # 'watchlists': [watchlist.to_dict() for watchlist in self.watchlists],
             # 'news': [news.to_dict() for news in self.news],

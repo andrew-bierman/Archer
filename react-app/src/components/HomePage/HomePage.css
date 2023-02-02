@@ -9,3 +9,36 @@
     margin-right: 20px;
     margin-left: 20px;
 }
+
+.homepage-main-left-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    width: 60%;
+    height: 100%;
+    margin-right: 50px;
+    margin-left: 10%;
+}
+
+.homepage-main-right-side{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    width: 40%;
+    height: 100%;
+    margin-right: 10%;
+    margin-left: 50px;
+
+    /* padding: 20px; */
+
+    border-radius: 20px;
+    border: 1px solid black;
+}
+
+.homepage-main-right-side h3 {
+    margin-left: 20px;
+}
