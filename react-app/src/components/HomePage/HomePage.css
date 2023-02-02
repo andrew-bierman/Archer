@@ -32,4 +32,13 @@
     height: 100%;
     margin-right: 10%;
     margin-left: 50px;
+
+    /* padding: 20px; */
+
+    border-radius: 20px;
+    border: 1px solid black;
+}
+
+.homepage-main-right-side h3 {
+    margin-left: 20px;
 }

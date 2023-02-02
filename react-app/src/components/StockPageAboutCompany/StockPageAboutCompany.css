@@ -15,24 +15,6 @@
     margin-bottom: 20px;
 }
 
-table {
-    width: 100%;
-    vertical-align: middle;
-    margin-left: auto;
-    margin-right: auto;
-    
-}
-
-td {
-    text-align: left;
-    vertical-align: middle;
-    width: 25%;
-}
-
-th {
-    text-align: left;
-    vertical-align: middle;
-}
 
 .stock-page-about-company-about-details{
     display: flex;

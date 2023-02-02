@@ -24,8 +24,9 @@ const SignUpForm = () => {
     if (password === repeatPassword) {
       const data = await dispatch(signUp(username, email, password));
       if (data) {
-        setErrors(data)
-        // setErrors(['Invalid credentials. Please try again.'])
+        // console.log({data})
+        // setErrors(data)
+        setErrors(['Invalid credentials. Please try again.'])
       }
     } else {
       setErrors(['Confirm Password field must be the same as the Password field'])

@@ -25,18 +25,22 @@ const StockPageAboutCompany = () => {
             <p>{companyInfo.Description}</p>
             <div classname='stock-page-about-company-about-details'>
                 <table>
-                    <tr>
-                        <th>Name</th>
-                        <th>Address</th>
-                        <th>Industry</th>
-                        <th>Exchange</th>
-                    </tr>
-                    <tr>
-                        <td>{companyInfo.Name}</td>
-                        <td>{companyInfo.Address}</td>
-                        <td>{companyInfo.Industry}</td>
-                        <td>{companyInfo.Exchange}</td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Industry</th>
+                            <th>Exchange</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{companyInfo.Name}</td>
+                            <td>{companyInfo.Address}</td>
+                            <td>{companyInfo.Industry}</td>
+                            <td>{companyInfo.Exchange}</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
             <div classname='stock-page-about-company-key-statistics-container'>
@@ -44,38 +48,51 @@ const StockPageAboutCompany = () => {
                     <h2>Key Statistics</h2>
                 </div>
                 <table>
-                    <tr>
-                        <th>Market Cap</th>
-                        <th>PE Ratio</th>
-                        <th>Dividend Yield</th>
-                        <th>Analyst Target Price</th>
+                    <thead>
+                        <tr>
+                            <th>Market Cap</th>
+                            <th>PE Ratio</th>
+                            <th>Dividend Yield</th>
+                            <th>Analyst Target Price</th>
 
-                    </tr>
-                    <tr>
-                        <td>${abbrNum(parseFloat(companyInfo.MarketCapitalization), 2).length > 0 && abbrNum(parseFloat(companyInfo.MarketCapitalization), 2).toUpperCase() }</td>
-                        <td>{companyInfo.PERatio}</td>
-                        <td>{companyInfo.DividendYield}</td>
-                        <td>${formatToCurrency(companyInfo.AnalystTargetPrice)}</td>
-                    </tr>
-                    <tr>
-                        <th></th>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <th>Symbol</th>
-                        <th>Year High</th>
-                        <th>Year Low</th>
-                        <th>Sector</th>
-                    </tr>
-                    <tr>
-                        <td>{companyInfo.Symbol}</td>
-                        <td>${formatToCurrency(companyInfo["52WeekHigh"])}</td>
-                        <td>${formatToCurrency(companyInfo["52WeekLow"])}</td>
-                        <td>{companyInfo.Sector}</td>
-                    </tr>
-
-
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>${abbrNum(parseFloat(companyInfo.MarketCapitalization), 2).length > 0 && abbrNum(parseFloat(companyInfo.MarketCapitalization), 2).toUpperCase()}</td>
+                            <td>{companyInfo.PERatio}</td>
+                            <td>{companyInfo.DividendYield}</td>
+                            <td>${formatToCurrency(companyInfo.AnalystTargetPrice)}</td>
+                        </tr>
+                    </tbody>
                 </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </thead>
+                </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Year High</th>
+                            <th>Year Low</th>
+                            <th>Sector</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{companyInfo.Symbol}</td>
+                            <td>${formatToCurrency(companyInfo["52WeekHigh"])}</td>
+                            <td>${formatToCurrency(companyInfo["52WeekLow"])}</td>
+                            <td>{companyInfo.Sector}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
                 {/* <div>
                     <p>Market Capitalization</p>
                     <p>{companyInfo.MarketCapitalization}</p>

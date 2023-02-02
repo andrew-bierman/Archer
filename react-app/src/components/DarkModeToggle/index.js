@@ -3,8 +3,8 @@ import Darkreader, { Switch, useDarkreader } from 'react-darkreader';
 
 const DarkModeToggle = () => {
     const [isDark, { toggle }] = useDarkreader(false, {
-        brightness: 120,
-        contrast: 95,
+        brightness: 150,
+        contrast: 100,
         sepia: 0,
         },
         {

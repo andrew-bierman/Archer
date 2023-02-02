@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchWatchlists, createNewWatchlist, deleteWatchlist, fetchWatchlistById, updateWatchlist, addStockToWatchlistThunk, removeStockFromWatchlistThunk, getWatchlistStockData, getWatchlistStockDataDaily } from '../../store/watchlists';
+import { Link } from 'react-router-dom';
+import { fetchWatchlists, createNewWatchlist, deleteWatchlist, fetchWatchlistById, updateWatchlist, addStockToWatchlistThunk, removeStockFromWatchlistThunk, getWatchlistStockData, getWatchlistStockDataDaily, getStockCurrentPriceFinnHub } from '../../store/watchlists';
+// import {getSingleStockCurrentPriceYahoo} from '../../store/stocks';
 import { getAllStocks } from '../../store/stockList';
 import StockList from '../StockList';
 import WatchListStockChartMini from '../WatchListsStockChartMini';
@@ -30,7 +32,8 @@ const Watchlists = () => {
                 watchlist?.stocks?.forEach(async (stock) => {
                     // console.log(stock.symbol)
                     if (!watchListStockData[stock.symbol]) {
-                        await dispatch(getWatchlistStockData(stock.symbol))
+                        await dispatch(getStockCurrentPriceFinnHub(stock.symbol))
+                        // await dispatch(getWatchlistStockData(stock.symbol))
                         await dispatch(getWatchlistStockDataDaily(stock.symbol))
                     }
                 })
@@ -40,10 +43,18 @@ const Watchlists = () => {
 
     useEffect(() => {
         setLoading(true);
+
         dispatch(fetchWatchlists());
         dispatch(getAllStocks());
+
+        const timer = setTimeout(() => {
+            hitAPI();
+        }, 7000);
+
         // console.log(state)
         setLoading(false);
+
+        return () => clearTimeout(timer);
     }, [dispatch]);
 
     useEffect(() => {
@@ -56,8 +67,8 @@ const Watchlists = () => {
     const formatWatchlistStockData = async (watchlistStockSymbol) => {
         let stockCurrentPrice = 0;
         let stockCurrentPercentageChange = 0;
-        if (!loading && !watchListStockData[watchlistStockSymbol]) {
-            await dispatch(getWatchlistStockData(watchlistStockSymbol))
+        if (!loading && !watchListStockData[watchlistStockSymbol].dailyData) {
+            await dispatch(getWatchlistStockDataDaily(watchlistStockSymbol))
                 .then((res) => {
                     stockCurrentPrice = res.close
                     return res
@@ -116,16 +127,20 @@ const Watchlists = () => {
 
     return (
         <div className='watchlist-container'>
-            <h3>
-                Lists
-                &nbsp;
-                <OpenModalButton
-                    modalComponent={<CreateWatchListModal />}
-                    className='watchlist-create-button'
-                    faIcon={'fa-solid fa-plus'}
-                // buttonText={'Create Watchlist'}
-                />
-            </h3>
+            <div className='watchlist-container-main-header'>
+                <h3>
+                    Lists
+                    &nbsp;
+                </h3>
+                <span>
+                    <OpenModalButton
+                        modalComponent={<CreateWatchListModal />}
+                        className='watchlist-create-button'
+                        faIcon={'fa-solid fa-plus'}
+                    // buttonText={'Create Watchlist'}
+                    />
+                </span>
+            </div>
             {/* <form onSubmit={(e) => handleWatchlistCreate(e)}>
         <input
           type="text"
@@ -213,7 +228,9 @@ const Watchlists = () => {
                                                     <div key={stock.id} value={stock.id} className='watchlist-stock-individual'>
                                                         <div className='watchlist-stock-individual-symbol'>
                                                             <div className='watchlist-stock-individual-symbol'>
-                                                                {stock.symbol}
+                                                                <Link to={`/stocks/${stock.symbol}`} >
+                                                                    {stock.symbol}
+                                                                </Link>
                                                             </div>
                                                         </div>
                                                         <div className='watchlist-stock-individual-chart'>
@@ -234,7 +251,8 @@ const Watchlists = () => {
                                                                             <div>
                                                                                 {
                                                                                     <div>
-                                                                                        ${parseFloat(watchListStockData[stock.symbol]?.Info?.close).toFixed(2)}
+                                                                                        {/* ${parseFloat(watchListStockData[stock.symbol]?.Info?.close).toFixed(2)} */}
+                                                                                        ${parseFloat(watchListStockData[stock.symbol]?.currentPrice?.c).toFixed(2)}
                                                                                     </div>
                                                                                 }
                                                                             </div>
@@ -242,11 +260,13 @@ const Watchlists = () => {
                                                                                 {
                                                                                     watchListStockData[stock.symbol]?.percent_change > 0 ?
                                                                                         <div className='watchlist-stock-individual-price-and-change-positive'>
-                                                                                            +{parseFloat(watchListStockData[stock.symbol]?.Info?.percent_change).toFixed(2)}%
+                                                                                            {/* +{parseFloat(watchListStockData[stock.symbol]?.Info?.percent_change).toFixed(2)}% */}
+                                                                                            +{parseFloat(watchListStockData[stock.symbol]?.currentPrice?.dp).toFixed(2)}%
                                                                                         </div>
                                                                                         :
                                                                                         <div className='watchlist-stock-individual-price-and-change-negative'>
-                                                                                            {parseFloat(watchListStockData[stock.symbol]?.Info?.percent_change).toFixed(2)}%
+                                                                                            {/* {parseFloat(watchListStockData[stock.symbol]?.Info?.percent_change).toFixed(2)}% */}
+                                                                                            {parseFloat(watchListStockData[stock.symbol]?.currentPrice?.dp).toFixed(2)}%
                                                                                         </div>
                                                                                 }
                                                                             </div>

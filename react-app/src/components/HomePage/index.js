@@ -2,6 +2,7 @@ import React from "react";
 import StockChart from "../StockChart";
 import StockList from "../StockList";
 import WatchLists from "../WatchLists";
+import HomePageHoldings from "../HomePageHoldings";
 import StockListSearch from "../Search";
 import HomePageStockChart from "../HomePageStockChart";
 import HomePageNewsFeed from "../HomePageNewsFeed";
@@ -16,6 +17,7 @@ const HomePage = () => {
                 <HomePageNewsFeed />
             </div>
             <div className="homepage-main-right-side">
+                <HomePageHoldings />
                 <WatchLists />  
             </div>
         </div>

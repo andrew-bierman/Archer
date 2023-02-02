@@ -92,7 +92,12 @@ const HomePageStockChart = (props) => {
   useEffect(() => {
     // debugger
     setSeries([{ name: '', data: stockData }])
-    setPortfolioValueLatest(stockData.slice(-1)[0]?.y)
+    if(holdings.length > 0) {
+      setPortfolioValueLatest(stockData.slice(-1)[0]?.y)
+    } else {
+      setPortfolioValueLatest(userBuyingPower)
+    }
+
   }, [stockData])
 
   useEffect(() => {
@@ -291,7 +296,7 @@ const HomePageStockChart = (props) => {
           </h1 >
           :
           <div className='homepage-stock-chart-entire-comp-container'>
-            <h2>{portfolioValueLatest ? `$${(portfolioValueLatest)}` : ''}</h2>
+            <h2>{portfolioValueLatest ? `Portfolio Value: $${formatToCurrency(portfolioValueLatest)}` : ''}</h2>
             <div className='big-chart-container'>
               <ApexCharts options={options} series={series} width='900px' height='300px'/>
             </div>

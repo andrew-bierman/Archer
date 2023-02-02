@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { openInNewTab } from "../utility";
+import { openInNewTab, isObjectEmpty } from "../utility";
 import { getAllNewsForHomePage, getUserBookmarkedNews, createAndBookmarkNews, removeAndDeleteNewsFromBookmarks } from "../../store/news";
 import './NewsCard.css';
 
@@ -28,7 +28,7 @@ const NewsCard = ({ article }) => {
     // }
 
     const doesStockExistInDB = (symbol) => {
-        if (!allStocks || allStocks?.length === 0) return false;
+        if (!allStocks || allStocks?.length === 0 || isObjectEmpty(allStocks)) return false;
 
         const stock = allStocks?.find(stock => stock.symbol === symbol);
 

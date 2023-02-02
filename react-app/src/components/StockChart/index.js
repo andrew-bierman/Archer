@@ -46,7 +46,10 @@ const StockChart = (props) => {
     if (tempData) {
       tempData.reverse(); // Reverse the order of the data
       let seriesData = tempData.map(item => {
-        return { x: item.datetime, y: item.close }
+        return { 
+          x: item.datetime, 
+          y: Math.round(item.close * 100) / 100
+        }
       });
       setSeries([{ name: '', data: seriesData }])
       setXaxisCategories(tempData.map(({ datetime }) => {

@@ -77,7 +77,7 @@ def get_all_external_news():
     response = requests.get(url)
     data = response.json()
 
-    print(data)
+    # print(data)
 
     if 'feed' not in data:
         return {'message': 'No news found'}, 404
@@ -110,7 +110,7 @@ def create_news():
     """
 
     data = request.json
-    print(data)
+    # print(data)
 
     # check the db to make sure the URL is not already in the db for the current user, if not then add to db
     if not News.query.filter(News.url == data['url'], News.user_id == current_user.id).first():

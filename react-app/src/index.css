@@ -63,13 +63,24 @@ nav a.active {
 .navbar-logo-and-name {
   display: flex;
   flex-direction: row;
+  justify-content: flex-start;
   align-items: center;
-  font-size: larger;
-  font-weight: 1000;
+
+  width: 25%;
 
   background-color: currentColor;
   -webkit-background-clip: text;
   background-clip: text;
+}
+
+.navbar-logo-and-name a {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 20pt;
+  font-weight: 1000;
+
 }
 
 .navbar-logo-and-name img{
@@ -98,12 +109,16 @@ nav a.active {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+
+  width: 50%;
 }
 
 .navbar-right-side {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: flex-end;
+  width: 25%;
 }
 
 .navbar-right-side button {
@@ -249,4 +264,30 @@ button:disabled {
 
 svg {
   fill: currentColor;
+}
+
+table {
+  width: 100%;
+  vertical-align: middle;
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+
+td {
+  text-align: left;
+  vertical-align: middle;
+  width: 25%;
+}
+
+th {
+  text-align: left;
+  vertical-align: middle;
+}
+
+th:last-child,
+td:last-child,
+th:nth-last-child(2),
+td:nth-last-child(2) {
+  text-align: right;
 }

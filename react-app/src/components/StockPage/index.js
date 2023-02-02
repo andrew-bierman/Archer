@@ -7,6 +7,7 @@ import { getSingleStockDataFromAPI, getSingleStockInfo, getSingleStockCurrentPri
 import { resetCurrentHolding } from '../../store/holdings';
 import OpenModalButton from '../OpenModalButton';
 import { Modal } from '../../context/Modal';
+import { isObjectEmpty } from '../utility';
 import WatchlistsStockPage from '../WatchListsStockPage';
 import BuySellStock from '../BuySellStock';
 import StockPageAboutCompany from '../StockPageAboutCompany';
@@ -22,8 +23,10 @@ function StockPage() {
   const stockData = useSelector(state => state.stocks.singleStock.Data);
   // const [stockInfo, setStockInfo] = useState({});
   const stockInfo = useSelector(state => state.stocks.singleStock.Info);
-  const stockCurrentPrice = useSelector(state => state.stocks.singleStock.CurrentPrice.close);
-  const stockCurrentPercentChange = useSelector(state => state.stocks.singleStock.CurrentPrice.percent_change);
+  // const stockCurrentPrice = useSelector(state => state.stocks.singleStock.CurrentPrice.close);
+  // const stockCurrentPercentChange = useSelector(state => state.stocks.singleStock.CurrentPrice.percent_change);
+  const stockCurrentPrice = useSelector(state => state.stocks.singleStock.CurrentPrice.c);
+  const stockCurrentPercentChange = useSelector(state => state.stocks.singleStock.CurrentPrice.dp);
   const state = useSelector(state => state);
 
   // console.log(state)
@@ -46,13 +49,21 @@ function StockPage() {
     await dispatch(getSingleStockDataFromAPI(symbol))
       .then((res) => {
         // console.log('data', data)
-        if (res.status === 200) {
+        if (!isObjectEmpty(res) && res.ok && res.status === 200 && !(typeof res['message'] === 'string')) {
           const data = res;
           dispatch(getWatchlistStockDataDailyAction(data))
+        } else {
+          return;
         }
       })
-      .then(async () => await dispatch(getSingleStockCurrentPriceFromAPI(symbol)))
-      .then((data) => dispatch(getWatchlistStockDataAction(data)))
+      .then(async () => {
+        await dispatch(getSingleStockCurrentPriceFromAPI(symbol))
+      })
+      .then((data) => {
+        if(!data || typeof data === 'undefined') return;
+
+        dispatch(getWatchlistStockDataAction(data))
+      })
 
 
   }
@@ -96,14 +107,29 @@ function StockPage() {
                     <></>
                 }
               </h2>
-              {(stockCurrentPercentChange > 0) ?
-                <h3 className='stock-page-stock-info-percent-change-positive'>+{stockCurrentPercentChange}%</h3>
+              {(isNaN(stockCurrentPercentChange)) ?
+                <>
+                  <span className='search-results-individual-result-symbol'>
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    &nbsp;
+                    Loading...
+                  </span>
+                </>
                 :
-                <h3 className='stock-page-stock-info-percent-change-negative'>
-                  {stockCurrentPercentChange}%</h3>
+                <>
+                  {(stockCurrentPercentChange > 0) ?
+                    <h3 className='stock-page-stock-info-percent-change-positive'>
+                      +{stockCurrentPercentChange}%</h3>
+                    :
+                    <h3 className='stock-page-stock-info-percent-change-negative'>
+                      {stockCurrentPercentChange}%</h3>
+                  }
+                </>
               }
               <StockChart stockData={stockData} />
+              <br></br>
               <StockPageAboutCompany stockInfo={stockInfo} />
+              <br></br>
               <StockPageNewsFeed stockInfo={stockInfo} />
             </div>
             <div className='stock-page-sidebar'>

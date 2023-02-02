@@ -40,7 +40,7 @@ const ProfileNewsFeed = () => {
     }, []);
 
     return (
-        <div className="news-feed-container">
+        <div className="profile-news-feed-container">
             <div className="news-feed-header">
                 <h2>Bookmarked News</h2>
             </div>

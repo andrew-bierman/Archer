@@ -1,4 +1,5 @@
 import { getWatchlistStockDataAction, getWatchlistStockDataDailyAction } from "./watchlists";
+import yahooFinance from "yahoo-finance";
 
 const GET_ALL_STOCKS_FROM_DB = 'stockList/GET_ALL_STOCKS_FROM_DB';
 const GET_SINGLE_STOCK_INFO_FROM_DB = 'stockList/GET_SINGLE_STOCK_INFO_FROM_DB';
@@ -6,6 +7,8 @@ const GET_SINGLE_STOCK_DATA = 'stockList/GET_SINGLE_STOCK_DATA_FROM_API';
 const GET_SINGLE_STOCK_CURRENT_PRICE = 'stockList/GET_SINGLE_STOCK_CURRENT_PRICE';
 const GET_SINGLE_STOCK_COMPANY_INFO = 'stockList/GET_SINGLE_STOCK_COMPANY_INFO';
 const RESET_SINGLE_STOCK_DATA = 'stockList/RESET_SINGLE_STOCK_DATA';
+
+const GET_SINGLE_STOCK_CURRENT_PRICE_YAHOO = 'stockList/GET_SINGLE_STOCK_CURRENT_PRICE_YAHOO';
 
 const getAllStocksFromDB = (stocks) => ({
     type: GET_ALL_STOCKS_FROM_DB,
@@ -29,6 +32,11 @@ const getSingleStockCurrentPrice = (data) => ({
 
 const getSingleStockCompanyInfo = (data) => ({
     type: GET_SINGLE_STOCK_COMPANY_INFO,
+    payload: data
+});
+
+const getSingleStockCurrentPriceYahooAction = (data) => ({
+    type: GET_SINGLE_STOCK_CURRENT_PRICE_YAHOO,
     payload: data
 });
 
@@ -76,11 +84,8 @@ export const getSingleStockDataFromAPI = (symbol, filter) => async (dispatch) =>
             console.log('Error fetching watchlist stock data', data)
             return
         }
-        console.log('data IN SINGLE STOCK THUNK', data)
+        // console.log('data IN SINGLE STOCK THUNK', data)
         dispatch(getSingleDataStock(data));
-        // if(filter === '1D'){
-        //     dispatch(getWatchlistStockDataDailyAction(data));
-        // }
         return data;
 
     } else {
@@ -90,7 +95,10 @@ export const getSingleStockDataFromAPI = (symbol, filter) => async (dispatch) =>
 
 
 export const getSingleStockCurrentPriceFromAPI = (symbol) => async (dispatch) => {
-    const response = await fetch(`/api/stocks/data/current/${symbol}`);
+    // 12 data route
+    // const response = await fetch(`/api/stocks/data/current/${symbol}`);
+    // finnhub route
+    const response = await fetch(`/api/stocks/data/finn-hub/current/${symbol}`);
     if (response.ok && response.status !== 429) {
         const data = await response.json();
         if (typeof data['message'] === 'string') {
@@ -118,6 +126,21 @@ export const getSingleStockCompanyInfoFromAPI = (symbol) => async (dispatch) => 
     }
 }
 
+// export const getSingleStockCurrentPriceYahoo = (symbol) => async (dispatch) => {
+//     yahooFinance.quote({
+//         symbol: symbol,
+//         modules: ['price']
+//     })
+//     .then((data) => {
+//         console.log(data)
+//         dispatch(getSingleStockCurrentPriceYahooAction(data));
+//     })
+//     .catch((err) => {
+//         console.log('Error fetching stock', err);
+//     })
+// }
+
+
 export const resetSingleStockData = () => ({
     type: RESET_SINGLE_STOCK_DATA
 });
@@ -130,6 +153,7 @@ const initialState = {
         Info: {},
         CompanyInfo: {},
         CurrentPrice: {},
+        YahooCurrentPrice: {},
         Data: {},
         News: {}
     }
@@ -181,6 +205,15 @@ const stockListReducer = (state = initialState, action) => {
                 singleStock: {
                     ...state.singleStock,
                     CompanyInfo: action.payload
+                }
+            }
+
+        case GET_SINGLE_STOCK_CURRENT_PRICE_YAHOO:
+            return {
+                ...state,
+                singleStock: {
+                    ...state.singleStock,
+                    YahooCurrentPrice: action.payload.price
                 }
             }
         
