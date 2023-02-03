@@ -107,7 +107,7 @@ const WatchlistsStockPage = () => {
     };
 
 
-    // write a function that will precheck all the checkboxes that the stock is already in, and then when the user clicks add stock, it will add the stock to all the watchlists that are checked. If the user unchecks a box that the stock was previously in, it will remove the stock from that watchlist.
+    // a function that will precheck all the checkboxes that the stock is already in, and then when the user clicks add stock, it will add the stock to all the watchlists that are checked. If the user unchecks a box that the stock was previously in, it will remove the stock from that watchlist.
 
     const preCheckWatchlists = (stockId) => {
         let preChecked = {};
@@ -122,7 +122,6 @@ const WatchlistsStockPage = () => {
         });
         setSelectedWatchlists(preChecked);
         setPreCheckedWatchlists(preChecked);
-        // console.log('preChecked, ', preChecked)
     };
 
 
@@ -131,7 +130,7 @@ const WatchlistsStockPage = () => {
         <div className='watchlist-modal-container'>
             <p>Lists</p>
             <div className='watchlist-modal-create-errors'>
-                {errors.length > 0 && errors.map(error => <p>{error}</p>)}
+                {errors.length > 0 && errors.map(error => <p key={error}>{error}</p>)}
             </div>
             <div className='watchlist-modal-create-watchlist-stock-page-button-and-input-container'>
                 <form onSubmit={(e) => handleWatchlistCreate(e)}>

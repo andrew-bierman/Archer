@@ -45,14 +45,51 @@ const StockChart = (props) => {
   }, [timeSeriesData]);
 
   useEffect(() => {
-    if (tempData) {
+    if (tempData && tempData?.length > 0) {
       // compare start and end date to determine if reverse is needed
       if (new Date(tempData[0].datetime) > new Date(tempData[tempData.length - 1].datetime)) {
-          tempData.reverse(); // Reverse the order of the data
+        tempData.reverse(); // Reverse the order of the data
       }
-      let seriesData = tempData.map(item => {
-        return { 
-          x: item.datetime, 
+
+      let filteredData = timeSeriesData.filter(({ datetime }) => {
+    
+        // const date = new Date(datetime);
+        const dateInQuestion = new Date(datetime);
+
+        const date = new Date()
+        // const currentDate = new Date();
+        let startDate, endDate;
+      
+        if (filter === '1D') {
+          startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0);
+          endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
+        } else if (filter === '1W') {
+          startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 7, 0, 0);
+          endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
+        } else if (filter === '1M') {
+          startDate = new Date(date.getFullYear(), date.getMonth() - 1, date.getDate(), 0, 0);
+          endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
+        } else if (filter === '3M') {
+          startDate = new Date(date.getFullYear(), date.getMonth() - 3, date.getDate(), 0, 0);
+          endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
+        } else if (filter === '1Y') {
+          startDate = new Date(date.getFullYear() - 1, date.getMonth(), date.getDate(), 0, 0);
+          endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
+        } else if (filter === '5Y') {
+          startDate = new Date(date.getFullYear() - 5, date.getMonth(), date.getDate(), 0, 0);
+          endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
+        } else {
+          startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 0, 0);
+          endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
+        }
+      
+        return dateInQuestion >= startDate && dateInQuestion <= endDate;
+      });
+
+
+      let seriesData = filteredData.map(item => {
+        return {
+          x: item.datetime,
           y: Math.round(item.close * 100) / 100
         }
       });
@@ -65,15 +102,17 @@ const StockChart = (props) => {
         }
       }));
 
-      if(seriesData?.length > 0){
+      if (seriesData?.length > 0) {
         setColor(seriesData[0].y <= seriesData[seriesData.length - 1].y ? '#00C805' : '#FF0000');
         // console.log(seriesData[0].y <= seriesData[seriesData.length - 1].y ? '#00C805' : '#FF0000')
         // console.log(seriesData[0].y, seriesData[seriesData.length - 1].y)
       }
-  
+
+      console.log(series)
+
     }
   }, [tempData, filter])
-  
+
 
 
 
@@ -85,7 +124,7 @@ const StockChart = (props) => {
     setSeries([]);
 
     // make API call with updated interval
-    dispatch(getSingleStockDataFromAPI(singleStockInfo.symbol, filter));
+    await dispatch(getSingleStockDataFromAPI(singleStockInfo.symbol, filter));
   }
 
 
@@ -127,7 +166,8 @@ const StockChart = (props) => {
     ],
 
     xaxis: {
-      categories: [],
+      // type: 'datetime',
+      categories: xaxisCategories,
       labels: {
         show: false,
         showAlways: false,
@@ -187,15 +227,15 @@ const StockChart = (props) => {
         !loading ?
           <div className='big-chart-container'>
             <div className='big-chart-container'>
-              <ApexCharts options={options} series={series}  width='100%' height='100%' />
+              <ApexCharts options={options} series={series} width='100%' height='100%' />
             </div>
             <div className='stock-chart-filter-buttons-container'>
-              <button onClick={() => handleFilterChange('1D')} className={filter === '1D' ? 'active-filter-button' : '' } id='filter-button'>1D</button>
-              <button onClick={() => handleFilterChange('1W')} className={filter === '1W' ? 'active-filter-button' : '' }>1W</button>
-              <button onClick={() => handleFilterChange('1M')} className={filter === '1M' ? 'active-filter-button' : '' }>1M</button>
-              <button onClick={() => handleFilterChange('3M')} className={filter === '3M' ? 'active-filter-button' : '' }>3M</button>
-              <button onClick={() => handleFilterChange('1Y')} className={filter === '1Y' ? 'active-filter-button' : '' }>1Y</button>
-              <button onClick={() => handleFilterChange('5Y')} className={filter === '5Y' ? 'active-filter-button' : '' }>5Y</button>
+              <button onClick={() => handleFilterChange('1D')} className={filter === '1D' ? 'active-filter-button' : ''} id='filter-button'>1D</button>
+              <button onClick={() => handleFilterChange('1W')} className={filter === '1W' ? 'active-filter-button' : ''}>1W</button>
+              <button onClick={() => handleFilterChange('1M')} className={filter === '1M' ? 'active-filter-button' : ''}>1M</button>
+              <button onClick={() => handleFilterChange('3M')} className={filter === '3M' ? 'active-filter-button' : ''}>3M</button>
+              <button onClick={() => handleFilterChange('1Y')} className={filter === '1Y' ? 'active-filter-button' : ''}>1Y</button>
+              <button onClick={() => handleFilterChange('5Y')} className={filter === '5Y' ? 'active-filter-button' : ''}>5Y</button>
             </div>
           </div>
           :

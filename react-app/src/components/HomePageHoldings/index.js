@@ -50,10 +50,10 @@ const HomePageHoldings = () => {
 
 		dispatch(getAllUserHoldings())
 
-		hitAPI();
-
-		// const timer = setTimeout(() => {
-		// }, 500);
+		
+		const timer = setTimeout(() => {
+			hitAPI();
+		}, 5000);
 
 		// console.log(state)
 		setLoading(false);
@@ -61,7 +61,7 @@ const HomePageHoldings = () => {
 		console.log("holdings", holdings)
 		console.log(holdingsStockData['COIN'])
 
-		// return () => clearTimeout(timer);
+		return () => clearTimeout(timer);
 	}, [dispatch]);
 
 	return (

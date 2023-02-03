@@ -172,7 +172,7 @@ function StockPage() {
                         buttonText={
                           <>
                             {preCheckWatchlistButton ? 
-                            <i className="fa-solid fa-check"></i> 
+                            <i className="fa-solid fa-check flex-row flex-center"></i> 
                             : <i className="fa-solid fa-plus"></i>}
                             &nbsp;
                             Add to List
