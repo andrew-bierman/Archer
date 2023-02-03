@@ -18,6 +18,7 @@ const WatchlistsStockPage = () => {
 
     const [newWatchlistName, setNewWatchlistName] = useState('');
     const [selectedWatchlists, setSelectedWatchlists] = useState({});
+    const [preCheckedWatchlists, setPreCheckedWatchlists] = useState({});
 
     const watchlists = useSelector(state => state.watchlists.allWatchlists);
 
@@ -95,8 +96,10 @@ const WatchlistsStockPage = () => {
         Object.keys(selectedWatchlists).forEach(watchlistId => {
             if (selectedWatchlists[watchlistId]) {
                 dispatch(addStockToWatchlistThunk(watchlistId, stockId));
-            } else {
+            } else if (!selectedWatchlists[watchlistId] && preCheckedWatchlists[watchlistId]){
                 dispatch(removeStockFromWatchlistThunk(watchlistId, stockId));
+            } else {
+                return;
             }
         });
         dispatch(fetchWatchlists());
@@ -118,7 +121,8 @@ const WatchlistsStockPage = () => {
             });
         });
         setSelectedWatchlists(preChecked);
-        console.log('preChecked, ', preChecked)
+        setPreCheckedWatchlists(preChecked);
+        // console.log('preChecked, ', preChecked)
     };
 
 

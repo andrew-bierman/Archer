@@ -8,6 +8,7 @@ import { getHoldingCurrentPriceFinnHub, getAllUserHoldings } from "../../store/h
 import { getAllStocks } from "../../store/stockList";
 import StockList from "../StockList";
 import WatchListStockChartMini from "../WatchListsStockChartMini";
+import HoldingsStockChartMini from "./HoldingsStockChartMini";
 import OpenModalButton from "../OpenModalButton";
 
 import './HomePageHoldings.css';
@@ -34,8 +35,8 @@ const HomePageHoldings = () => {
 						|| !isObjectEmpty(holdingsStockData[stock.symbol]?.currentPrice)) {
 							await dispatch(getHoldingCurrentPriceFinnHub(stock.symbol));
 							console.log('running dispatch in holdings homepage component')
-						// await dispatch(getWatchlistStockData(stock.symbol))
-						// await dispatch(getWatchlistStockDataDaily(stock.symbol))
+							// await dispatch(getWatchlistStockData(stock.symbol))
+							// await dispatch(getWatchlistStockDataDaily(stock.symbol))
 					}
 				});
 			});
@@ -48,11 +49,14 @@ const HomePageHoldings = () => {
 		dispatch(getAllUserHoldings());
 
 		// const timer = setTimeout(() => {
-			hitAPI();
+		hitAPI();
 		// }, 500);
 
 		// console.log(state)
 		setLoading(false);
+
+		console.log("holdings", holdings)
+		console.log(holdingsStockData['COIN'])
 
 		// return () => clearTimeout(timer);
 	}, [dispatch]);
@@ -104,12 +108,16 @@ const HomePageHoldings = () => {
 										</div>
 										<div className="watchlist-stock-individual-chart">
 											<div>
-												{holdingsStockData[stock.symbol]?.values?.length >
-													1 ? (
-													<WatchListStockChartMini stockSymbol={stock.symbol} />
-												) : (
-													<i className="fa-solid fa-circle-notch fa-spin"></i>
-												)}
+												{
+													!isObjectEmpty(holdingsStockData[stock.symbol])
+														|| (holdingsStockData[stock.symbol]?.values?.length > 0)
+														?
+														(
+															// <WatchListStockChartMini stockSymbol={stock.symbol} />
+															<HoldingsStockChartMini stockSymbol={stock.symbol} />
+														) : (
+															<i className="fa-solid fa-circle-notch fa-spin"></i>
+														)}
 											</div>
 										</div>
 										<div className="watchlist-stock-individual-price-and-change">
@@ -165,7 +173,7 @@ const HomePageHoldings = () => {
 												) : (
 													<div className="watchlist-stock-individual-price-percent-loading">
 														<span>
-															<i class="fa-solid fa-circle-notch fa-spin"></i>
+															<i className="fa-solid fa-circle-notch fa-spin"></i>
 															&nbsp;
 															Loading...
 														</span>

@@ -19,6 +19,8 @@ function StockPage() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
 
+  const user = useSelector(state => state.session.user);
+
   // const [stockData, setStockData] = useState({});
   const stockData = useSelector(state => state.stocks.singleStock.Data);
   // const [stockInfo, setStockInfo] = useState({});
@@ -118,7 +120,7 @@ function StockPage() {
 
   return (
     <>
-      {(!loading)
+      {(!loading && user)
         ?
         (
           <div className='stock-page-core-container'>
@@ -191,7 +193,7 @@ function StockPage() {
         )
         :
         (
-          <p>Loading...</p>
+          <i className="fa-solid fa-circle-notch fa-spin"></i>
         )}
     </>
   );

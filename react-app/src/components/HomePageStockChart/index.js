@@ -151,7 +151,7 @@ const HomePageStockChart = (props) => {
                 y: Math.round((dataPoint.close * holdings[i].shares + userBuyingPower) * 100) / 100
               };
             } else {
-              aggregateData[dataPoint.datetime].y += (Math.round((dataPoint.close * holdings[i].shares) * 100) / 100)
+              aggregateData[dataPoint.datetime].y = Math.round((aggregateData[dataPoint.datetime].y + (dataPoint.close * holdings[i].shares)) * 100) / 100;
             }
           });
         }
@@ -191,7 +191,7 @@ const HomePageStockChart = (props) => {
   }
   */
 
-  console.log(typeof portfolioValueLatest)
+  // console.log(typeof portfolioValueLatest)
 
   // const seriesData = Object.keys(data).map(date => ({ x: date, y: data[date]["4. close"] }));
 

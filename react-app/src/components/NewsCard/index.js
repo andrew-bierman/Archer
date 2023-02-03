@@ -62,7 +62,7 @@ const NewsCard = ({ article }) => {
     }
 
     return (
-        <div className='news-feed-individual-news' id={`${article.url}`}>
+        <div className='news-feed-individual-news' id={`${article.url}`} key={`${article.url}`}>
             <div className="news-feed-individual-left-side">
                 <div className="news-feed-individual-left-side-text">
                     <h5>{article.source}</h5>
@@ -78,7 +78,7 @@ const NewsCard = ({ article }) => {
                         article.ticker_sentiment && article.ticker_sentiment.map((ticker) => {
                             return (
                                 doesStockExistInDB(ticker.ticker) ?
-                                    <Link to={`/stocks/${ticker.ticker}`}>
+                                    <Link to={`/stocks/${ticker.ticker}`} key={`${ticker.ticker}`}>
                                         <span>
                                             {ticker.ticker}
                                         </span>
