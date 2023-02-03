@@ -32,6 +32,10 @@ const DarkModeToggle = () => {
         }
     }, []);
 
+    const handleClick = async () => {
+        await toggle();
+        await dispatch(updateUserDarkModePref(!isDark))
+    };
 
     // const [message, setMessage] = useState('Current theme mode is what');
 
@@ -40,9 +44,7 @@ const DarkModeToggle = () => {
             <Switch
                 checked={isDark}
                 onChange={() => {
-                    toggle()
-                    dispatch(updateUserDarkModePref(isDark))
-                    .then(() => dispatch(getUserSession()))
+                    handleClick()
                 }}
                 styling="github"
             />

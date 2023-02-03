@@ -36,9 +36,9 @@ const NavBar = () => {
           !user
             ?
             <div className='navbar-right-side '>
-              <li>
+              {/* <li>
                 <DarkModeToggle />
-              </li>
+              </li> */}
               <li>
                 <NavLink to='/login' exact={true} activeClassName='active'>
                   Login

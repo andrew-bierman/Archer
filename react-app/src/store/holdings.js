@@ -259,7 +259,10 @@ const holdingReducer = (state = initialState, action) => {
         ...state,
         stockData: {
           ...state.stockData,
-          [action.payload.meta.symbol]: action.payload,
+          [action.payload.meta.symbol]: {
+            ...state.stockData[action.payload.meta.symbol],
+            ...action.payload,
+          }
         },
       };
     case GET_HOLDING_CURRENT_PRICE_FINNHUB:

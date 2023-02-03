@@ -152,6 +152,8 @@ export default function reducer(state = initialState, action) {
       return { user: null }
     case GET_USER_SESSION:
       return { user: action.payload }
+    case UPDATE_USER_DARK_MODE_PREF:
+      return { user: action.payload }
     default:
       return state;
   }

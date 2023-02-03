@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { getAllUserHoldings } from "../../store/holdings";
 import { formatToCurrency, isObjectEmpty } from "../utility";
 
-import { getHoldingCurrentPriceFinnHub } from "../../store/holdings";
+import { getHoldingCurrentPriceFinnHub, getAllUserHoldings } from "../../store/holdings";
 // import {getSingleStockCurrentPriceYahoo} from '../../store/stocks';
 import { getAllStocks } from "../../store/stockList";
 import StockList from "../StockList";
@@ -25,14 +24,16 @@ const HomePageHoldings = () => {
 	const holdingsStockData = useSelector((state) => state.holdings.stockData);
 
 	const hitAPI = async () => {
+		setLoading(true);
 		if (holdings.length > 0) {
 			holdings.forEach((holding) => {
 				holding?.stock?.forEach(async (stock) => {
 					// console.log(stock.symbol)
-					if ((typeof holdingsStockData[stock.symbol] === 'undefined') || !holdingsStockData[stock.symbol]?.currentPrice || !isObjectEmpty(holdingsStockData[stock.symbol]?.currentPrice)) {
-						await dispatch(
-							getHoldingCurrentPriceFinnHub(stock.symbol)
-						);
+					if ((typeof holdingsStockData[stock.symbol] === 'undefined')
+						|| (typeof holdingsStockData[stock.symbol]?.currentPrice === 'undefined')
+						|| !isObjectEmpty(holdingsStockData[stock.symbol]?.currentPrice)) {
+							await dispatch(getHoldingCurrentPriceFinnHub(stock.symbol));
+							console.log('running dispatch in holdings homepage component')
 						// await dispatch(getWatchlistStockData(stock.symbol))
 						// await dispatch(getWatchlistStockDataDaily(stock.symbol))
 					}
@@ -44,14 +45,16 @@ const HomePageHoldings = () => {
 	useEffect(() => {
 		setLoading(true);
 
-		const timer = setTimeout(() => {
+		dispatch(getAllUserHoldings());
+
+		// const timer = setTimeout(() => {
 			hitAPI();
-		}, 5000);
+		// }, 500);
 
 		// console.log(state)
 		setLoading(false);
 
-		return () => clearTimeout(timer);
+		// return () => clearTimeout(timer);
 	}, [dispatch]);
 
 	return (
@@ -105,7 +108,7 @@ const HomePageHoldings = () => {
 													1 ? (
 													<WatchListStockChartMini stockSymbol={stock.symbol} />
 												) : (
-													<p>Loading...</p>
+													<i className="fa-solid fa-circle-notch fa-spin"></i>
 												)}
 											</div>
 										</div>
@@ -176,30 +179,7 @@ const HomePageHoldings = () => {
 						</div>
 					</>
 				) : (
-					// <table>
-					//     <thead>
-					//         <tr>
-					//             <th>Symbol</th>
-					//             <th>Company Name</th>
-					//             <th>Shares</th>
-					//             <th>Avg. Cost</th>
-					//         </tr>
-					//     </thead>
-					//     <tbody>
-					//         <>
-					//             {
-					//                 holdings.map(holding => (
-					//                     <tr>
-					//                         <td>{holding.stock[0].symbol}</td>
-					//                         <td>{holding.stock[0].company_name}</td>
-					//                         <td>x{holding.shares}</td>
-					//                         <td>${formatToCurrency(holding.avg_cost)}</td>
-					//                     </tr>
-					//                 ))
-					//             }
-					//         </>
-					//     </tbody>
-					// </table>
+
 					<p>You do not have any holdings</p>
 				)}
 			</>
