@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import StockChart from '../StockChart';
-import { addStockToWatchlistThunk, getWatchlistStockDataAction, getWatchlistStockDataDailyAction } from '../../store/watchlists';
+import { addStockToWatchlistThunk, getWatchlistStockDataAction, getWatchlistStockDataDailyAction, fetchWatchlists } from '../../store/watchlists';
 import { getSingleStockDataFromAPI, getSingleStockInfo, getSingleStockCurrentPriceFromAPI, resetSingleStockData } from '../../store/stocks';
 import { resetCurrentHolding } from '../../store/holdings';
 import OpenModalButton from '../OpenModalButton';
@@ -19,6 +19,8 @@ function StockPage() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
 
+  const user = useSelector(state => state.session.user);
+
   // const [stockData, setStockData] = useState({});
   const stockData = useSelector(state => state.stocks.singleStock.Data);
   // const [stockInfo, setStockInfo] = useState({});
@@ -27,6 +29,9 @@ function StockPage() {
   // const stockCurrentPercentChange = useSelector(state => state.stocks.singleStock.CurrentPrice.percent_change);
   const stockCurrentPrice = useSelector(state => state.stocks.singleStock.CurrentPrice.c);
   const stockCurrentPercentChange = useSelector(state => state.stocks.singleStock.CurrentPrice.dp);
+
+  const watchlists = useSelector(state => state.watchlists.allWatchlists);
+
   const state = useSelector(state => state);
 
   // console.log(state)
@@ -60,14 +65,19 @@ function StockPage() {
         await dispatch(getSingleStockCurrentPriceFromAPI(symbol))
       })
       .then((data) => {
-        if(!data || typeof data === 'undefined') return;
+        if (!data || typeof data === 'undefined') return;
 
         dispatch(getWatchlistStockDataAction(data))
       })
-
-
   }
 
+  const handleWatchlistFetchandCheck = async () => {
+    await dispatch(fetchWatchlists())
+    .then(() => {
+      preCheckWatchlistButton(stockInfo?.id)
+    })
+
+  }
   // search database for stock data
   useEffect(() => {
     setLoading(true);
@@ -82,15 +92,35 @@ function StockPage() {
     }
   }, [symbol]);
 
+  useEffect(() => {
+    handleWatchlistFetchandCheck();
+  }, []);
 
-  const handleAddToList = (e) => {
-    e.preventDefault();
-    // dispatch(addStockToWatchlistThunk(watchlistId, selectedStockId))
-  }
+
+  const preCheckWatchlistButton = (stockId) => {
+    if (typeof stockId === 'undefined') return false;
+
+    let preCheckedObj = {};
+    let preCheck = false
+    watchlists.forEach(watchlist => {
+      let watchlistId = watchlist.id;
+      preCheckedObj[watchlistId] = false;
+      watchlist?.stocks.forEach(stock => {
+        if (stock?.id === stockId) {
+          preCheckedObj[watchlistId] = true;
+        }
+      });
+    });
+    if (Object.values(preCheckedObj).includes(true)) {
+      preCheck = true;
+    }
+    return preCheck;
+  };
+
 
   return (
     <>
-      {(!loading)
+      {(!loading && user)
         ?
         (
           <div className='stock-page-core-container'>
@@ -110,7 +140,7 @@ function StockPage() {
               {(isNaN(stockCurrentPercentChange)) ?
                 <>
                   <span className='search-results-individual-result-symbol'>
-                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    <i className="fa-solid fa-circle-notch fa-spin"></i>
                     &nbsp;
                     Loading...
                   </span>
@@ -139,7 +169,15 @@ function StockPage() {
                     <BuySellStock stockInfo={stockInfo} stockCurrentPrice={stockCurrentPrice} loading={loading} />
                     <div className='stock-page-add-to-list-modal-button'>
                       <OpenModalButton
-                        buttonText={'Add to List'}
+                        buttonText={
+                          <>
+                            {preCheckWatchlistButton ? 
+                            <i className="fa-solid fa-check"></i> 
+                            : <i className="fa-solid fa-plus"></i>}
+                            &nbsp;
+                            Add to List
+                          </>
+                        }
                         modalComponent={<WatchlistsStockPage />}
                       />
                     </div>
@@ -155,7 +193,7 @@ function StockPage() {
         )
         :
         (
-          <p>Loading...</p>
+          <i className="fa-solid fa-circle-notch fa-spin"></i>
         )}
     </>
   );

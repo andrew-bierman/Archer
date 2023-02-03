@@ -55,7 +55,7 @@
     align-items: center;
     flex-wrap: nowrap;
     width: fit-content;
-    max-width: 40%;
+    width: 40%;
     
     text-align: center;
 }

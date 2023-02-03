@@ -1,22 +1,22 @@
 # Archer 🏹
 
-A Robinhood inspired application built with Flask, React/Redux, SQLAlchemy, and SocketIO. Archer is a real-time stock trading application that allows users to trade stocks, monitor their holdings, follow stock performance with watchlists, and stay up to date with financial news.
+A Robinhood inspired application built with Flask, React/Redux, SQLAlchemy, and PostgreSQL. Archer is a real-time stock exchange application that allows users to trade stocks, monitor their holdings, follow stock performance with watchlists, and stay up to date with financial news.
 
 
 ## ✨ Features
-- Watchlists - create multiple watchlists, add and delete stocks from each one
-- Portfolio/Holdings - view your current holdings, buy and sell stocks
-- Bookmarks - save news articles to read later
-- Bank Info - add your fictional bank info to make deposits and withdrawals
-- Search - search for stocks by ticker or company name
-- Dark Mode - toggle between dark and light mode
-- Real-time - see your portfolio and watchlists update in real-time as you buy and sell stocks
+- Watchlists - create multiple watchlists, add and delete stocks from each one, and view your watchlists in real-time
+- Portfolio/Holdings - view your current holdings, buy and sell stocks at real-time prices, and view your aggregated portfolio
+- Bookmarks - save news articles to read later, and view them in your bookmarks page
+- Bank Info - add your fictional bank info to make deposits & withdrawals, and view your account balance
+- Search - search for stocks by ticker or company name, with predictive search
+- Dark Mode - toggle between dark and light mode, depending on your preference. Preferences are saved to your user account
+- Real-time - see your portfolio and watchlists update in real-time as you buy and sell stocks. Archer uses live data from the top financial APIs to retrieve stock data
 
 ## ⚡ Technologies Used
 - Flask: Backend framework for building web applications.
 - React: Frontend library for building user interfaces.
 - Redux: State management library for React.
-- Multiple Finance APIs: Application Programming Interface for fetching data.
+- Multiple Finance APIs: Application Programming Interface for fetching data. A big thanks to Alpha Vantage, Twelve Data, and FinnHub for providing access to their APIs.
 - SQLAlchemy: Object-relational mapper for working with databases.
 - PostgreSQL: Relational database management system.
 
@@ -50,6 +50,7 @@ DATABASE_URL=sqlite:///dev.db
 SCHEMA=flask_schema
 AV_API_KEY= <your Alpha Vantage API key>
 TWELVE_API_KEY= <your Twelve Data API key>
+FINN_HUB_API_KEY= <your FinnHub API key>
 ```
 
 4. Get into your pipenv, migrate your database, seed your database, and run your Flask app
@@ -94,6 +95,9 @@ To use Archer, you need to sign up for an account (or use the demo user). You ca
 
 ## 📝 Documentation
 - [Database Schema](https://github.com/andrew-bierman/Archer/wiki/DB-Schema)
+- [Features List](https://github.com/andrew-bierman/Archer/wiki/Features-List)
+- [User Stories](https://github.com/andrew-bierman/Archer/wiki/User-Stories)
+- [Wireframes](https://github.com/andrew-bierman/Archer/wiki/Wireframes)
 
 ## 🤝 Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

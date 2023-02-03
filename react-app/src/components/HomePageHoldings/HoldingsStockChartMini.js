@@ -7,9 +7,9 @@ import moment from 'moment';
 
 import { isObjectEmpty } from '../utility';
 
-import './WatchListStockChart.css';
+// import './WatchListStockChart.css';
 
-const WatchListStockChartMini = ({stockSymbol}) => {
+const HoldingsStockChartMini = ({stockSymbol}) => {
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(true);
@@ -22,7 +22,8 @@ const WatchListStockChartMini = ({stockSymbol}) => {
 
   const [currentMarketPrice, setCurrentMarketPrice] = useState(true);
   // console.log("stockSymbol in mini chart", stockSymbol)
-  const timeSeriesData = useSelector(state => state.watchlists?.watchlistStockData[stockSymbol]?.dailyData);
+  // const timeSeriesData = useSelector(state => state.watchlists?.watchlistStockData[stockSymbol]?.dailyData);
+  const timeSeriesData = useSelector(state => state.holdings?.stockData[stockSymbol]?.values);
   const [tempData, setTempData] = useState();
   const [series, setSeries] = useState([]);
 
@@ -144,4 +145,4 @@ const WatchListStockChartMini = ({stockSymbol}) => {
   );
 }
 
-export default WatchListStockChartMini;
+export default HoldingsStockChartMini;

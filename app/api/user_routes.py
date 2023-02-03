@@ -41,5 +41,7 @@ def update_dark_mode():
     """
     new_dark_mode_pref = request.json['dark_mode_pref']
     current_user.dark_mode_pref = new_dark_mode_pref
+    print('new_dark_mode_pref', new_dark_mode_pref)
+    print('current_user.dark_mode_pref', current_user.dark_mode_pref)
     db.session.commit()
     return jsonify(current_user.to_dict())

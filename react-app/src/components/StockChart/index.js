@@ -46,7 +46,10 @@ const StockChart = (props) => {
 
   useEffect(() => {
     if (tempData) {
-      tempData.reverse(); // Reverse the order of the data
+      // compare start and end date to determine if reverse is needed
+      if (new Date(tempData[0].datetime) > new Date(tempData[tempData.length - 1].datetime)) {
+          tempData.reverse(); // Reverse the order of the data
+      }
       let seriesData = tempData.map(item => {
         return { 
           x: item.datetime, 

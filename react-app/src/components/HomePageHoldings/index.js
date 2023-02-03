@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { getAllUserHoldings } from "../../store/holdings";
 import { formatToCurrency, isObjectEmpty } from "../utility";
 
-import { getHoldingCurrentPriceFinnHub } from "../../store/holdings";
+import { getHoldingCurrentPriceFinnHub, getAllUserHoldings } from "../../store/holdings";
 // import {getSingleStockCurrentPriceYahoo} from '../../store/stocks';
 import { getAllStocks } from "../../store/stockList";
 import StockList from "../StockList";
 import WatchListStockChartMini from "../WatchListsStockChartMini";
+import HoldingsStockChartMini from "./HoldingsStockChartMini";
 import OpenModalButton from "../OpenModalButton";
 
 import './HomePageHoldings.css';
@@ -25,16 +25,20 @@ const HomePageHoldings = () => {
 	const holdingsStockData = useSelector((state) => state.holdings.stockData);
 
 	const hitAPI = async () => {
+		setLoading(true);
+		await dispatch(getAllUserHoldings())
+
 		if (holdings.length > 0) {
 			holdings.forEach((holding) => {
 				holding?.stock?.forEach(async (stock) => {
 					// console.log(stock.symbol)
-					if ((typeof holdingsStockData[stock.symbol] === 'undefined') || !holdingsStockData[stock.symbol]?.currentPrice || !isObjectEmpty(holdingsStockData[stock.symbol]?.currentPrice)) {
-						await dispatch(
-							getHoldingCurrentPriceFinnHub(stock.symbol)
-						);
-						// await dispatch(getWatchlistStockData(stock.symbol))
-						// await dispatch(getWatchlistStockDataDaily(stock.symbol))
+					if ((typeof holdingsStockData[stock.symbol] === 'undefined')
+						|| (typeof holdingsStockData[stock.symbol]?.currentPrice === 'undefined')
+						|| !isObjectEmpty(holdingsStockData[stock.symbol]?.currentPrice)) {
+							await dispatch(getHoldingCurrentPriceFinnHub(stock.symbol));
+							console.log('running dispatch in holdings homepage component')
+							// await dispatch(getWatchlistStockData(stock.symbol))
+							// await dispatch(getWatchlistStockDataDaily(stock.symbol))
 					}
 				});
 			});
@@ -44,14 +48,20 @@ const HomePageHoldings = () => {
 	useEffect(() => {
 		setLoading(true);
 
-		const timer = setTimeout(() => {
-			hitAPI();
-		}, 5000);
+		dispatch(getAllUserHoldings())
+
+		hitAPI();
+
+		// const timer = setTimeout(() => {
+		// }, 500);
 
 		// console.log(state)
 		setLoading(false);
 
-		return () => clearTimeout(timer);
+		console.log("holdings", holdings)
+		console.log(holdingsStockData['COIN'])
+
+		// return () => clearTimeout(timer);
 	}, [dispatch]);
 
 	return (
@@ -101,12 +111,16 @@ const HomePageHoldings = () => {
 										</div>
 										<div className="watchlist-stock-individual-chart">
 											<div>
-												{holdingsStockData[stock.symbol]?.values?.length >
-													1 ? (
-													<WatchListStockChartMini stockSymbol={stock.symbol} />
-												) : (
-													<p>Loading...</p>
-												)}
+												{
+													!isObjectEmpty(holdingsStockData[stock.symbol])
+														|| (holdingsStockData[stock.symbol]?.values?.length > 0)
+														?
+														(
+															// <WatchListStockChartMini stockSymbol={stock.symbol} />
+															<HoldingsStockChartMini stockSymbol={stock.symbol} />
+														) : (
+															<i className="fa-solid fa-circle-notch fa-spin"></i>
+														)}
 											</div>
 										</div>
 										<div className="watchlist-stock-individual-price-and-change">
@@ -162,7 +176,7 @@ const HomePageHoldings = () => {
 												) : (
 													<div className="watchlist-stock-individual-price-percent-loading">
 														<span>
-															<i class="fa-solid fa-circle-notch fa-spin"></i>
+															<i className="fa-solid fa-circle-notch fa-spin"></i>
 															&nbsp;
 															Loading...
 														</span>
@@ -176,30 +190,7 @@ const HomePageHoldings = () => {
 						</div>
 					</>
 				) : (
-					// <table>
-					//     <thead>
-					//         <tr>
-					//             <th>Symbol</th>
-					//             <th>Company Name</th>
-					//             <th>Shares</th>
-					//             <th>Avg. Cost</th>
-					//         </tr>
-					//     </thead>
-					//     <tbody>
-					//         <>
-					//             {
-					//                 holdings.map(holding => (
-					//                     <tr>
-					//                         <td>{holding.stock[0].symbol}</td>
-					//                         <td>{holding.stock[0].company_name}</td>
-					//                         <td>x{holding.shares}</td>
-					//                         <td>${formatToCurrency(holding.avg_cost)}</td>
-					//                     </tr>
-					//                 ))
-					//             }
-					//         </>
-					//     </tbody>
-					// </table>
+
 					<p>You do not have any holdings</p>
 				)}
 			</>

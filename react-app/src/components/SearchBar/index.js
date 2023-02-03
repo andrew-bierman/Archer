@@ -84,7 +84,7 @@ const SearchBar = () => {
                     {loading && 
                     <div className='search-results-individual-result'>
                         <span className='search-results-individual-result-symbol'>
-                            <i class="fa-solid fa-circle-notch fa-spin"></i>
+                            <i className="fa-solid fa-circle-notch fa-spin"></i>
                             &nbsp;
                             Loading...
                         </span>

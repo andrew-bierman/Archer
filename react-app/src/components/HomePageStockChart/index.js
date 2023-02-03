@@ -134,8 +134,13 @@ const HomePageStockChart = (props) => {
 
           if (typeof stock === 'undefined') return
 
+          if(typeof stock?.values === 'undefined') return
+
           let data = stock.values;
-          data.reverse()
+          // compare the start and end date to see if reverse is needed
+          if (new Date(data[0].datetime) > new Date(data[data.length - 1].datetime)){
+            data.reverse()
+          }
           // debugger
           data.forEach(dataPoint => {
             // debugger
@@ -146,7 +151,7 @@ const HomePageStockChart = (props) => {
                 y: Math.round((dataPoint.close * holdings[i].shares + userBuyingPower) * 100) / 100
               };
             } else {
-              aggregateData[dataPoint.datetime].y += (Math.round((dataPoint.close * holdings[i].shares) * 100) / 100)
+              aggregateData[dataPoint.datetime].y = Math.round((aggregateData[dataPoint.datetime].y + (dataPoint.close * holdings[i].shares)) * 100) / 100;
             }
           });
         }
@@ -186,25 +191,7 @@ const HomePageStockChart = (props) => {
   }
   */
 
-  // chart data and options
-  // let data = [];
-  // let series = [];
-  // if (holdings.length > 0 && !loading) {
-  //   data = aggregateHoldingsData(holdings);
-  //   series = [{
-  //     name: 'Portfolio Value',
-  //     data: data
-  //   }]
-  // }
-
-  // const series = [{
-  //   name: '',
-  //   data: stockData
-  // }]
-
-  // console.log(series)
-
-  console.log(typeof portfolioValueLatest)
+  // console.log(typeof portfolioValueLatest)
 
   // const seriesData = Object.keys(data).map(date => ({ x: date, y: data[date]["4. close"] }));
 
@@ -303,7 +290,7 @@ const HomePageStockChart = (props) => {
           </h1 >
           :
           <div className='homepage-stock-chart-entire-comp-container'>
-            <h2>{portfolioValueLatest ? `Portfolio Value: $${formatToCurrency(portfolioValueLatest)}` : ''}</h2>
+            <h2>{portfolioValueLatest ? `Portfolio: $${formatToCurrency(portfolioValueLatest)}` : ''}</h2>
             <div className='big-chart-container'>
               <ApexCharts options={options} series={series} width='100%' height='100%' />
             </div>
