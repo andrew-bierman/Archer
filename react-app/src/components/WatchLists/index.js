@@ -203,15 +203,6 @@ const Watchlists = () => {
                                                     // buttonText={'Create Watchlist'}
                                                     />
                                                 </div>
-                                                {/* <button className='watchlist-individual-header watchlist-individual-button' onClick={() => {
-                                                    setEdittedWatchlistName(watchlist.name);
-                                                    setIsEditing(watchlist.id);
-                                                }}>
-                                                    <i className="fa-regular fa-pen-to-square"></i>
-                                                </button>
-                                                <button className='watchlist-individual-header  watchlist-individual-button' onClick={() => handleWatchlistDelete(watchlist.id)}>
-                                                    <i className="fa-solid fa-trash-can"></i>
-                                                </button> */}
                                                 <button>
                                                     {
                                                         (showStocks === watchlist.id) ?

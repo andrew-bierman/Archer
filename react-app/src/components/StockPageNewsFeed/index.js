@@ -35,20 +35,32 @@ const StockPageNewsFeed = ({ stockInfo }) => {
     }, [stockNews])
 
     return (
-        <div className="news-feed-container">
-            <div className="news-feed-header">
-                <h2>News</h2>
-            </div>
-            <>
-                {
-                    (!loading && stockNews?.length > 0) && stockNews.map((article, idx) => {
-                        return (
-                            <NewsCard article={article} key={idx} />
-                        )
-                    })
-                }
-            </>
-        </div>
+        <>
+            {
+                (!loading && stockNews?.length > 0) ?
+                    <div className="news-feed-container">
+                        <div className="news-feed-header">
+                            <h2>News</h2>
+                        </div>
+                        <>
+                            {
+                                (!loading && stockNews?.length > 0) && stockNews.map((article, idx) => {
+                                    return (
+                                        <NewsCard article={article} key={idx} />
+                                    )
+                                })
+                            }
+                        </>
+                    </div>
+                    :
+                    <div className="news-feed-container">
+                        <div className="news-feed-header">
+                            <i className="fa-solid fa-circle-notch fa-spin"></i>
+                        </div>
+                    </div>
+
+            }
+        </>
     );
 }
 

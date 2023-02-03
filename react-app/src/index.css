@@ -247,6 +247,10 @@ nav a.active {
   width: 50%;
 }
 
+.signup-form-container form {
+  width: 50%;
+}
+
 .signup-form-container input {
   width: 100%;
 }
