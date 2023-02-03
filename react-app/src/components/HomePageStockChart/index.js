@@ -17,6 +17,7 @@ const HomePageStockChart = (props) => {
   const [portfolioValueLatest, setPortfolioValueLatest] = useState(0);
 
   const [filter, setFilter] = useState('1D');
+  const [color, setColor] = useState('#00C805');
 
   const [currentMarketPrice, setCurrentMarketPrice] = useState(true);
 
@@ -92,7 +93,7 @@ const HomePageStockChart = (props) => {
   useEffect(() => {
     // debugger
     setSeries([{ name: '', data: stockData }])
-    if(holdings.length > 0) {
+    if (holdings.length > 0) {
       setPortfolioValueLatest(stockData.slice(-1)[0]?.y)
     } else {
       setPortfolioValueLatest(userBuyingPower)
@@ -142,17 +143,23 @@ const HomePageStockChart = (props) => {
               aggregateData[dataPoint.datetime] = {
                 x: dataPoint.datetime,
                 // y: (dataPoint.close * holdings[i].total_cost) / holdings[i].shares
-                y: Math.round(parseFloat(dataPoint.close * holdings[i].shares + userBuyingPower) * 100) / 100
+                y: Math.round((dataPoint.close * holdings[i].shares + userBuyingPower) * 100) / 100
               };
             } else {
-              aggregateData[dataPoint.datetime].y += (Math.round(parseFloat(dataPoint.close * holdings[i].shares) * 100) / 100)
+              aggregateData[dataPoint.datetime].y += (Math.round((dataPoint.close * holdings[i].shares) * 100) / 100)
             }
           });
         }
       }
       setStockData(Object.values(aggregateData));
       setSeries([{ name: '', data: stockData }])
-      console.log({ series })
+
+      if (stockData?.length > 0) {
+        setColor(stockData[0].y <= stockData[stockData.length - 1].y ? '#00C805' : '#FF0000');
+        // console.log({ series })
+        // console.log(stockData[0].y <= stockData[stockData.length - 1].y ? '#00C805' : '#FF0000')
+
+      }
     };
     fetchData();
   }, [holdings, dispatch, loading, filter]);
@@ -243,7 +250,7 @@ const HomePageStockChart = (props) => {
         show: false,
       },
     },
-    colors: ["#00C805"],
+    colors: [`${color}`],
     stroke: {
       width: 2.75
     },
@@ -290,7 +297,7 @@ const HomePageStockChart = (props) => {
       {
         loading ?
           <h1>
-            <i class="fa-solid fa-circle-notch fa-spin"></i>
+            <i className="fa-solid fa-circle-notch fa-spin"></i>
             &nbsp;
             Loading...
           </h1 >
@@ -298,7 +305,7 @@ const HomePageStockChart = (props) => {
           <div className='homepage-stock-chart-entire-comp-container'>
             <h2>{portfolioValueLatest ? `Portfolio Value: $${formatToCurrency(portfolioValueLatest)}` : ''}</h2>
             <div className='big-chart-container'>
-              <ApexCharts options={options} series={series} width='900px' height='300px'/>
+              <ApexCharts options={options} series={series} width='100%' height='100%' />
             </div>
 
             <div className='stock-chart-filter-buttons-container'>

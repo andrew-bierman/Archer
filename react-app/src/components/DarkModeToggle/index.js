@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateUserDarkModePref, getUserSession } from '../../store/session';
 import Darkreader, { Switch, useDarkreader } from 'react-darkreader';
 
 const DarkModeToggle = () => {
@@ -8,16 +10,40 @@ const DarkModeToggle = () => {
         sepia: 0,
         },
         {
-            ignoreImageAnalysis: ['.background-image', '.background-image-2', '.login-page-splash-image-container']}
+            ignoreImageAnalysis: ['.background-image', '.background-image-2', '.login-page-splash-image-container']
+        }
     );
 
-    const [message, setMessage] = useState('Current theme mode is what');
+    const dispatch = useDispatch();
+
+    const user = useSelector(state => state.session.user);
+    const dark_mode_pref = user?.dark_mode_pref;
+
+    useEffect(() => {
+        // dispatch(getUserSession())
+        
+        if(dark_mode_pref === true && !isDark) {
+            toggle();
+            dispatch(getUserSession())
+        }
+        if(dark_mode_pref === false && isDark) {
+            toggle();
+            dispatch(getUserSession())
+        }
+    }, []);
+
+
+    // const [message, setMessage] = useState('Current theme mode is what');
 
     return (
         <>
             <Switch
                 checked={isDark}
-                onChange={toggle}
+                onChange={() => {
+                    toggle()
+                    dispatch(updateUserDarkModePref(isDark))
+                    .then(() => dispatch(getUserSession()))
+                }}
                 styling="github"
             />
             {/* <Darkreader

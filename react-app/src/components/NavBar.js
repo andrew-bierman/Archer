@@ -8,14 +8,16 @@ import LogoIconComp from './LogoIconComp/LogoIconComp';
 import ArcherLogoCrop from '../images/Logo/ArcherLogoCrop.png';
 import path200 from '../images/Logo/path200.svg';
 import DarkModeToggle from './DarkModeToggle';
+// import { isDark } from './DarkModeToggle/index.js';
 
 const NavBar = () => {
   const user = useSelector(state => state.session.user);
+  const dark_mode_pref = useSelector(state => state.session.user?.dark_mode_pref);
 
   return (
     <nav>
       <ul>
-        <div className='navbar-logo-and-name'>
+        <div className={`navbar-logo-and-name ${ dark_mode_pref ? 'logo-color-light' : 'logo-color-dark' }`}>
           <li>
             <NavLink to='/' exact={true} activeClassName='active'>
               {/* <img src={ArcherLogoCrop}/> */}
@@ -24,7 +26,8 @@ const NavBar = () => {
               {/* <svg src={path200}></svg>
                    */}
               {/* <path200></path200> */}
-              <img src={path200} className='navbar-logo-img logo-color' />
+              <img src={path200} className={`navbar-logo-img`}/>
+              
               Archer
             </NavLink>
           </li>

@@ -86,14 +86,19 @@ nav a.active {
 .navbar-logo-and-name img{
   width: 40px;
   margin-right: 1rem;
-  color: inherit;
+  /* color: inherit; */
   /* background-color: red;
   -webkit-mask-image: url('./images/Logo/path200.svg');
   mask-image: url('./images/Logo/path200.svg'); */
 }
 
-.logo-color {
-  filter: hue-rotate(60deg);
+.navbar-logo-and-name.logo-color-dark img {
+  /* filter: hue-rotate(60deg); */
+  filter: invert(0%)
+}
+
+.navbar-logo-and-name.logo-color-light img {
+  filter: invert(100%)
 }
 
 .navbar-other-parts{

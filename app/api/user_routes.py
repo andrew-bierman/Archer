@@ -1,6 +1,6 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, session, request
 from flask_login import login_required, current_user
-from app.models import User
+from app.models import User, db
 
 user_routes = Blueprint('users', __name__)
 
@@ -30,4 +30,16 @@ def get_current_user():
     """
     Returns the information about the current user that is logged in.
     """
+    return jsonify(current_user.to_dict())
+
+
+@user_routes.route('/session/dark-mode', methods=['PUT'])
+@login_required
+def update_dark_mode():
+    """
+    Updates the dark mode setting for the current user.
+    """
+    new_dark_mode_pref = request.json['dark_mode_pref']
+    current_user.dark_mode_pref = new_dark_mode_pref
+    db.session.commit()
     return jsonify(current_user.to_dict())

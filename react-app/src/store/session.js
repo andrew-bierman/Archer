@@ -2,6 +2,7 @@
 const SET_USER = 'session/SET_USER';
 const REMOVE_USER = 'session/REMOVE_USER';
 const GET_USER_SESSION = 'session/GET_USER_SESSION';
+const UPDATE_USER_DARK_MODE_PREF = 'session/UPDATE_USER_DARK_MODE_PREF';
 
 const setUser = (user) => ({
   type: SET_USER,
@@ -14,6 +15,11 @@ const removeUser = () => ({
 
 const getUserSessionAction = (user) => ({
   type: GET_USER_SESSION,
+  payload: user
+})
+
+const updateUserDarkModePrefAction = (user) => ({
+  type: UPDATE_USER_DARK_MODE_PREF,
   payload: user
 })
 
@@ -112,6 +118,25 @@ export const getUserSession = () => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
     dispatch(getUserSessionAction(data));
+    if (data.errors) {
+      return;
+    }
+  }
+}
+
+export const updateUserDarkModePref = (dark_mode_pref) => async (dispatch) => {
+  const response = await fetch('/api/users/session/dark-mode', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      dark_mode_pref
+    })
+  });
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(updateUserDarkModePrefAction(data));
     if (data.errors) {
       return;
     }
