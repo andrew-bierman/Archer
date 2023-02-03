@@ -1,8 +1,8 @@
 """create table
 
-Revision ID: 7c56093ea285
+Revision ID: bcb9a52d089d
 Revises: 
-Create Date: 2023-02-02 15:12:04.397688
+Create Date: 2023-02-03 12:12:01.386954
 
 """
 from alembic import op
@@ -13,7 +13,7 @@ environment = os.getenv("FLASK_ENV")
 SCHEMA = os.environ.get("SCHEMA")
 
 # revision identifiers, used by Alembic.
-revision = '7c56093ea285'
+revision = 'bcb9a52d089d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -70,11 +70,11 @@ def upgrade():
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('bookmark', sa.Boolean(), nullable=False),
     sa.Column('symbol', sa.String(length=255), nullable=True),
-    sa.Column('title', sa.String(length=255), nullable=True),
-    sa.Column('summary', sa.String(length=255), nullable=True),
+    sa.Column('title', sa.Text(), nullable=True),
+    sa.Column('summary', sa.Text(), nullable=True),
     sa.Column('source', sa.String(length=255), nullable=True),
-    sa.Column('url', sa.String(length=255), nullable=True),
-    sa.Column('image_link', sa.String(length=255), nullable=True),
+    sa.Column('url', sa.Text(), nullable=True),
+    sa.Column('image_link', sa.Text(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),

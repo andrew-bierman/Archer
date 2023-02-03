@@ -252,22 +252,45 @@ const Watchlists = () => {
                                                                                 {
                                                                                     <div>
                                                                                         {/* ${parseFloat(watchListStockData[stock.symbol]?.Info?.close).toFixed(2)} */}
-                                                                                        ${parseFloat(watchListStockData[stock.symbol]?.currentPrice?.c).toFixed(2)}
+                                                                                        {
+                                                                                            watchListStockData[stock.symbol]?.currentPrice?.c > 0 ?
+                                                                                                <>
+                                                                                                    ${parseFloat(watchListStockData[stock.symbol]?.currentPrice?.c).toFixed(2)}
+                                                                                                </>
+                                                                                                :
+                                                                                                <>
+                                                                                                    <i className="fa-solid fa-circle-notch fa-spin"></i>
+                                                                                                </>
+
+                                                                                        }
                                                                                     </div>
                                                                                 }
                                                                             </div>
                                                                             <div>
                                                                                 {
-                                                                                    watchListStockData[stock.symbol]?.currentPrice?.dp > 0 ?
-                                                                                        <div className='watchlist-stock-individual-price-and-change-positive'>
-                                                                                            {/* +{parseFloat(watchListStockData[stock.symbol]?.Info?.percent_change).toFixed(2)}% */}
-                                                                                            +{parseFloat(watchListStockData[stock.symbol]?.currentPrice?.dp).toFixed(2)}%
-                                                                                        </div>
+                                                                                    !isNaN(watchListStockData[stock.symbol]?.currentPrice?.dp) ?
+                                                                                        <>
+                                                                                            <>
+                                                                                                {
+                                                                                                    watchListStockData[stock.symbol]?.currentPrice?.dp > 0 && (
+                                                                                                        <div className='watchlist-stock-individual-price-and-change-positive'>
+                                                                                                            +{parseFloat(watchListStockData[stock.symbol]?.currentPrice?.dp).toFixed(2)}%
+                                                                                                        </div>
+                                                                                                    )
+                                                                                                }
+                                                                                            </>
+                                                                                            <>
+                                                                                                {
+                                                                                                    watchListStockData[stock.symbol]?.currentPrice?.dp < 0 &&
+                                                                                                    <div className='watchlist-stock-individual-price-and-change-negative'>
+                                                                                                        {/* {parseFloat(watchListStockData[stock.symbol]?.Info?.percent_change).toFixed(2)}% */}
+                                                                                                        {parseFloat(watchListStockData[stock.symbol]?.currentPrice?.dp).toFixed(2)}%
+                                                                                                    </div>
+                                                                                                }
+                                                                                            </>
+                                                                                        </>
                                                                                         :
-                                                                                        <div className='watchlist-stock-individual-price-and-change-negative'>
-                                                                                            {/* {parseFloat(watchListStockData[stock.symbol]?.Info?.percent_change).toFixed(2)}% */}
-                                                                                            {parseFloat(watchListStockData[stock.symbol]?.currentPrice?.dp).toFixed(2)}%
-                                                                                        </div>
+                                                                                        <i className="fa-solid fa-circle-notch fa-spin"></i>
                                                                                 }
                                                                             </div>
                                                                         </div>
