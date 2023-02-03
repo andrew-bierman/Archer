@@ -26,6 +26,8 @@ const HomePageHoldings = () => {
 
 	const hitAPI = async () => {
 		setLoading(true);
+		await dispatch(getAllUserHoldings())
+
 		if (holdings.length > 0) {
 			holdings.forEach((holding) => {
 				holding?.stock?.forEach(async (stock) => {
@@ -46,10 +48,11 @@ const HomePageHoldings = () => {
 	useEffect(() => {
 		setLoading(true);
 
-		dispatch(getAllUserHoldings());
+		dispatch(getAllUserHoldings())
+
+		hitAPI();
 
 		// const timer = setTimeout(() => {
-		hitAPI();
 		// }, 500);
 
 		// console.log(state)
