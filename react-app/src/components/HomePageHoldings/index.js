@@ -160,10 +160,12 @@ const HomePageHoldings = () => {
 														</div>
 													</div>
 												) : (
-													<div className="watchlist-stock-individual-delete-button">
-														{/* <button onClick={() => formatWatchlistStockData(stock.symbol)}>
-                                                                <i className="fa-solid fa-sync"></i>
-                                                            </button> */}
+													<div className="watchlist-stock-individual-price-percent-loading">
+														<span>
+															<i class="fa-solid fa-circle-notch fa-spin"></i>
+															&nbsp;
+															Loading...
+														</span>
 													</div>
 												)}
 											</>

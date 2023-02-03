@@ -15,12 +15,14 @@ const WatchListStockChartMini = ({stockSymbol}) => {
   const [loading, setLoading] = useState(true);
 //   const singleStockInfo = useSelector(state => state.stocks.singleStock.Info);
 
+  const [color, setColor] = useState('#00C805');
+
   const [filter, setFilter] = useState('1D');
   const [xaxisCategories, setXaxisCategories] = useState([]);
 
   const [currentMarketPrice, setCurrentMarketPrice] = useState(true);
   // console.log("stockSymbol in mini chart", stockSymbol)
-  const timeSeriesData = useSelector(state => state.watchlists.watchlistStockData[stockSymbol].dailyData);
+  const timeSeriesData = useSelector(state => state.watchlists?.watchlistStockData[stockSymbol]?.dailyData);
   const [tempData, setTempData] = useState();
   const [series, setSeries] = useState([]);
 
@@ -28,7 +30,7 @@ const WatchListStockChartMini = ({stockSymbol}) => {
   useEffect(() => {
     setLoading(true);
     console.log('timeSeriesData: ', timeSeriesData)
-    if (timeSeriesData !== undefined) {
+    if (typeof timeSeriesData !== 'undefined') {
       if (isObjectEmpty(timeSeriesData)) {
         setLoading(true);
       } else {
@@ -48,6 +50,10 @@ const WatchListStockChartMini = ({stockSymbol}) => {
       setXaxisCategories(tempData.map(({ datetime }) => {
         return moment(datetime).format('HH:mm');
       }));
+
+      if(seriesData?.length > 0) {
+        setColor(seriesData[seriesData.length - 1].y > seriesData[0].y ? '#00C805' : '#FF0000');
+      }
     }
   }, [tempData, filter])
 
@@ -90,7 +96,7 @@ const WatchListStockChartMini = ({stockSymbol}) => {
         show: false,
       },
     },
-    colors: ["#00C805"],
+    colors: [`${color}`],
     stroke: {
       width: 2
     },

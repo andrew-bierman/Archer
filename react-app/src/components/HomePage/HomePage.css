@@ -28,10 +28,13 @@
     justify-content: space-between;
     align-items: flex-start;
     flex-wrap: nowrap;
+    /* min-width: 300px; */
     width: 40%;
     height: 100%;
     margin-right: 10%;
     margin-left: 50px;
+
+    box-sizing: border-box;
 
     /* padding: 20px; */
 

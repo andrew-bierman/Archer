@@ -18,6 +18,8 @@ const StockChart = (props) => {
   const [filter, setFilter] = useState('1D');
   const [xaxisCategories, setXaxisCategories] = useState([]);
 
+  const [color, setColor] = useState('#00C805');
+
   const [currentMarketPrice, setCurrentMarketPrice] = useState(true);
 
   const timeSeriesData = useSelector(state => state.stocks.singleStock.Data.values);
@@ -59,8 +61,16 @@ const StockChart = (props) => {
           return moment(datetime).format('MMM DD');
         }
       }));
+
+      if(seriesData?.length > 0){
+        setColor(seriesData[0].y <= seriesData[seriesData.length - 1].y ? '#00C805' : '#FF0000');
+        // console.log(seriesData[0].y <= seriesData[seriesData.length - 1].y ? '#00C805' : '#FF0000')
+        // console.log(seriesData[0].y, seriesData[seriesData.length - 1].y)
+      }
+  
     }
   }, [tempData, filter])
+  
 
 
 
@@ -130,7 +140,7 @@ const StockChart = (props) => {
         show: false,
       },
     },
-    colors: ["#00C805"],
+    colors: [`${color}`],
     stroke: {
       width: 2.75
     },
@@ -172,9 +182,9 @@ const StockChart = (props) => {
     <>
       {
         !loading ?
-          <div>
+          <div className='big-chart-container'>
             <div className='big-chart-container'>
-              <ApexCharts options={options} series={series}  width='800px' height='300px' />
+              <ApexCharts options={options} series={series}  width='100%' height='100%' />
             </div>
             <div className='stock-chart-filter-buttons-container'>
               <button onClick={() => handleFilterChange('1D')} className={filter === '1D' ? 'active-filter-button' : '' } id='filter-button'>1D</button>

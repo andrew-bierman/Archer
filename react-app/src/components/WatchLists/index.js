@@ -258,7 +258,7 @@ const Watchlists = () => {
                                                                             </div>
                                                                             <div>
                                                                                 {
-                                                                                    watchListStockData[stock.symbol]?.percent_change > 0 ?
+                                                                                    watchListStockData[stock.symbol]?.currentPrice?.dp > 0 ?
                                                                                         <div className='watchlist-stock-individual-price-and-change-positive'>
                                                                                             {/* +{parseFloat(watchListStockData[stock.symbol]?.Info?.percent_change).toFixed(2)}% */}
                                                                                             +{parseFloat(watchListStockData[stock.symbol]?.currentPrice?.dp).toFixed(2)}%
