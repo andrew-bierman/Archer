@@ -79,8 +79,11 @@ def get_all_stocks():
 @stock_routes.route('/data/finn-hub/current/<string:symbol>')
 def get_current_stock_data_by_symbol_finn_hubb(symbol):
     """
-    Query the TWELVE API for a stock by symbol and returns that data in a dictionary
+    Query the FinnHUb API for a stock by symbol and returns that data in a dictionary
     """
+
+    time.sleep(1)
+
     res = finnhub_client.quote(symbol)
 
     # if res.status_code != 200:
@@ -162,6 +165,7 @@ def get_timeseries_stock_data_by_symbol(symbol, filter):
     else:
         delay = 3
 
+    time.sleep(0.5)
 
     if not useRapid:
 
