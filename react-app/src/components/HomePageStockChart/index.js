@@ -152,13 +152,14 @@ const HomePageStockChart = (props) => {
             if (typeof stock?.values === 'undefined') return
 
             let data = stock.values;
-            console.log(data, 'data from stock.values')
+            // console.log(data, 'data from stock.values')
             // compare the start and end date to see if reverse is needed
             if (new Date(data[0].datetime) > new Date(data[data.length - 1].datetime)) {
               data.reverse()
             }
 
-            debugger
+            // debugger
+            // let filteredData = data 
             let filteredData = data.filter(({ datetime }) => {
               // debugger
 
@@ -169,8 +170,17 @@ const HomePageStockChart = (props) => {
               let startDate, endDate;
 
               if (filter === '1D') {
-                startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0);
-                endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
+                const day = date.getDay();
+                if (day === 0) {
+                  startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 2, 9, 30);
+                  endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 2, 16, 0);
+                } else if (day === 6) {
+                  startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 9, 30);
+                  endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 16, 0);
+                } else {
+                  startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 9, 30);
+                  endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 16, 0);
+                }
               } else if (filter === '1W') {
                 startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 7, 0, 0);
                 endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
@@ -194,11 +204,12 @@ const HomePageStockChart = (props) => {
               return dateInQuestion >= startDate && dateInQuestion <= endDate;
             });
 
-            console.log('filteredData', filteredData)
+            // console.log('filteredData', filteredData)
+            // console.log('filteredData2', filteredData2)
 
 
             filteredData.forEach(dataPoint => {
-              debugger
+              // debugger
               if (!aggregateData[dataPoint.datetime]) {
                 aggregateData[dataPoint.datetime] = {
                   x: dataPoint.datetime,
@@ -211,8 +222,9 @@ const HomePageStockChart = (props) => {
             });
           }
         }
-        debugger
-        console.log('aggregateData', aggregateData)
+        // debugger
+        // console.log('aggregateData', aggregateData)
+
         setStockData(Object.values(aggregateData));
         setSeries([{ name: '', data: stockData }])
 
@@ -223,10 +235,10 @@ const HomePageStockChart = (props) => {
 
         }
       };
-      debugger
+      // debugger
       fetchData();
-      console.log('series at end of useEffect', series)
-      console.log('stockdata at end of useEffect', stockData)
+      // console.log('series at end of useEffect', series)
+      // console.log('stockdata at end of useEffect', stockData)
     }, [holdings, dispatch, loading, filter]);
 
     /*
@@ -349,9 +361,9 @@ const HomePageStockChart = (props) => {
               Loading...
             </h1 >
             :
-            <div className='homepage-stock-chart-entire-comp-container'>
+            <div className='homepage-stock-chart-entire-comp-container' key={'homepage-stock-container'}>
               <h2>{portfolioValueLatest ? `Portfolio: $${formatToCurrency(portfolioValueLatest)}` : ''}</h2>
-              <div className='big-chart-container'>
+              <div className='big-chart-container' key={'big-chart-container'}>
                 <ApexCharts options={options} series={series} width='100%' height='100%' />
               </div>
 
