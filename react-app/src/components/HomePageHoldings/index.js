@@ -17,6 +17,7 @@ const HomePageHoldings = () => {
 	const dispatch = useDispatch();
 
 	const [loading, setLoading] = useState(true);
+	const [isCalling, setIsCalling] = useState(false);
 
 	const user = useSelector((state) => state.session.user);
 
@@ -26,19 +27,34 @@ const HomePageHoldings = () => {
 
 	const hitAPI = async () => {
 		setLoading(true);
-		await dispatch(getAllUserHoldings())
+
+		// if (typeof holdingsStockData === 'undefined' || isObjectEmpty(holdingsStockData)) {
+			// await dispatch(getAllUserHoldings())
+		// }
+
+		console.log('at top of hitAPI in holdings homepage component')
+		console.log(holdingsStockData)
 
 		if (holdings.length > 0) {
 			holdings.forEach((holding) => {
 				holding?.stock?.forEach(async (stock) => {
 					// console.log(stock.symbol)
-					if ((typeof holdingsStockData[stock.symbol] === 'undefined')
+					console.log((typeof holdingsStockData[stock.symbol] === 'undefined')
 						|| (typeof holdingsStockData[stock.symbol]?.currentPrice === 'undefined')
-						|| !isObjectEmpty(holdingsStockData[stock.symbol]?.currentPrice)) {
-							await dispatch(getHoldingCurrentPriceFinnHub(stock.symbol));
-							console.log('running dispatch in holdings homepage component')
-							// await dispatch(getWatchlistStockData(stock.symbol))
-							// await dispatch(getWatchlistStockDataDaily(stock.symbol))
+						|| !isObjectEmpty(holdingsStockData[stock.symbol]?.currentPrice))
+					if (!isCalling && (
+						(typeof holdingsStockData[stock.symbol] === 'undefined')
+						|| (typeof holdingsStockData[stock.symbol]?.currentPrice === 'undefined')
+						|| !isObjectEmpty(holdingsStockData[stock.symbol]?.currentPrice))
+					) {
+						setIsCalling(true);
+						await dispatch(getHoldingCurrentPriceFinnHub(stock.symbol))
+							.then(() => setIsCalling(false))
+						// setIsCalling(false);
+
+						console.log('running dispatch in holdings homepage component')
+						// await dispatch(getWatchlistStockData(stock.symbol))
+						// await dispatch(getWatchlistStockDataDaily(stock.symbol))
 					}
 				});
 			});
@@ -50,19 +66,28 @@ const HomePageHoldings = () => {
 
 		dispatch(getAllUserHoldings())
 
-		
+		hitAPI()
+
 		const timer = setTimeout(() => {
-			hitAPI();
+			// hitAPI();
 		}, 5000);
 
 		// console.log(state)
 		setLoading(false);
 
 		console.log("holdings", holdings)
-		console.log(holdingsStockData['COIN'])
+		// console.log(holdingsStockData['COIN'])
 
 		return () => clearTimeout(timer);
 	}, [dispatch]);
+
+	
+
+	useEffect(() => {
+		setLoading(true);
+		hitAPI();
+		setLoading(false);
+	}, [holdings]);
 
 	return (
 		<div className="home-page-holdings-container">
