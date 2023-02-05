@@ -82,11 +82,19 @@ def get_current_stock_data_by_symbol_finn_hubb(symbol):
     Query the FinnHUb API for a stock by symbol and returns that data in a dictionary
     """
 
-    retries = 10
+    retries = 3
     while retries > 0:
         try:
             time.sleep(1)
 
+            # trying to use requests package instead of finnhub client
+
+            url = "https://finnhub.io/api/v1/quote?symbol={}&token={}".format(symbol, finn_hub_api_key)
+
+            res = requests.get(url).json()
+
+            # finnhub client method
+            '''
             res = finnhub_client.quote(symbol)
 
             # if res.status_code != 200:
@@ -94,6 +102,7 @@ def get_current_stock_data_by_symbol_finn_hubb(symbol):
 
             print('finn hub res', res)
 
+            '''
             return res
 
         except Exception as e:
