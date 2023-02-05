@@ -82,16 +82,28 @@ def get_current_stock_data_by_symbol_finn_hubb(symbol):
     Query the FinnHUb API for a stock by symbol and returns that data in a dictionary
     """
 
-    time.sleep(1)
+    retries = 10
+    while retries > 0:
+        try:
+            time.sleep(1)
 
-    res = finnhub_client.quote(symbol)
+            res = finnhub_client.quote(symbol)
 
-    # if res.status_code != 200:
-    #     return {'message': 'Stock not found'}, 404
+            # if res.status_code != 200:
+            #     return {'message': 'Stock not found'}, 404
 
-    print('finn hub res', res)
+            print('finn hub res', res)
 
-    return res
+            return res
+
+        except Exception as e:
+            retries -= 1
+            if retries == 0:
+                print (f'Error fetching data for symbol {symbol}: {e}')
+                return {'message': f'Error fetching data for symbol {symbol}: {e}'}, 500
+            time.sleep(1)
+    
+    # return res
 
 
 @stock_routes.route('/data/current/<string:symbol>')
