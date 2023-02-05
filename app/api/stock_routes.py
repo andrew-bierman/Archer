@@ -89,9 +89,17 @@ def get_current_stock_data_by_symbol_finn_hubb(symbol):
 
             # trying to use requests package instead of finnhub client
 
-            url = "https://finnhub.io/api/v1/quote?symbol={}&token={}".format(symbol, finn_hub_api_key)
+            # url = "https://finnhub.io/api/v1/quote?symbol={}&token={}".format(symbol, finn_hub_api_key)
 
-            res = requests.get(url).json()
+            url = "https://finnhub.io/api/v1/quote"
+
+            querystring = {
+                "symbol": symbol,
+                "token": finn_hub_api_key
+            }
+
+            res = requests.get(url, params=querystring).json()
+
 
             # finnhub client method
             '''
