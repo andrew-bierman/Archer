@@ -81,8 +81,13 @@ function StockPage() {
   // search database for stock data
   useEffect(() => {
     setLoading(true);
+
+    // dispatch(resetCurrentHolding());
+    // dispatch(resetSingleStockData());
+
     fetchDbData();
     fetchApiData(symbol);
+
     setLoading(false);
 
     return () => {
@@ -95,6 +100,13 @@ function StockPage() {
   useEffect(() => {
     handleWatchlistFetchandCheck();
   }, []);
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   dispatch(resetCurrentHolding());
+  //   dispatch(resetSingleStockData());
+  //   setLoading(false);
+  // }, [user, symbol]);
 
 
   const preCheckWatchlistButton = (stockId) => {
