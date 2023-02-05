@@ -73,9 +73,9 @@ function StockPage() {
 
   const handleWatchlistFetchandCheck = async () => {
     await dispatch(fetchWatchlists())
-    .then(() => {
-      preCheckWatchlistButton(stockInfo?.id)
-    })
+      .then(() => {
+        preCheckWatchlistButton(stockInfo?.id)
+      })
 
   }
   // search database for stock data
@@ -103,17 +103,25 @@ function StockPage() {
     let preCheckedObj = {};
     let preCheck = false
     watchlists.forEach(watchlist => {
+      // debugger
       let watchlistId = watchlist.id;
       preCheckedObj[watchlistId] = false;
+
+      // const foundStock = watchlist.stocks.find(stock => stock?.id === stockId)
       watchlist?.stocks.forEach(stock => {
         if (stock?.id === stockId) {
+          console.log('found stock', stock)
+          console.log('stock ids', stock.id, stockId)
           preCheckedObj[watchlistId] = true;
         }
       });
+
     });
+    console.log('preCheckedObj', preCheckedObj)
     if (Object.values(preCheckedObj).includes(true)) {
       preCheck = true;
     }
+    // debugger
     return preCheck;
   };
 
@@ -171,9 +179,12 @@ function StockPage() {
                       <OpenModalButton
                         buttonText={
                           <>
-                            {preCheckWatchlistButton ? 
-                            <i className="fa-solid fa-check flex-row flex-center"></i> 
-                            : <i className="fa-solid fa-plus"></i>}
+                            {
+                              Boolean(preCheckWatchlistButton(stockInfo?.id)) ?
+                                <i className="fa-solid fa-check flex-row flex-center"></i>
+                                :
+                                <i className="fa-solid fa-plus"></i>
+                            }
                             &nbsp;
                             Add to List
                           </>

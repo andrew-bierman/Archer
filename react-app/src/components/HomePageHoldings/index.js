@@ -29,7 +29,7 @@ const HomePageHoldings = () => {
 		setLoading(true);
 
 		// if (typeof holdingsStockData === 'undefined' || isObjectEmpty(holdingsStockData)) {
-			// await dispatch(getAllUserHoldings())
+		// await dispatch(getAllUserHoldings())
 		// }
 
 		console.log('at top of hitAPI in holdings homepage component')
@@ -64,9 +64,13 @@ const HomePageHoldings = () => {
 	useEffect(() => {
 		setLoading(true);
 
-		dispatch(getAllUserHoldings())
+		if(holdings.length === 0){
+			dispatch(getAllUserHoldings())
+		} else {
+			hitAPI()
+		}
 
-		hitAPI()
+		// hitAPI()
 
 		const timer = setTimeout(() => {
 			// hitAPI();
@@ -79,15 +83,15 @@ const HomePageHoldings = () => {
 		// console.log(holdingsStockData['COIN'])
 
 		return () => clearTimeout(timer);
-	}, [dispatch]);
+	}, [dispatch, holdings]);
 
-	
 
-	useEffect(() => {
-		setLoading(true);
-		hitAPI();
-		setLoading(false);
-	}, [holdings]);
+
+	// useEffect(() => {
+	// 	setLoading(true);
+	// 	hitAPI();
+	// 	setLoading(false);
+	// }, [holdings]);
 
 	return (
 		<div className="home-page-holdings-container">
@@ -120,12 +124,15 @@ const HomePageHoldings = () => {
 														{stock.symbol}
 													</div>
 													<div className="stock-individual-number-of-shares">
-														{0 < holding.shares <= 1
-															?
+														{(0 < holding.shares && holding.shares <= 1.0)
+															&&
 															<>
 																{holding.shares} Share
 															</>
-															:
+
+														}
+														{(0 < holding.shares && holding.shares > 1.0)
+															&&
 															<>
 																{holding.shares} Shares
 															</>

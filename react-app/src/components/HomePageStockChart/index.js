@@ -229,9 +229,9 @@ const HomePageStockChart = (props) => {
         setSeries([{ name: '', data: stockData }])
 
         if (stockData?.length > 0) {
-          setColor(stockData[0].y <= stockData[stockData.length - 1].y ? '#00C805' : '#FF0000');
+          setColor(stockData[stockData.length - 1].y >= stockData[0].y ? '#00C805' : '#FF0000');
           // console.log({ series })
-          // console.log(stockData[0].y <= stockData[stockData.length - 1].y ? '#00C805' : '#FF0000')
+          console.log(stockData[stockData.length - 1].y >= stockData[0].y ? '#00C805' : '#FF0000')
 
         }
       };
