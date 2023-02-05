@@ -29,7 +29,7 @@ const WatchListStockChartMini = ({stockSymbol}) => {
 
   useEffect(() => {
     setLoading(true);
-    console.log('timeSeriesData: ', timeSeriesData)
+    // console.log('timeSeriesData: ', timeSeriesData)
     if (typeof timeSeriesData !== 'undefined') {
       if (isObjectEmpty(timeSeriesData)) {
         setLoading(true);
@@ -48,17 +48,26 @@ const WatchListStockChartMini = ({stockSymbol}) => {
       }
 
       let filteredData = tempData.filter(({ datetime }) => {
-    
-        // const date = new Date(datetime);
+        // debugger
+
         const dateInQuestion = new Date(datetime);
 
         const date = new Date()
-        // const currentDate = new Date();
+
         let startDate, endDate;
-      
+
         if (filter === '1D') {
-          startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0);
-          endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
+          const day = date.getDay();
+          if (day === 0) {
+            startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 2, 9, 30);
+            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 2, 16, 0);
+          } else if (day === 6) {
+            startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 9, 30);
+            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 16, 0);
+          } else {
+            startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 9, 30);
+            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 16, 0);
+          }
         } else if (filter === '1W') {
           startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 7, 0, 0);
           endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
@@ -78,9 +87,8 @@ const WatchListStockChartMini = ({stockSymbol}) => {
           startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 0, 0);
           endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
         }
-  
+
         return dateInQuestion >= startDate && dateInQuestion <= endDate;
-        
       });
 
       let seriesData = filteredData.map(item => {

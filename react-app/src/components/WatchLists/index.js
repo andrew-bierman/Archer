@@ -14,6 +14,8 @@ import './WatchLists.css';
 
 const Watchlists = () => {
     const [loading, setLoading] = useState(true);
+    const [isCalling, setIsCalling] = useState(false);
+
     const [isAdding, setIsAdding] = useState(false);
     const [showStocks, setShowStocks] = useState(0);
 
@@ -31,10 +33,18 @@ const Watchlists = () => {
             watchlists.forEach(watchlist => {
                 watchlist?.stocks?.forEach(async (stock) => {
                     // console.log(stock.symbol)
-                    if (!watchListStockData[stock.symbol]) {
+                    if (!watchListStockData[stock.symbol] && !isCalling) {
+                        setIsCalling(true);
+
                         await dispatch(getStockCurrentPriceFinnHub(stock.symbol))
+
                         // await dispatch(getWatchlistStockData(stock.symbol))
-                        await dispatch(getWatchlistStockDataDaily(stock.symbol))
+                        if (typeof watchListStockData[stock.symbol]?.dailyData === 'undefined') {
+                            await dispatch(getWatchlistStockDataDaily(stock.symbol))
+                                .then(() => setIsCalling(false))
+                        } else {
+                            setIsCalling(false)
+                        }
                     }
                 })
             })
@@ -47,18 +57,18 @@ const Watchlists = () => {
         dispatch(fetchWatchlists());
         dispatch(getAllStocks());
 
-        const timer = setTimeout(() => {
-            hitAPI();
-        }, 7000);
+        // const timer = setTimeout(() => {
+        //     hitAPI();
+        // }, 7000);
 
         // console.log(state)
         setLoading(false);
 
-        return () => clearTimeout(timer);
+        // return () => clearTimeout(timer);
     }, [dispatch]);
 
     useEffect(() => {
-        if (!loading && watchlists.length > 0) {
+        if (!loading && watchlists.length > 0 && !isCalling) {
             hitAPI();
         }
     }, [watchlists]);
@@ -141,19 +151,6 @@ const Watchlists = () => {
                     />
                 </span>
             </div>
-            {/* <form onSubmit={(e) => handleWatchlistCreate(e)}>
-        <input
-          type="text"
-          value={newWatchlistName}
-          onChange={event => setNewWatchlistName(event.target.value)}
-          minLength="1"
-          maxLength="255"
-          placeholder="Create Watchlist"
-          />
-          <button type="submit">
-            <i className="fa-solid fa-plus"></i>
-          </button>
-        </form> */}
             <div className='watchlist-all-watchlists-container'>
                 {(watchlists.length > 0) &&
                     watchlists?.map((watchlist, idx) => (
