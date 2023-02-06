@@ -30,7 +30,8 @@ nav {
   justify-content: space-between;
   align-items: center;
   width: auto;
-  height: 100px;
+  /* height: 100px; */
+  height: fit-content;
   padding: 30px 20px;
 
   text-decoration: none;
