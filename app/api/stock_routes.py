@@ -190,9 +190,9 @@ def get_timeseries_stock_data_by_symbol(symbol, filter):
         outputsize = '288'
 
     if filter == '1D':
-        delay = 1
+        delay = 0.5
     else:
-        delay = 3
+        delay = 1
 
     time.sleep(0.5)
 
