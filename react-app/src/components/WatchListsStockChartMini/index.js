@@ -9,11 +9,11 @@ import { isObjectEmpty } from '../utility';
 
 import './WatchListStockChart.css';
 
-const WatchListStockChartMini = ({stockSymbol}) => {
+const WatchListStockChartMini = ({ stockSymbol }) => {
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(true);
-//   const singleStockInfo = useSelector(state => state.stocks.singleStock.Info);
+  //   const singleStockInfo = useSelector(state => state.stocks.singleStock.Info);
 
   const [color, setColor] = useState('#00C805');
 
@@ -99,7 +99,7 @@ const WatchListStockChartMini = ({stockSymbol}) => {
         return moment(datetime).format('HH:mm');
       }));
 
-      if(seriesData?.length > 0) {
+      if (seriesData?.length > 0) {
         setColor(seriesData[seriesData.length - 1].y > seriesData[0].y ? '#00C805' : '#FF0000');
       }
     }
@@ -174,15 +174,16 @@ const WatchListStockChartMini = ({stockSymbol}) => {
   return (
     <>
       {
-        (!loading ) ?
+        (!loading) ?
           <div>
             <div className='watchlist-stock-chart-container'>
               <ApexCharts options={options} series={series} width='140px' />
+              {/* <ApexCharts options={options} series={series} width='100%' height='60%' /> */}
             </div>
           </div>
           :
           <>
-          <i className="fa-solid fa-circle-notch fa-spin"></i>
+            <i className="fa-solid fa-circle-notch fa-spin"></i>
           </>
       }
     </>

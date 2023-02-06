@@ -29,7 +29,8 @@
     align-items: flex-start;
     flex-wrap: nowrap;
     /* min-width: 300px; */
-    width: 40%;
+    /* width: 40%; */
+    width: fit-content;
     height: 100%;
     margin-right: 10%;
     margin-left: 50px;

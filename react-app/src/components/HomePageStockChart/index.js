@@ -228,6 +228,7 @@ const HomePageStockChart = (props) => {
         setStockData(Object.values(aggregateData));
         setSeries([{ name: '', data: stockData }])
 
+        console.log(stockData, 'stockData')
         if (stockData?.length > 0) {
           setColor(stockData[stockData.length - 1].y >= stockData[0].y ? '#00C805' : '#FF0000');
           // console.log({ series })
@@ -240,6 +241,16 @@ const HomePageStockChart = (props) => {
       // console.log('series at end of useEffect', series)
       // console.log('stockdata at end of useEffect', stockData)
     }, [holdings, dispatch, loading, filter]);
+
+    useEffect(() => {
+      // console.log(series, 'series')
+      if(stockData?.length > 0) {
+        // let seriesData = series?.data
+        // console.log(stockData, 'seriesData')
+        setColor(stockData[stockData.length - 1].y >= stockData[0].y ? '#00C805' : '#FF0000');
+      }
+    }, [stockData])
+  
 
     /*
     const aggregateHoldingsData = async (holdings) => {
