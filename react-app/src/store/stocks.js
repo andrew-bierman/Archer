@@ -9,6 +9,7 @@ const GET_SINGLE_STOCK_COMPANY_INFO = 'stockList/GET_SINGLE_STOCK_COMPANY_INFO';
 const RESET_SINGLE_STOCK_DATA = 'stockList/RESET_SINGLE_STOCK_DATA';
 
 const GET_SINGLE_STOCK_CURRENT_PRICE_YAHOO = 'stockList/GET_SINGLE_STOCK_CURRENT_PRICE_YAHOO';
+const RESET_ENTIRE_SINGLE_STOCK = 'stockList/RESET_ENTIRE_SINGLE_STOCK';
 
 const getAllStocksFromDB = (stocks) => ({
     type: GET_ALL_STOCKS_FROM_DB,
@@ -38,6 +39,10 @@ const getSingleStockCompanyInfo = (data) => ({
 const getSingleStockCurrentPriceYahooAction = (data) => ({
     type: GET_SINGLE_STOCK_CURRENT_PRICE_YAHOO,
     payload: data
+});
+
+const resetEntireSingleStockAction = () => ({
+    type: RESET_ENTIRE_SINGLE_STOCK
 });
 
 export const getAllStocks = () => async (dispatch) => {
@@ -145,6 +150,10 @@ export const resetSingleStockData = () => ({
     type: RESET_SINGLE_STOCK_DATA
 });
 
+export const resetEntireSingleStock = () => async (dispatch) => {
+    dispatch(resetEntireSingleStockAction());
+}
+
 const initialState = {
     allStocks: {
         byId: {},
@@ -223,6 +232,19 @@ const stockListReducer = (state = initialState, action) => {
                 singleStock: {
                     ...state.singleStock,
                     Data: {}
+                }
+            }
+
+        case RESET_ENTIRE_SINGLE_STOCK:
+            return {
+                ...state,
+                singleStock: {
+                    Info: {},
+                    CompanyInfo: {},
+                    CurrentPrice: {},
+                    YahooCurrentPrice: {},
+                    Data: {},
+                    News: {}
                 }
             }
 
