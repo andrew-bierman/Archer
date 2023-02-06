@@ -38,7 +38,7 @@ const NewsCard = ({ article }) => {
             return false
         }
     }
-    
+
     const handleBookmarkClickAdd = () => {
         // e.preventDefault();
         // e.stopPropagation();
@@ -68,7 +68,11 @@ const NewsCard = ({ article }) => {
                     <h5>{article.source}</h5>
                 </div>
                 <div className="news-feed-individual-left-side-text">
-                    <h5 onClick={() => openInNewTab(article.url)}>{article.title}</h5>
+                    <h5 onClick={() => openInNewTab(article.url)}>
+                        <a>
+                            {article.title}
+                        </a>
+                    </h5>
                 </div>
                 <div className="news-feed-individual-left-side-text">
                     <p>{article.summary}</p>
