@@ -8,6 +8,7 @@
     margin-right: 0;
 
     width: 100%;
+    min-width: fit-content;
     height: fit-content;
 
     padding-top: 20px;
@@ -247,6 +248,7 @@
     flex-wrap: nowrap;
 
     width: 100%;
+    min-width: 100px;
 
     margin: 10px;
 

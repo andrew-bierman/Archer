@@ -73,10 +73,12 @@ const SignUpForm = () => {
             ))}
           </div>
           <div>
-            <label>User Name</label>
+            {/* <label>User Name</label> */}
             <input
               type='text'
               name='username'
+              placeholder='User Name'
+              autocomplete="on"
               onChange={updateUsername}
               value={username}
               minLength='1'
@@ -85,10 +87,12 @@ const SignUpForm = () => {
             ></input>
           </div>
           <div>
-            <label>Email</label>
+            {/* <label>Email</label> */}
             <input
               type='text'
               name='email'
+              placeholder='Email'
+              autocomplete="on"
               onChange={updateEmail}
               value={email}
               minLength='1'
@@ -97,10 +101,12 @@ const SignUpForm = () => {
             ></input>
           </div>
           <div>
-            <label>Password</label>
+            {/* <label>Password</label> */}
             <input
               type='password'
               name='password'
+              placeholder='Password'
+              autocomplete="on"
               onChange={updatePassword}
               value={password}
               minLength='1'
@@ -109,10 +115,12 @@ const SignUpForm = () => {
             ></input>
           </div>
           <div>
-            <label>Repeat Password</label>
+            {/* <label>Repeat Password</label> */}
             <input
               type='password'
               name='repeat_password'
+              placeholder='Confirm Password'
+              autocomplete="on"
               onChange={updateRepeatPassword}
               value={repeatPassword}
               required={true}
