@@ -55,9 +55,9 @@ const HomePageStockChart = (props) => {
         if (response.ok) {
           const data = await response.json();
           // console.log('HOLDINGS STOCK THUNK', data)
-          dispatch({ type: 'holding/GET_HOLDING_STOCK_DATA', payload: data });
-
+          
           if (filter === '1D') {
+            dispatch({ type: 'holding/GET_HOLDING_STOCK_DATA', payload: data });
             // dispatch({ type: 'holding/GET_HOLDING_STOCK_DATA', payload: data });
             dispatch({ type: 'watchlists/GET_WATCHLIST_STOCK_DATA_DAILY', payload: data });
 
