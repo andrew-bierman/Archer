@@ -47,21 +47,31 @@ const StockChart = (props) => {
   useEffect(() => {
     if (tempData && tempData?.length > 0) {
       // compare start and end date to determine if reverse is needed
-      if (new Date(tempData[0].datetime) > new Date(tempData[tempData.length - 1].datetime)) {
-        tempData.reverse(); // Reverse the order of the data
-      }
+      // if (new Date(tempData[0].datetime) > new Date(tempData[tempData.length - 1].datetime)) {
+      //   tempData.reverse(); // Reverse the order of the data
+      // }
 
+      let filteredData = tempData
+      /*
       let filteredData = tempData.filter(({ datetime }) => {
         // debugger
 
         const dateInQuestion = new Date(datetime);
 
-        const date = new Date()
+          const date = new Date()
+        const day = date.getDay();
+        if (day >= 6 || day === 0) {
+          if (day === 6) {
+            date.setDate(date.getDate() - 1);
+          } else if (day === 0) {
+            date.setDate(date.getDate() - 2);
+          }
+        }
 
         let startDate, endDate;
 
         if (filter === '1D') {
-          const day = date.getDay();
+          // const day = date.getDay();
           if (day === 0) {
             startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 2, 9, 30);
             endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 2, 16, 0);
@@ -94,6 +104,7 @@ const StockChart = (props) => {
 
         return dateInQuestion >= startDate && dateInQuestion <= endDate;
       });
+      */
 
 
       let seriesData = filteredData.map(item => {
@@ -104,12 +115,23 @@ const StockChart = (props) => {
       });
       setSeries([{ name: '', data: seriesData }])
       setXaxisCategories(tempData.map(({ datetime }) => {
+        const date = new Date(datetime);
+        if (filter === '1D') {
+          return `${date.getHours()}:${date.getMinutes()}`;
+        } else {
+          return `${date.toLocaleString('default', { month: 'short' })} ${date.getDate()}`;
+        }
+      }));
+
+      /*
+      setXaxisCategories(tempData.map(({ datetime }) => {
         if (filter === '1D') {
           return moment(datetime).format('HH:mm');
         } else {
           return moment(datetime).format('MMM DD');
         }
       }));
+      */
 
       if (seriesData?.length > 0) {
         setColor(seriesData[0].y <= seriesData[seriesData.length - 1].y ? '#00C805' : '#FF0000');

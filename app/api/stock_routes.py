@@ -4,6 +4,7 @@ from app.models import db, User, Watchlist, Stock, Holding, News
 from app.config import Config
 import requests
 import time
+from datetime import datetime, timedelta
 import finnhub
 
 stock_routes = Blueprint('stocks', __name__)
@@ -111,6 +112,8 @@ def get_current_stock_data_by_symbol_finn_hubb(symbol):
             print('finn hub res', res)
 
             '''
+            print('finn hub res', res)
+            
             return res
 
         except Exception as e:
@@ -247,6 +250,99 @@ def get_timeseries_stock_data_by_symbol(symbol, filter):
 
         # print('RESPONSE FOR STOCK DATA ------', res)
 
+
+    # filtering data in python attempt
+    def process_time_series_data(time_series_data, filter):
+        
+        print('time series data', time_series_data)
+
+        filtered_data = []
+        for item in time_series_data:
+            date_in_question = datetime.strptime(item['datetime'], '%Y-%m-%d %H:%M:%S')
+            date = datetime.now()
+
+            start_date, end_date = None, None
+
+            if filter == '1D':
+                day = date.weekday()
+                hour = date.hour
+                if day == 6 or (day < 5 and hour < 9):
+                    start_date = datetime(date.year, date.month, date.day - 1, 9, 30)
+                    end_date = datetime(date.year, date.month, date.day - 1, 16, 0)
+                elif day == 5 or (day < 5 and hour >= 9):
+                    start_date = datetime(date.year, date.month, date.day, 9, 30)
+                    end_date = datetime(date.year, date.month, date.day, 16, 0)
+                else:
+                    start_date = datetime(date.year, date.month, date.day, 9, 30)
+                    end_date = datetime(date.year, date.month, date.day, 16, 0)
+            elif filter == '1W':
+                start_date = date - timedelta(days=7)
+                start_date = start_date.replace(hour=0, minute=0, second=0, microsecond=0)
+                end_date = datetime(date.year, date.month, date.day, 23, 59)
+            elif filter == '1M':
+                if date.month == 1:
+                    start_date = datetime(date.year - 1, 12, date.day, 0, 0)
+                else:
+                    start_date = datetime(date.year, date.month - 1, date.day, 0, 0)
+                end_date = datetime(date.year, date.month, date.day, 23, 59)
+            elif filter == '3M':
+                if date.month <= 3:
+                    start_date = datetime(date.year - 1, 12 + (date.month - 3), date.day, 0, 0)
+                else:
+                    start_date = datetime(date.year, date.month - 3, date.day, 0, 0)
+                end_date = datetime(date.year, date.month, date.day, 23, 59)
+            elif filter == '1Y':
+                start_date = datetime(date.year - 1, date.month, date.day, 0, 0)
+                end_date = datetime(date.year, date.month, date.day, 23, 59)
+            elif filter == '5Y':
+                if date.month <= 12:
+                    start_date = datetime(date.year - 5, date.month, date.day, 0, 0)
+                else:
+                    start_date = datetime(date.year - 5, date.month - 12, date.day, 0, 0)
+                end_date = datetime(date.year, date.month, date.day, 23, 59)
+            else:
+                start_date = datetime(date.year, date.month, date.day - 1, 0, 0)
+                end_date = datetime(date.year, date.month, date.day, 23, 59)
+
+            if start_date <= date_in_question <= end_date:
+                filtered_data.append(item)
+
+
+        # print ('FILTERED DATA', filtered_data)
+        # filtered_data.reverse()  # Reverse the order of the data
+        filtered_data.sort(key=lambda x: datetime.strptime(x['datetime'], '%Y-%m-%d %H:%M:%S'))
+        if datetime.strptime(filtered_data[0]['datetime'], '%Y-%m-%d %H:%M:%S') > datetime.strptime(filtered_data[-1]['datetime'], '%Y-%m-%d %H:%M:%S'):
+            filtered_data.reverse()
+            print ('without reverse')
+
+        return filtered_data
+
+    if 'values' in res and res['values']:
+        price = None
+
+        if len(res['values']) == 0:
+            return {'message': 'Stock not found'}, 404
+
+        if len(res['values']) == 0:
+            price = None
+        if not all(key in res['values'][-1] for key in ['close']):
+            price = None
+
+        # print(res)
+
+        res['values'] = process_time_series_data(res['values'], filter)
+
+        if price is not None:
+            res['currentPriceMath'] = {
+                'price': price,
+                'percentChange': round((float(price) - float(res['values'][0]['close'])) / float(res['values'][0]['close']) * 100, 2)
+            }
+        # else:
+        #     res['currentPriceMath'] = {
+        #         'price': None,
+        #         'percentChange': None
+        #     }
+    
     time.sleep(delay)
 
     return res

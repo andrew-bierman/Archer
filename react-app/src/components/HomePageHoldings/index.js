@@ -35,8 +35,8 @@ const HomePageHoldings = () => {
 		console.log('at top of hitAPI in holdings homepage component')
 		console.log(holdingsStockData)
 
-		if (holdings.length > 0) {
-			holdings.forEach((holding) => {
+		if (holdings?.length > 0) {
+			holdings?.forEach((holding) => {
 				holding?.stock?.forEach(async (stock) => {
 					// console.log(stock.symbol)
 					console.log((typeof holdingsStockData[stock.symbol] === 'undefined')
@@ -50,7 +50,6 @@ const HomePageHoldings = () => {
 						setIsCalling(true);
 						await dispatch(getHoldingCurrentPriceFinnHub(stock.symbol))
 							.then(() => setIsCalling(false))
-						// setIsCalling(false);
 
 						console.log('running dispatch in holdings homepage component')
 						// await dispatch(getWatchlistStockData(stock.symbol))
@@ -64,7 +63,7 @@ const HomePageHoldings = () => {
 	useEffect(() => {
 		setLoading(true);
 
-		if(holdings.length === 0){
+		if (!holdings) {
 			dispatch(getAllUserHoldings())
 		} else {
 			hitAPI()
@@ -76,7 +75,6 @@ const HomePageHoldings = () => {
 			// hitAPI();
 		}, 5000);
 
-		// console.log(state)
 		setLoading(false);
 
 		console.log("holdings", holdings)
@@ -101,7 +99,7 @@ const HomePageHoldings = () => {
 				</div>
 			</div>
 			<>
-				{holdings.length > 0 ? (
+				{holdings && holdings.length > 0 ? (
 					<>
 						<div className="watchlist-stock-list">
 							{holdings.map((holding) => {

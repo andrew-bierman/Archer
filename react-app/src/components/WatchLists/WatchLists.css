@@ -112,12 +112,12 @@
     flex-wrap: nowrap;
     overflow: hidden;
     max-width: 60%;
+    word-break: break-all;
 
 }
 
 /* .watchlist-individual-header h4 {
-    padding-left: 20px;
-    color: red;
+    word-break: break-all;
 
 } */
 

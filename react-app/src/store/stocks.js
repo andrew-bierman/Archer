@@ -186,7 +186,8 @@ const stockListReducer = (state = initialState, action) => {
                     ...state.singleStock,
                     Data: {
                         meta: action.payload.meta,
-                        values: action.payload.values
+                        values: action.payload.values,
+                        currentPriceMath: action.payload.currentPriceMath
                     } 
                 }
             }

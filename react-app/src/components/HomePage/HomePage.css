@@ -1,4 +1,4 @@
-.homepage-main-container{
+/* .homepage-main-container{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -8,7 +8,7 @@
     height: 100%;
     margin-right: 20px;
     margin-left: 20px;
-}
+} */
 
 .homepage-main-left-side {
     display: flex;
@@ -31,6 +31,7 @@
     /* min-width: 300px; */
     /* width: 40%; */
     width: fit-content;
+    max-width: 350px;
     height: 100%;
     margin-right: 10%;
     margin-left: 50px;

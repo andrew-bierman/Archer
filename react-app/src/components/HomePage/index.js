@@ -10,8 +10,8 @@ import './HomePage.css';
 
 const HomePage = () => {
     return (
-        <div className="homepage-main-container">
-            <div className="homepage-main-left-side">
+        <div className="homepage-main-container flex flex-col lg:flex-row">
+            <div className="homepage-main-left-side flex flex-col lg:flex-row">
                 {/* <StockListSearch /> */}
                 <HomePageStockChart />
                 <HomePageNewsFeed />

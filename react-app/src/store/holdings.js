@@ -1,3 +1,5 @@
+import { isObjectEmpty } from "../components/utility";
+
 const GET_USER_HOLDINGS_FROM_DB = "holding/GET_USER_HOLDINGS_FROM_DB";
 const CREATE_NEW_HOLDING = "holding/CREATE_NEW_HOLDING";
 const UPDATE_HOLDING = "holding/UPDATE_HOLDING";
@@ -66,6 +68,34 @@ export const getAllUserHoldings = () => async (dispatch) => {
     console.log("Error fetching holdings");
   }
 };
+
+// export const getAllUserHoldings = () => async (dispatch, getState) => {
+//   const response = await fetch("/api/holdings/");
+//   if (response.ok) {
+//     const data = await response.json();
+//     dispatch(getUserHoldingsFromDBAction(data.holdings));
+//     const holdings = data.holdings;
+//     if (holdings.length > 0) {
+//       const holdingsStockData = getState()?.holdings?.stockData
+//       holdings.forEach((holding) => {
+//         holding?.stock?.forEach(async (stock) => {
+//           // console.log(stock.symbol)
+//           if ((typeof holdingsStockData[stock.symbol] === 'undefined')
+//               || (typeof holdingsStockData[stock.symbol]?.currentPrice === 'undefined')
+//               || !isObjectEmpty(holdingsStockData[stock.symbol]?.currentPrice)) {
+//             await dispatch(getHoldingCurrentPriceFinnHub(stock.symbol));
+//             console.log('running dispatch in holdings homepage component')
+//             // await dispatch(getWatchlistStockData(stock.symbol))
+//             // await dispatch(getWatchlistStockDataDaily(stock.symbol))
+//           }
+//         });
+//       });
+//     }
+//   } else {
+//     console.log("Error fetching holdings");
+//   }
+// };
+
 
 export const createNewHolding =
   (symbol, quantity, stockCurrentPrice) => async (dispatch) => {
@@ -158,7 +188,6 @@ export const getHoldingStockData = (stockSymbol) => async (dispatch) => {
     const response = await fetch(
       `/api/stocks/data/time-series/${stockSymbol}/1D`
     );
-    // debugger
     if (response.ok && response.status !== 429) {
       const data = await response.json();
 
@@ -212,7 +241,7 @@ export const resetAllHoldings = () => async (dispatch) => {
 };
 
 const initialState = {
-  allHoldings: [],
+  allHoldings: null,
   currentHolding: {},
   stockData: {},
 };
@@ -262,21 +291,21 @@ const holdingReducer = (state = initialState, action) => {
           [action.payload.meta.symbol]: {
             ...state.stockData[action.payload.meta.symbol],
             ...action.payload,
-          }
+          },
         },
       };
     case GET_HOLDING_CURRENT_PRICE_FINNHUB:
-        return {
-            ...state,
-            stockData: {
-                ...state.stockData,
-                [action.payload.symbol]: {
-                    ...state.stockData[action.payload.symbol],
-                    currentPrice: action.payload
-                }
-            }
-        }
-        
+      return {
+        ...state,
+        stockData: {
+          ...state.stockData,
+          [action.payload.symbol]: {
+            ...state.stockData[action.payload.symbol],
+            currentPrice: action.payload,
+          },
+        },
+      };
+
     case RESET_CURRENT_HOLDING:
       return {
         ...state,
