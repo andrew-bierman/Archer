@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { deleteWatchlist, fetchWatchlists } from '../../store/watchlists';
+import { handleFormSubmit } from '../utility';
 import { useModal } from '../../context/Modal';
 import { Modal } from '../../context/Modal';
 
@@ -17,7 +18,7 @@ const DeleteWatchListModal = ({ watchlist }) => {
     const handleWatchlistDelete = async (watchlistId) => {
         setLoading(true);
         await dispatch(deleteWatchlist(watchlistId));
-        await dispatch(fetchWatchlists());
+        // await dispatch(fetchWatchlists());
         setLoading(false);
         closeModal();
     };
@@ -27,7 +28,7 @@ const DeleteWatchListModal = ({ watchlist }) => {
             <div className='create-watchlist-modal-content'>
                 <h3>Confirm Deletion</h3>
                 {/* <div className='watchlist-individual-header'> */}
-                    <form>
+                    <form onSubmit={handleFormSubmit}>
                         <button className='watchlist-modal-cancel-button' onClick={() => closeModal()}>
                             Cancel
                         </button>

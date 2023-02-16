@@ -69,3 +69,6 @@ export function isEmail(emailAdress) {
         return false;
 }
 
+export const handleFormSubmit = (e) => {
+    e.preventDefault();
+}
