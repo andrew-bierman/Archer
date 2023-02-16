@@ -5,6 +5,9 @@
     align-items: flex-start;
     flex-wrap: nowrap;
     width: 100%;
+    /* margin: 40px; */
+
+    box-sizing: border-box;
 }
 .news-feed-container .news-feed-header {
     display: flex;
@@ -36,6 +39,8 @@
 
     /* border-top: 1px solid black; */
     border-bottom: 1px solid black;
+
+    box-sizing: border-box;
 }
 
 .news-feed-individual-left-side{

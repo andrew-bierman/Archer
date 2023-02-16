@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-
+import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+
 
 import { getAllUserHoldings } from "../../store/holdings";
 
@@ -32,8 +33,16 @@ const ProfileHoldings = () => {
                             <>
                                 {holdings.map((holding) => (
                                     <tr>
-                                        <td>{holding.stock[0].symbol}</td>
-                                        <td>{holding.stock[0].company_name}</td>
+                                        <td>
+                                            <NavLink to={`/stocks/${holding.stock[0].symbol}`}>
+                                                {holding.stock[0].symbol}
+                                            </NavLink>
+                                        </td>
+                                        <td>
+                                            <NavLink to={`/stocks/${holding.stock[0].symbol}`}>
+                                                {holding.stock[0].company_name}
+                                            </NavLink>
+                                        </td>
                                         <td>x{holding.shares}</td>
                                         <td>${formatToCurrency(holding.avg_cost)}</td>
                                     </tr>

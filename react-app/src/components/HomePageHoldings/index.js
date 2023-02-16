@@ -4,12 +4,7 @@ import { Link } from "react-router-dom";
 import { formatToCurrency, isObjectEmpty } from "../utility";
 
 import { getHoldingCurrentPriceFinnHub, getAllUserHoldings } from "../../store/holdings";
-// import {getSingleStockCurrentPriceYahoo} from '../../store/stocks';
-import { getAllStocks } from "../../store/stockList";
-import StockList from "../StockList";
-import WatchListStockChartMini from "../WatchListsStockChartMini";
 import HoldingsStockChartMini from "./HoldingsStockChartMini";
-import OpenModalButton from "../OpenModalButton";
 
 import './HomePageHoldings.css';
 
@@ -35,8 +30,8 @@ const HomePageHoldings = () => {
 		console.log('at top of hitAPI in holdings homepage component')
 		console.log(holdingsStockData)
 
-		if (holdings?.length > 0) {
-			holdings?.forEach((holding) => {
+		if (holdings.length > 0) {
+			holdings.forEach((holding) => {
 				holding?.stock?.forEach(async (stock) => {
 					// console.log(stock.symbol)
 					console.log((typeof holdingsStockData[stock.symbol] === 'undefined')
@@ -50,6 +45,7 @@ const HomePageHoldings = () => {
 						setIsCalling(true);
 						await dispatch(getHoldingCurrentPriceFinnHub(stock.symbol))
 							.then(() => setIsCalling(false))
+						// setIsCalling(false);
 
 						console.log('running dispatch in holdings homepage component')
 						// await dispatch(getWatchlistStockData(stock.symbol))
@@ -61,27 +57,27 @@ const HomePageHoldings = () => {
 	};
 
 	useEffect(() => {
-		setLoading(true);
-
-		if (!holdings) {
-			dispatch(getAllUserHoldings())
-		} else {
-			hitAPI()
+		if(user && !holdings){
+			dispatch(getAllUserHoldings());
 		}
+	  }, []);
 
-		// hitAPI()
-
-		const timer = setTimeout(() => {
-			// hitAPI();
-		}, 5000);
-
+	useEffect(() => {
+		setLoading(true);
+	
+		if (!holdings) return;
+	
+		if (isCalling) return;
+		setIsCalling(true);
+	
+		hitAPI();
+	
 		setLoading(false);
-
-		console.log("holdings", holdings)
-		// console.log(holdingsStockData['COIN'])
-
-		return () => clearTimeout(timer);
-	}, [dispatch, holdings]);
+		setIsCalling(false);
+	
+		console.log("holdings", holdings);
+	}, [holdings, isCalling]);
+	
 
 
 
@@ -99,7 +95,7 @@ const HomePageHoldings = () => {
 				</div>
 			</div>
 			<>
-				{holdings && holdings.length > 0 ? (
+				{!isObjectEmpty(holdings) && (holdings.length > 0) ? (
 					<>
 						<div className="watchlist-stock-list">
 							{holdings.map((holding) => {

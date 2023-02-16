@@ -51,6 +51,10 @@ const WatchlistsStockPage = () => {
             setErrors(['Watchlist name cannot be empty'])
             setLoading(false);
             return;
+        } else if (newWatchlistName.length >= 10) {
+            setErrors(['Watchlist name cannot be longer than 10 characters'])
+            setLoading(false);
+            return;
         }
 
         await dispatch(createNewWatchlist(newWatchlistName))
@@ -142,7 +146,7 @@ const WatchlistsStockPage = () => {
                         value={newWatchlistName}
                         onChange={event => setNewWatchlistName(event.target.value)}
                         minLength="1"
-                        maxLength="255"
+                        maxLength="10"
                         placeholder="Create Watchlist"
                     />
                 </form>

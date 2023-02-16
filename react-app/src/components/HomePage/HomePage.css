@@ -1,49 +1,47 @@
-/* .homepage-main-container{
+.homepage-entire-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  /* width: 96vw; */
+  /* width: 100%; */
+  height: 100%;
+  margin-right: 100px;
+  margin-left: 100px;
+
+  /* padding: 50px; */
+
+  box-sizing: border-box;
+
+}
+
+.homepage-core-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
-    align-items: flex-start;
-    flex-wrap: nowrap;
-    width: 96vw;
-    height: 100%;
-    margin-right: 20px;
-    margin-left: 20px;
-} */
-
-.homepage-main-left-side {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: nowrap;
-    width: 60%;
-    height: 100%;
-    margin-right: 50px;
-    margin-left: 10%;
-}
-
-.homepage-main-right-side{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: nowrap;
-    /* min-width: 300px; */
-    /* width: 40%; */
-    width: fit-content;
-    max-width: 350px;
-    height: 100%;
-    margin-right: 10%;
-    margin-left: 50px;
-
+    gap: 50px;
+    width: 100%;
     box-sizing: border-box;
-
-    /* padding: 20px; */
-
+  }
+  
+  .homepage-buy-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    margin: 10px;
+  
     border-radius: 20px;
     border: 1px solid black;
-}
-
-.homepage-main-right-side h3 {
-    margin-left: 20px;
-}
+  }
+  
+  @media (max-width: 800px) {
+    .homepage-entire-container {
+      top: 150px;
+      left: 0;
+      right: 0;
+    }
+    .homepage-core-container {
+      flex-direction: column;
+    }
+  }

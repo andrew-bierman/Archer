@@ -28,6 +28,9 @@ const CreateWatchListModal = () => {
         if (newWatchlistName.length < 1) {
             setErrors(['Watchlist name cannot be empty'])
             return;
+        } else if (newWatchlistName.length >= 10) {
+            setErrors(['Watchlist name cannot be longer than 10 characters'])
+            return;
         }
 
         await dispatch(createNewWatchlist(newWatchlistName))
@@ -55,7 +58,7 @@ const CreateWatchListModal = () => {
                         value={newWatchlistName}
                         onChange={event => setNewWatchlistName(event.target.value)}
                         minLength="1"
-                        maxLength="255"
+                        maxLength="10"
                         placeholder="Create Watchlist"
                     />
                     <button type="submit">

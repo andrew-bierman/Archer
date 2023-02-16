@@ -6,30 +6,32 @@
     flex-wrap: nowrap;
     width: 100%;
     height: 100%;
-}
-
-.big-chart-container {
+    box-sizing: border-box;
+    /* padding: 50px; */
+  }
+  
+  .big-chart-container {
     display: block;
-
+  
     /* margin-left: auto; */
     /* margin-right: auto; */
-
+  
     width: 100%;
     min-height: 300px;
-
+  
     /* margin-top: 20px; */
     /* margin-bottom: 20px; */
-    
+  
     border-radius: 20px;
     /* border: 1px solid #000000; */
-}
-
-.apexcharts-canvas {
+  }
+  
+  .apexcharts-canvas {
     margin-left: auto;
     margin-right: auto;
-}
-
-.home-page-stock-chart-buying-power-container{
+  }
+  
+  .home-page-stock-chart-buying-power-container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -39,6 +41,6 @@
     height: 100%;
     margin-top: 20px;
     margin-bottom: 20px;
-
+  
     border-bottom: 1px solid #000000;
-}
+  }
