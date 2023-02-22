@@ -77,12 +77,12 @@ const NewsCard = ({ article }) => {
                 <div className="news-feed-individual-left-side-text">
                     <p>{article.summary}</p>
                 </div>
-                <div className="news-feed-individual-ticker-row">
+                <div className="news-feed-individual-ticker-row" key={`${article.ticker_sentiment[0]}`}>
                     {
                         article.ticker_sentiment && article.ticker_sentiment.map((ticker) => {
                             return (
                                 doesStockExistInDB(ticker.ticker) ?
-                                    <Link to={`/stocks/${ticker.ticker}`} key={`${ticker.ticker}`}>
+                                    <Link to={`/stocks/${ticker.ticker}`} key={`${ticker.ticker} + ${article.url}`}>
                                         <span>
                                             {ticker.ticker}
                                         </span>
@@ -96,7 +96,7 @@ const NewsCard = ({ article }) => {
                 </div>
             </div>
             <div className="news-feed-individual-news-img-and-bookmark">
-                <div className="news-feed-individual-news-bookmark">
+                <div className="news-feed-individual-news-bookmark" key={'bookmark'}>
                     {
                         isBookmarked ?
                             <button onClick={() => handleBookmarkClickRemove()}>

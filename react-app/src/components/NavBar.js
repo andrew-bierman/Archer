@@ -18,7 +18,7 @@ const NavBar = () => {
 
   return (
     <>
-      <nav>
+      <nav className='navbar'>
         <div className={`navbar-logo-and-name ${dark_mode_pref ? 'logo-color-light' : 'logo-color-dark'
           }`}>
           <NavLink to="/" exact={true} activeClassName="active">

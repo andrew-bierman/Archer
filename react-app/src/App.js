@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Switch , Redirect} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import './assets/main.css'
+import './bulma/css/mystyles.css'
 
 import LoginForm from './components/auth/LoginForm';
 import SignUpForm from './components/auth/SignUpForm';
@@ -17,6 +18,7 @@ import Watchlists from './components/WatchLists';
 import StockList from './components/StockList';
 import Profile from './components/Profile';
 import LandingPage from './components/LandingPage';
+import ScrollToTopButton from "./components/ScrollToToButton";
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -38,6 +40,7 @@ function App() {
   return (
     <BrowserRouter>
       <NavBar />
+      <ScrollToTopButton />
       <Switch>
         <Route path='/login' exact={true}>
           <LoginForm />

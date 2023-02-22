@@ -26,12 +26,12 @@
     "yahoo-finance": "^0.3.8"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "npm run css-watch & react-scripts start",
     "build": "CI=false npm run build:css && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build:css": "postcss src/assets/tailwind.css -o src/assets/main.css",
-    "watch:css": "postcss src/assets/tailwind.css -o src/assets/main.css"
+    "css-build": "node-sass src/bulma/sass/mystyles.scss src/bulma/css/mystyles.css",
+    "css-watch": "npm run css-build -- --watch"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -49,5 +49,9 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5000"
+  "proxy": "http://localhost:5000",
+  "devDependencies": {
+    "bulma": "^0.9.4",
+    "node-sass": "^8.0.0"
+  }
 }

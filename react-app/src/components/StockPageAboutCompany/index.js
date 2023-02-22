@@ -22,12 +22,12 @@ const StockPageAboutCompany = () => {
             {
                 companyInfo && companyInfo.Name ?
 
-                    <div classname='stock-page-about-company-container'>
+                    <div className='stock-page-about-company-container'>
                         <div className="stock-page-about-company-container-section-header">
                             <h2>About</h2>
                         </div>
                         <p>{companyInfo.Description}</p>
-                        <div classname='stock-page-about-company-about-details'>
+                        <div className='stock-page-about-company-about-details'>
                             <table>
                                 <thead>
                                     <tr>
@@ -47,7 +47,7 @@ const StockPageAboutCompany = () => {
                                 </tbody>
                             </table>
                         </div>
-                        <div classname='stock-page-about-company-key-statistics-container'>
+                        <div className='stock-page-about-company-key-statistics-container'>
                             <div className="stock-page-about-company-container-section-header">
                                 <h2>Key Statistics</h2>
                             </div>

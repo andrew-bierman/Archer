@@ -13,35 +13,88 @@
   /* padding: 50px; */
 
   box-sizing: border-box;
-
 }
 
 .homepage-core-container {
-    display: flex;
-    flex-direction: row;
-    gap: 50px;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  width: 60%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.homepage-buy-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  margin: 10px;
+  border-radius: 20px;
+  border: 1px solid black;
+  width: 25%;
+  position: fixed;
+  top: 140px;
+  right: 7%;
+
+  max-height: 70vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.homepage-buy-card::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  visibility: hidden;
+}
+.homepage-buy-card::-webkit-scrollbar-button {
+  height: 20px;
+}
+
+.homepage-buy-card::-webkit-scrollbar {
+  width: 5px;
+  background-color: transparent;
+}
+.homepage-buy-card:active::-webkit-scrollbar-thumb,
+.homepage-buy-card:focus::-webkit-scrollbar-thumb,
+.homepage-buy-card:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+}
+.homepage-news-feed {
+  width: 60%;
+}
+
+@media (max-width: 1199.98px) {
   .homepage-buy-card {
-    display: flex;
+    width: 30%;
+  }
+}
+
+@media only screen and (max-width: 767.98px) {
+  .homepage-entire-container {
+    width: 90vw;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .homepage-core-container {
     flex-direction: column;
-    align-items: flex-start;
-    flex-wrap: nowrap;
-    margin: 10px;
-  
-    border-radius: 20px;
-    border: 1px solid black;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
   }
-  
-  @media (max-width: 800px) {
-    .homepage-entire-container {
-      top: 150px;
-      left: 0;
-      right: 0;
-    }
-    .homepage-core-container {
-      flex-direction: column;
-    }
+  .homepage-buy-card {
+    position: static;
+    width: 60%;
+    margin: 0;
+    max-height: 100%;
   }
+  .homepage-news-feed {
+    width: 100%;
+    margin-top: 50px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .homepage-buy-card {
+    width: 100%;
+  }
+}

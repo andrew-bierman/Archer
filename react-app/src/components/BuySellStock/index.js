@@ -138,7 +138,7 @@ const BuySellStock = ({ stockInfo, stockCurrentPrice }) => {
 
                 <div className="stock-page-buy-sell-container">
                     <div className="stock-page-buy-sell-top-buttons">
-                        <button onClick={() => handleSwitch('buy')} className='stock-page-buy-button-top'>
+                        <button onClick={() => handleSwitch('buy')} className='stock-page-buy-button-top text-is-green'>
                             Buy {stockInfo.symbol}
                         </button>
                         <button onClick={() => handleSwitch('sell')} className='stock-page-sell-button-top'>
@@ -152,7 +152,7 @@ const BuySellStock = ({ stockInfo, stockCurrentPrice }) => {
                                 <div className="stock-page-buy-sell-buy-inputs">
                                     <div className="stock-page-buy-sell-buy-inputs-quantity">
                                         <h5>Quantity</h5>
-                                        <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} min={0}></input>
+                                        <input className="input is-small" type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} min={0}></input>
                                     </div>
                                     <div className="stock-page-buy-sell-buy-inputs-price">
                                         <h5>Price</h5>
@@ -166,7 +166,7 @@ const BuySellStock = ({ stockInfo, stockCurrentPrice }) => {
                                 <div className="stock-page-buy-sell-buy-buttons">
                                     <div className='stock-page-buy'>
                                         {(parseFloat(quantity) === 0 || ((stockCurrentPrice * parseFloat(quantity)) > buyingPower)) ?
-                                            <button className='stock-page-buy' disabled>
+                                            <button className='stock-page-buy button' disabled>
                                                 Buy
                                             </button>
                                             :
@@ -186,7 +186,7 @@ const BuySellStock = ({ stockInfo, stockCurrentPrice }) => {
                                 <div className="stock-page-buy-sell-sell-inputs">
                                     <div className="stock-page-buy-sell-sell-inputs-quantity">
                                         <h5>Quantity</h5>
-                                        <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} min={0} max={currentHoldingShares}></input>
+                                        <input className="input is-small" type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} min={0} max={currentHoldingShares}></input>
                                     </div>
                                     <div className="stock-page-buy-sell-sell-inputs-price">
                                         <h5>Price</h5>
