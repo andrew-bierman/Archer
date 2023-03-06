@@ -212,34 +212,38 @@ export const filterDataForChart = (tempData, filter) => {
         tempData.reverse(); // Reverse the order of the data
     }
 
-    // let filteredData = tempData
+    const estTimeZone = 'America/New_York'; // EST timezone identifier
 
     let filteredData = tempData.filter(({ datetime }) => {
-        // debugger
-
         const dateInQuestion = new Date(datetime);
 
-        const date = new Date()
-        const day = date.getDay();
-        const year = date.getFullYear();
+        // Convert user's date to EST
+        const userDate = new Date(dateInQuestion.toLocaleString('en-US', { timeZone: estTimeZone }));
+
+        // Get EST date for current day
+        const currentDate = new Date(new Date().toLocaleString('en-US', { timeZone: estTimeZone }));
+
+        const day = currentDate.getDay();
+        const year = currentDate.getFullYear();
+
         if (day >= 6 || day === 0) {
             if (day === 6) {
-                date.setDate(date.getDate() - 1);
+                currentDate.setDate(currentDate.getDate() - 1);
             } else if (day === 0) {
-                date.setDate(date.getDate() - 2);
+                currentDate.setDate(currentDate.getDate() - 2);
             }
         } else if (day <= 5 && day > 0) {
-            if (holiday_dates[year].includes(date.toISOString().slice(0, 10))) {
+            if (holiday_dates[year].includes(currentDate.toISOString().slice(0, 10))) {
                 if (day === 1) {
-                    date.setDate(date.getDate() - 3);
+                    currentDate.setDate(currentDate.getDate() - 3);
                 } else {
-                    date.setDate(date.getDate() - 1);
+                    currentDate.setDate(currentDate.getDate() - 1);
                 }
-            } else if (date.getHours() < 9) {
+            } else if (currentDate.getHours() < 9 || (currentDate.getHours() === 9 && currentDate.getMinutes() < 35)) {
                 if (day === 1) {
-                    date.setDate(date.getDate() - 3);
+                    currentDate.setDate(currentDate.getDate() - 3);
                 } else {
-                    date.setDate(date.getDate() - 1);
+                    currentDate.setDate(currentDate.getDate() - 1);
                 }
             }
         }
@@ -247,40 +251,51 @@ export const filterDataForChart = (tempData, filter) => {
         let startDate, endDate;
 
         if (filter === '1D') {
-            // const day = date.getDay();
             if (day === 0) {
-                startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 2, 9, 30);
-                endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 2, 16, 0);
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 2, 9, 30);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 2, 16, 0);
             } else if (day === 6) {
-                startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 9, 30);
-                endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 16, 0);
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1, 9, 30);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1, 16, 0);
             } else {
-                startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 9, 30);
-                endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 16, 0);
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 9, 30);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 16, 0);
             }
         } else if (filter === '1W') {
-            startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 7, 0, 0);
-            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
+            startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 7, 0, 0);
+            endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 23, 59);
         } else if (filter === '1M') {
-            startDate = new Date(date.getFullYear(), date.getMonth() - 1, date.getDate(), 0, 0);
-            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
+            let startMonth = currentDate.getMonth() - 1;
+            let startYear = currentDate.getFullYear();
+            if (startMonth < 0) {
+                startMonth = 11;
+                startYear--;
+            }
+            startDate = new Date(startYear, startMonth, currentDate.getDate(), 0, 0);
+            endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 23, 59);
         } else if (filter === '3M') {
-            startDate = new Date(date.getFullYear(), date.getMonth() - 3, date.getDate(), 0, 0);
-            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
-        } else if (filter === '1Y') {
-            startDate = new Date(date.getFullYear() - 1, date.getMonth(), date.getDate(), 0, 0);
-            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
+            let startMonth = currentDate.getMonth() - 3;
+            let startYear = currentDate.getFullYear();
+            if (startMonth < 0) {
+                startMonth = startMonth + 12;
+                startYear--;
+            }
+            startDate = new Date(startYear, startMonth, currentDate.getDate(), 0, 0);
+            endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 23, 59);
+        }  else if (filter === '1Y') {
+            startDate = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate(), 0, 0);
+            endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 23, 59);
         } else if (filter === '5Y') {
-            startDate = new Date(date.getFullYear() - 5, date.getMonth(), date.getDate(), 0, 0);
-            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
+            startDate = new Date(currentDate.getFullYear() - 5, currentDate.getMonth(), currentDate.getDate(), 0, 0);
+            endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 23, 59);
         } else {
-            startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 0, 0);
-            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
+            startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1, 0, 0);
+            endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 23, 59);
         }
 
-        return dateInQuestion >= startDate && dateInQuestion <= endDate;
+        return userDate >= startDate && userDate <= endDate;
     });
 
     return filteredData;
-
 }
+

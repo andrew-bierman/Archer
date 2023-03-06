@@ -8,7 +8,7 @@ import { getHoldingStockData, getAllUserHoldings } from "../../store/holdings";
 import ApexCharts from "react-apexcharts";
 
 import "./HomePageStockChart.css";
-import { formatToCurrency } from "../utility";
+import { filterDataForChart, formatToCurrency } from "../utility";
 
 const HomePageStockChart = (props) => {
   // const data = props?.stockData["Time Series (Daily)"];
@@ -133,6 +133,10 @@ const HomePageStockChart = (props) => {
               data.reverse();
             }
 
+            let filteredData = filterDataForChart(data, filter);
+
+
+/*
             let filteredData = data.filter(({ datetime }) => {
               const dateInQuestion = new Date(datetime);
 
@@ -291,6 +295,7 @@ const HomePageStockChart = (props) => {
 
               return dateInQuestion >= startDate && dateInQuestion <= endDate;
             });
+            */
 
             filteredData.forEach((dataPoint) => {
               // debugger
