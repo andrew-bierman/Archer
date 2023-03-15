@@ -4,8 +4,8 @@
 // @import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
 
 // Set your brand colors
-$green: #00C805;
-$red: #FF0000;
+$green: #198754;
+// $red: #FF0000;
 // $purple: #8A4D76;
 // $pink: #FA7C91;
 // $brown: #757763;
@@ -46,6 +46,7 @@ $red: #FF0000;
 // @import "./base/_all.sass";
 @import "./elements/button.sass";
 // @import "./components/dropdown.sass";
+@import "./components/card.sass";
 
 @import "./form/_all.sass";
 @import "./form/select.sass";

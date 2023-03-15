@@ -9,7 +9,7 @@
 }
 
 :root {
-  --green: #00C805;
+  --green: #00c805;
   --white: #ffffff;
   --red: #ff0000;
 }
@@ -167,7 +167,7 @@ nav a.active {
   padding-top: 15px;
   padding-bottom: 15px;
   font-size: 15px;
-  border: 1px solid currentColor;
+  border: 1px solid #ccc;
 }
 
 @media (max-width: 800px) {

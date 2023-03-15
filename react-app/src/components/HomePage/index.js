@@ -13,11 +13,13 @@ const HomePage = () => {
     <div className="homepage-entire-container">
       <div className="homepage-core-container">
         <HomePageStockChart />
-        <div className="homepage-buy-card">
+
+        <div className="card homepage-buy-card">
           <HomePageHoldings />
           <WatchLists />
         </div>
       </div>
+
       <div className="homepage-news-feed">
         <HomePageNewsFeed />
       </div>
