@@ -31,9 +31,11 @@ const Watchlists = () => {
   const [showStocks, setShowStocks] = useState(0);
 
   const [isEditing, setIsEditing] = useState(0);
+
   const [edittedWatchlistName, setEdittedWatchlistName] = useState("");
 
   const [newWatchlistName, setNewWatchlistName] = useState("");
+
   const dispatch = useDispatch();
   const watchlists = useSelector((state) => state.watchlists.allWatchlists);
   const watchListStockData = useSelector(

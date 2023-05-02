@@ -37,7 +37,6 @@ const CreateWatchListModal = () => {
     setNewWatchlistName("");
     setLoading(false);
     setIsAdding(false);
-
     closeModal();
   };
 

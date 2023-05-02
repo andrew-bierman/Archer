@@ -298,4 +298,3 @@ export const filterDataForChart = (tempData, filter) => {
 
     return filteredData;
 }
-
