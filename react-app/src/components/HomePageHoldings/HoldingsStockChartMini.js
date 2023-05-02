@@ -54,11 +54,19 @@ const HoldingsStockChartMini = ({stockSymbol}) => {
         const dateInQuestion = new Date(datetime);
 
         const date = new Date()
+        const day = date.getDay();
+        if (day >= 6 || day === 0) {
+          if (day === 6) {
+            date.setDate(date.getDate() - 1);
+          } else if (day === 0) {
+            date.setDate(date.getDate() - 2);
+          }
+        }
 
         let startDate, endDate;
 
         if (filter === '1D') {
-          const day = date.getDay();
+          // const day = date.getDay();
           if (day === 0) {
             startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 2, 9, 30);
             endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 2, 16, 0);

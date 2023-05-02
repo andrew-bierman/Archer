@@ -1,0 +1,30 @@
+.to-top-btn {
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 3%;
+  right: 2%;
+  border: none;
+  border-radius: 50%;
+  transition: all 0.4s ease-in-out;
+}
+.to-top-btn:hover,
+.to-top-btn:focus {
+  background-color: transparent;
+  border: 1px solid #b4aeae;
+  transform: translateY(-20px);
+}
+
+.to-top-btn:hover i,
+.to-top-btn:focus i {
+  color: rgb(110, 64, 201);
+}
+
+@media only screen and (max-width: 767.98px) {
+  .to-top-btn {
+    display: none;
+  }
+}

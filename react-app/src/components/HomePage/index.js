@@ -6,22 +6,25 @@ import HomePageHoldings from "../HomePageHoldings";
 import StockListSearch from "../Search";
 import HomePageStockChart from "../HomePageStockChart";
 import HomePageNewsFeed from "../HomePageNewsFeed";
-import './HomePage.css';
+import "./HomePage.css";
 
 const HomePage = () => {
-    return (
-        <div className="homepage-main-container">
-            <div className="homepage-main-left-side">
-                {/* <StockListSearch /> */}
-                <HomePageStockChart />
-                <HomePageNewsFeed />
-            </div>
-            <div className="homepage-main-right-side">
-                <HomePageHoldings />
-                <WatchLists />  
-            </div>
+  return (
+    <div className="container">
+      <div className="homepage-core-container">
+        <HomePageStockChart />
+
+        <div className="card homepage-buy-card">
+          <HomePageHoldings />
+          <WatchLists />
         </div>
-    );
-}
+      </div>
+
+      <div className="homepage-news-feed">
+        <HomePageNewsFeed />
+      </div>
+    </div>
+  );
+};
 
 export default HomePage;

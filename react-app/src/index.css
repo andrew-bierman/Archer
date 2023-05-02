@@ -1,12 +1,17 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* @import "bulma/sass/utilities/_all.sass";
+@import "bulma/sass/components/dropdown.sass"; */
 
 /* TODO Add site wide styles */
 
 * {
   /* font-family: 'Sen', 'Open Sans', sans-serif; */
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
+}
+
+:root {
+  --green: #00c805;
+  --white: #ffffff;
+  --red: #ff0000;
 }
 
 body {
@@ -35,12 +40,20 @@ nav {
   justify-content: space-between;
   align-items: center;
   width: auto;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
   height: fit-content;
   padding: 30px 20px;
+  background-color: white;
+  z-index: 999;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
 
   text-decoration: none;
 
-  position: relative;
+  position: -webkit-sticky;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
@@ -101,10 +114,12 @@ nav a.active {
 }
 
 .navbar-logo-and-name.logo-color-dark img {
+  -webkit-filter: invert(0%);
   filter: invert(0%);
 }
 
 .navbar-logo-and-name.logo-color-light img {
+  -webkit-filter: invert(100%);
   filter: invert(100%);
 }
 
@@ -129,7 +144,6 @@ nav a.active {
   align-items: center;
   justify-content: flex-end;
   width: 100%;
-  
 }
 
 .navbar-right-side-container {
@@ -140,6 +154,8 @@ nav a.active {
   /* flex-grow: 1; */
 
   width: 40%;
+  min-width: -webkit-fit-content;
+  min-width: -moz-fit-content;
   min-width: fit-content;
 }
 
@@ -151,7 +167,7 @@ nav a.active {
   padding-top: 15px;
   padding-bottom: 15px;
   font-size: 15px;
-  border: 1px solid currentColor;
+  border: 1px solid #ccc;
 }
 
 @media (max-width: 800px) {
@@ -163,13 +179,9 @@ nav a.active {
   nav {
     flex-direction: row;
     align-items: flex-start;
-    position: sticky;
-    top: 0;
-    left: 0;
-    right: 0;
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
     height: fit-content;
-    background-color: white;
-    z-index: 100;
   }
 
   nav ul {
@@ -208,7 +220,6 @@ nav a.active {
     box-sizing: border-box;
     /* overflow: hidden; */
   }
-  
 
   .navbar-menu.open {
     transform: translateY(0);
@@ -226,7 +237,6 @@ nav a.active {
     justify-content: center;
 
     width: 100%;
-    
   }
 
   .navbar-right-side {
@@ -239,7 +249,6 @@ nav a.active {
 
   .navbar-menu-toggle {
     display: block;
-
   }
 
   .navbar-menu-toggle-line {
@@ -249,28 +258,25 @@ nav a.active {
     background-color: currentColor;
     transition: all 0.3s ease;
   }
-  
+
   /* Add transform to the 3 toggle lines to create a cross when opened */
-  
+
   .navbar-menu-toggle.open .navbar-menu-toggle-line {
     transition: all 0.3s ease;
   }
-  
+
   .navbar-menu-toggle-line.open:nth-child(1) {
     transform: rotate(45deg) translate(5px, 5px);
   }
-  
+
   .navbar-menu-toggle-line.open:nth-child(2) {
     display: none;
   }
-  
-  .navbar-menu-toggle-line.open:nth-child(3) {
-    transform: rotate(-45deg) 
-  }
-  
-  
-}
 
+  .navbar-menu-toggle-line.open:nth-child(3) {
+    transform: rotate(-45deg);
+  }
+}
 
 .flex {
   display: flex;
@@ -357,7 +363,7 @@ nav a.active {
 }
 
 .signup-page-splash-image-container {
-  background-image: url('./images/SignUpPage/stocks.png');
+  background-image: url("./images/SignUpPage/stocks.png");
   background-color: green;
   background-size: 100%;
   background-position: bottom;
@@ -414,4 +420,19 @@ td:last-child,
 th:nth-last-child(2),
 td:nth-last-child(2) {
   text-align: right;
+}
+
+@media only screen and (max-width: 767.98px) {
+  .search-results-dropdown {
+    position: absolute;
+    top: 100px;
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .container {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
 }

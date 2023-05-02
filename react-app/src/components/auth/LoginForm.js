@@ -69,6 +69,7 @@ const LoginForm = () => {
               type='text'
               placeholder='Email'
               autocomplete="on"
+              max={100}
               value={email}
               onChange={updateEmail}
               required={true}
@@ -81,6 +82,7 @@ const LoginForm = () => {
               type='password'
               placeholder='Password'
               autocomplete="on"
+              max={100}
               value={password}
               onChange={updatePassword}
               required={true}

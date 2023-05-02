@@ -4,12 +4,7 @@ import { Link } from "react-router-dom";
 import { formatToCurrency, isObjectEmpty } from "../utility";
 
 import { getHoldingCurrentPriceFinnHub, getAllUserHoldings } from "../../store/holdings";
-// import {getSingleStockCurrentPriceYahoo} from '../../store/stocks';
-import { getAllStocks } from "../../store/stockList";
-import StockList from "../StockList";
-import WatchListStockChartMini from "../WatchListsStockChartMini";
 import HoldingsStockChartMini from "./HoldingsStockChartMini";
-import OpenModalButton from "../OpenModalButton";
 
 import './HomePageHoldings.css';
 
@@ -62,28 +57,27 @@ const HomePageHoldings = () => {
 	};
 
 	useEffect(() => {
-		setLoading(true);
-
-		if(holdings.length === 0){
-			dispatch(getAllUserHoldings())
-		} else {
-			hitAPI()
+		if(user && !holdings){
+			dispatch(getAllUserHoldings());
 		}
+	  }, []);
 
-		// hitAPI()
-
-		const timer = setTimeout(() => {
-			// hitAPI();
-		}, 5000);
-
-		// console.log(state)
+	useEffect(() => {
+		setLoading(true);
+	
+		if (!holdings) return;
+	
+		if (isCalling) return;
+		setIsCalling(true);
+	
+		hitAPI();
+	
 		setLoading(false);
-
-		console.log("holdings", holdings)
-		// console.log(holdingsStockData['COIN'])
-
-		return () => clearTimeout(timer);
-	}, [dispatch, holdings]);
+		setIsCalling(false);
+	
+		console.log("holdings", holdings);
+	}, [holdings, isCalling]);
+	
 
 
 
@@ -101,7 +95,7 @@ const HomePageHoldings = () => {
 				</div>
 			</div>
 			<>
-				{holdings.length > 0 ? (
+				{!isObjectEmpty(holdings) && (holdings.length > 0) ? (
 					<>
 						<div className="watchlist-stock-list">
 							{holdings.map((holding) => {

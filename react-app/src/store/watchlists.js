@@ -85,6 +85,31 @@ export const fetchWatchlists = () => async (dispatch) => {
     }
 };
 
+// export const fetchWatchlists = () => async (dispatch, getState) => {
+//     const response = await fetch('/api/watchlists/');
+//     if (response.ok) {
+//         const data = await response.json();
+//         dispatch(getAllUserWatchlists(data));
+//         const watchlists = data?.watchlists ?? [];
+//         const watchListStockData = getState()?.watchlists.watchlistStockData;
+//         if (watchlists.length > 0) {
+//             watchlists.forEach(watchlist => {
+//                 watchlist?.stocks?.forEach((stock) => {
+//                     // console.log(stock.symbol)
+//                     if (!watchListStockData[stock.symbol]) {
+//                         dispatch(getStockCurrentPriceFinnHub(stock.symbol))
+//                         // await dispatch(getWatchlistStockData(stock.symbol))
+//                         dispatch(getWatchlistStockDataDaily(stock.symbol))
+//                     }
+//                 })
+//             })
+//         }
+//     } else {
+//         console.log('Error fetching watchlists');
+//     }
+// };
+
+
 export const createNewWatchlist = (newWatchlistName) => async (dispatch) => {
     // console.log(newWatchlistName)
 

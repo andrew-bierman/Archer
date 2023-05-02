@@ -5,7 +5,7 @@ import { getSingleStockDataFromAPI } from '../../store/stocks';
 import ApexCharts from 'react-apexcharts'
 import moment from 'moment';
 
-import { isObjectEmpty } from '../utility';
+import { filterDataForChart, isObjectEmpty } from '../utility';
 
 import './WatchListStockChart.css';
 
@@ -46,6 +46,10 @@ const WatchListStockChartMini = ({ stockSymbol }) => {
       if (new Date(tempData[0].datetime) > new Date(tempData[tempData.length - 1].datetime)) {
         tempData.reverse(); // Reverse the order of the data
       }
+
+      let filteredData = filterDataForChart(tempData, filter);
+
+      /*
 
       let filteredData = tempData.filter(({ datetime }) => {
         // debugger
@@ -90,6 +94,8 @@ const WatchListStockChartMini = ({ stockSymbol }) => {
 
         return dateInQuestion >= startDate && dateInQuestion <= endDate;
       });
+
+      */
 
       let seriesData = filteredData.map(item => {
         return { x: item.datetime, y: item.close }
