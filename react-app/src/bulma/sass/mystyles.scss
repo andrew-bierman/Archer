@@ -41,7 +41,7 @@ $green: #198754;
 // @import "../bulma.sass";
 
 @import "./utilities/_all.sass";
-// @import "./helpers/_all.sass";
+@import "./helpers/_all.sass";
 
 // @import "./base/_all.sass";
 @import "./elements/button.sass";
@@ -50,3 +50,9 @@ $green: #198754;
 
 @import "./form/_all.sass";
 @import "./form/select.sass";
+
+@import "./layout/footer.sass";
+@import "./grid/columns.sass";
+
+@import "./elements/container.sass";
+@import "./elements/table.sass";

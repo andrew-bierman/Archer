@@ -155,7 +155,7 @@ function StockPage() {
   return (
     <>
       {!loading && user ? (
-        <div className="stock-page-container">
+        <div className="container">
           <div className="stock-page-core-container">
             <div className="stock-page-stock-info">
               {/* <h2>{stockInfo?.symbol?.toUpperCase()}</h2> */}

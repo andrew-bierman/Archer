@@ -1,25 +1,38 @@
 #modal {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  #modal-background {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-  }
-  
-  #modal-content {
-    position: absolute;
-    background-color:white;
-    border-radius: 20px;
-  }
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#modal-background {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+#modal-content {
+  position: absolute;
+  background-color: white;
+  border-radius: 20px;
+  box-sizing: border-box;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  min-width: 400px;
+}
+
+.input {
+  box-sizing: border-box;
+}
+
+button {
+  border: unset;
+}

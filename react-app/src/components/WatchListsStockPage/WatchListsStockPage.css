@@ -2,18 +2,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-
-  /* position: absolute; */
-
-  /* margin: auto; */
-
   padding: 20px;
-
-  width: 300px;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
-  overflow-y: auto;
 
   border-radius: 5px;
 }
@@ -44,9 +36,7 @@
   width: 100%;
 }
 
-.watchlist-modal-create-watchlist-stock-page-button-and-input-container
-  form
-  input {
+.watchlist-modal-create-watchlist-stock-page-button-and-input-container form {
   width: 100%;
 }
 
@@ -85,8 +75,9 @@
   margin-bottom: 10px;
 
   border-radius: 5px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   outline: none;
+  color: #198754;
 }
 
 .watchlist-modal-individual {

@@ -10,7 +10,7 @@ import "./HomePage.css";
 
 const HomePage = () => {
   return (
-    <div className="homepage-entire-container">
+    <div className="container">
       <div className="homepage-core-container">
         <HomePageStockChart />
 

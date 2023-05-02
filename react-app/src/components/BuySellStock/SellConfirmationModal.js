@@ -77,7 +77,7 @@ const SellConfirmationModal = ({ purchaseInfo, stockInfo }) => {
         {/* <div className='watchlist-individual-header'> */}
         <form onSubmit={handleFormSubmit}>
           <button
-            className="button is-success watchlist-modal-submit-button"
+            className="button is-danger watchlist-modal-submit-button"
             onClick={() => handleSell()}
           >
             Confirm

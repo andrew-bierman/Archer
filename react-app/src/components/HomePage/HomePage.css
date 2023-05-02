@@ -25,6 +25,7 @@
 }
 
 .homepage-buy-card {
+  max-width: 380px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -33,10 +34,11 @@
   border-radius: 20px;
   border: 1px solid #ccc;
   /* border: 1px solid black; */
-  width: 20%;
+  width: 25%;
   position: fixed;
   top: 140px;
-  right: 7%;
+  right: 12%;
+  box-sizing: border-box;
 
   max-height: 70vh;
   overflow-x: hidden;
@@ -73,6 +75,7 @@
 @media (max-width: 1199.98px) {
   .homepage-buy-card {
     width: 30%;
+    right: 5%;
   }
 }
 @media (max-width: 991.98px) {

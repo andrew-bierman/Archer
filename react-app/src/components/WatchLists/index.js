@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   fetchWatchlists,
   createNewWatchlist,
@@ -12,16 +12,16 @@ import {
   getWatchlistStockData,
   getWatchlistStockDataDaily,
   getStockCurrentPriceFinnHub,
-} from '../../store/watchlists';
+} from "../../store/watchlists";
 // import {getSingleStockCurrentPriceYahoo} from '../../store/stocks';
-import { getAllStocks } from '../../store/stockList';
-import StockList from '../StockList';
-import WatchListStockChartMini from '../WatchListsStockChartMini';
-import OpenModalButton from '../OpenModalButton';
-import CreateWatchListModal from './CreateWatchListModal';
-import EditWatchListModal from './EditWatchListModal';
-import DeleteWatchListModal from './DeleteWatchListModal';
-import './WatchLists.css';
+import { getAllStocks } from "../../store/stockList";
+import StockList from "../StockList";
+import WatchListStockChartMini from "../WatchListsStockChartMini";
+import OpenModalButton from "../OpenModalButton";
+import CreateWatchListModal from "./CreateWatchListModal";
+import EditWatchListModal from "./EditWatchListModal";
+import DeleteWatchListModal from "./DeleteWatchListModal";
+import "./WatchLists.css";
 
 const Watchlists = () => {
   const [loading, setLoading] = useState(true);
@@ -31,9 +31,9 @@ const Watchlists = () => {
   const [showStocks, setShowStocks] = useState(0);
 
   const [isEditing, setIsEditing] = useState(0);
-  const [edittedWatchlistName, setEdittedWatchlistName] = useState('');
+  const [edittedWatchlistName, setEdittedWatchlistName] = useState("");
 
-  const [newWatchlistName, setNewWatchlistName] = useState('');
+  const [newWatchlistName, setNewWatchlistName] = useState("");
   const dispatch = useDispatch();
   const watchlists = useSelector((state) => state.watchlists.allWatchlists);
   const watchListStockData = useSelector(
@@ -53,7 +53,7 @@ const Watchlists = () => {
 
             // await dispatch(getWatchlistStockData(stock.symbol))
             if (
-              typeof watchListStockData[stock.symbol]?.dailyData === 'undefined'
+              typeof watchListStockData[stock.symbol]?.dailyData === "undefined"
             ) {
               await dispatch(getWatchlistStockDataDaily(stock.symbol)).then(
                 () => setIsCalling(false)
@@ -122,7 +122,7 @@ const Watchlists = () => {
       async () => await dispatch(fetchWatchlists())
     );
 
-    setNewWatchlistName('');
+    setNewWatchlistName("");
     setLoading(false);
     setIsAdding(false);
   };
@@ -157,7 +157,7 @@ const Watchlists = () => {
           <OpenModalButton
             modalComponent={<CreateWatchListModal />}
             className="watchlist-create-button"
-            faIcon={'fa-solid fa-plus'}
+            faIcon={"fa-solid fa-plus"}
             // buttonText={'Create Watchlist'}
           />
         </span>
@@ -211,7 +211,7 @@ const Watchlists = () => {
                             <EditWatchListModal watchlist={watchlist} />
                           }
                           className="watchlist-individual-header watchlist-individual-button"
-                          faIcon={'fa-regular fa-pen-to-square'}
+                          faIcon={"fa-regular fa-pen-to-square"}
                           // buttonText={'Create Watchlist'}
                         />
                       </div>
@@ -222,7 +222,7 @@ const Watchlists = () => {
                             <DeleteWatchListModal watchlist={watchlist} />
                           }
                           className="watchlist-individual-header watchlist-individual-button"
-                          faIcon={'fa-solid fa-trash-can'}
+                          faIcon={"fa-solid fa-trash-can"}
                           // buttonText={'Create Watchlist'}
                         />
                       </div>

@@ -265,7 +265,10 @@ const BuySellStock = ({ stockInfo, stockCurrentPrice }) => {
                     {parseFloat(quantity) === 0 ||
                     parseFloat(quantity) > parseFloat(currentHoldingShares) ||
                     typeof currentHoldingShares === "undefined" ? (
-                      <button className="stock-page-sell" disabled>
+                      <button
+                        className="button stock-page-sell is-danger"
+                        disabled
+                      >
                         Sell
                       </button>
                     ) : (

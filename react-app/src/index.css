@@ -429,3 +429,10 @@ td:nth-last-child(2) {
     width: 90%;
   }
 }
+
+@media screen and (max-width: 1023px) {
+  .container {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}

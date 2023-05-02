@@ -1,33 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Route, Switch , Redirect} from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import './assets/main.css'
-import './bulma/css/mystyles.css'
+import React, { useState, useEffect } from "react";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import "./assets/main.css";
+import "./bulma/css/mystyles.css";
 
-import LoginForm from './components/auth/LoginForm';
-import SignUpForm from './components/auth/SignUpForm';
-import NavBar from './components/NavBar';
-import ProtectedRoute from './components/auth/ProtectedRoute';
-import UsersList from './components/UsersList';
-import User from './components/User';
-import { authenticate } from './store/session';
-import HomePage from './components/HomePage';
-import StockChart from './components/StockChart';
-import StockPage from './components/StockPage';
-import Watchlists from './components/WatchLists';
-import StockList from './components/StockList';
-import Profile from './components/Profile';
-import LandingPage from './components/LandingPage';
+import LoginForm from "./components/auth/LoginForm";
+import SignUpForm from "./components/auth/SignUpForm";
+import NavBar from "./components/NavBar";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import UsersList from "./components/UsersList";
+import User from "./components/User";
+import { authenticate } from "./store/session";
+import HomePage from "./components/HomePage";
+import StockChart from "./components/StockChart";
+import StockPage from "./components/StockPage";
+import Watchlists from "./components/WatchLists";
+import StockList from "./components/StockList";
+import Profile from "./components/Profile";
+import LandingPage from "./components/LandingPage";
 import ScrollToTopButton from "./components/ScrollToToButton";
+import Footer from "./components/Footer";
 
 function App() {
   const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
 
-  const user = useSelector(state => state.session.user);
+  const user = useSelector((state) => state.session.user);
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       await dispatch(authenticate());
       setLoaded(true);
     })();
@@ -42,33 +43,29 @@ function App() {
       <NavBar />
       <ScrollToTopButton />
       <Switch>
-        <Route path='/login' exact={true}>
+        <Route path="/login" exact={true}>
           <LoginForm />
         </Route>
-        <Route path='/sign-up' exact={true}>
+        <Route path="/sign-up" exact={true}>
           <SignUpForm />
         </Route>
-        <ProtectedRoute path='/users' exact={true} >
-          <UsersList/>
+        <ProtectedRoute path="/users" exact={true}>
+          <UsersList />
         </ProtectedRoute>
-        <ProtectedRoute path='/users/:userId' exact={true} >
+        <ProtectedRoute path="/users/:userId" exact={true}>
           <User />
         </ProtectedRoute>
-        <ProtectedRoute path='/profile' exact={true} >
+        <ProtectedRoute path="/profile" exact={true}>
           <Profile />
         </ProtectedRoute>
-        <Route path='/stocks/:symbol' exact={true} >
+        <Route path="/stocks/:symbol" exact={true}>
           <StockPage />
         </Route>
-        <Route path='/' exact={true} >
-          {
-            user ?
-            <HomePage />
-            :
-            <LandingPage />
-          }
+        <Route path="/" exact={true}>
+          {user ? <HomePage /> : <LandingPage />}
         </Route>
       </Switch>
+      <Footer />
     </BrowserRouter>
   );
 }

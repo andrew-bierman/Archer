@@ -1,0 +1,10 @@
+footer {
+  border-top: 1px solid #ebebeb;
+  position: relative;
+  margin-top: 100px;
+}
+.footer-links a {
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.3s ease-in;
+}

@@ -1,51 +1,54 @@
 .big-chart-container {
-    display: block;
+  display: block;
 
-    margin-left: auto;
-    margin-right: auto;
+  margin-left: auto;
+  margin-right: auto;
 
-    width: 100%;
+  width: 100%;
 
-    margin-top: 20px;
-    margin-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 
-    border-radius: 5px;
-    /* border: 1px solid #000000; */
-    border: none;
+  border-radius: 5px;
+  /* border: 1px solid #000000; */
+  border: none;
 }
-
+.stock-chart-filter-buttons-main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .stock-chart-filter-buttons-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
 
-    width: 100%;
+  width: 100%;
 }
 
 .stock-chart-filter-buttons-container button {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
 
-    height: 50px;
+  height: 50px;
 
-    margin: 10px;
+  margin: 10px;
 
-    outline: none;
-    border: none;
-    border-bottom: #000000;
+  outline: none;
+  border: none;
+  border-bottom: #000000;
 
-    background-color: transparent;
+  background-color: transparent;
 
-    font-weight: bold;
-    text-align: center;
-
+  font-weight: bold;
+  text-align: center;
 }
 
 .active-filter-button {
-    color: green
+  color: green;
 }
 
 /* .stock-chart-filter-buttons-container button:focus {
@@ -58,82 +61,91 @@
 
 } */
 
-
 .apexcharts-canvas {
-    margin-left: auto;
-    margin-right: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .stock-chart-chart-type-dropdown-container {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-    flex-wrap: nowrap;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
 
-    width: 100%;
+  width: 100%;
 }
 
-.stock-chart-chart-type-dropdown-container-dropdown-wrapper{
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-    flex-wrap: nowrap;
+.stock-chart-chart-type-dropdown-container-dropdown-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
 
-    width: fit-content;
+  width: -webkit-fit-content;
 
-    background-color: white;
+  width: -moz-fit-content;
+
+  width: fit-content;
+
+  background-color: white;
 }
 
 .stock-chart-chart-type-dropdown-container select {
-    width: 200px;
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
+  width: 200px;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
 
-    /* background-color: transparent; */
+  /* background-color: transparent; */
 
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-image: url('data:image/svg+xml;utf8;');
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8;");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  cursor: pointer;
 }
 
 .stock-chart-chart-type-dropdown-container select:focus {
-    outline: none;
-    box-shadow: 0 0 5px #8bc9ff;
+  outline: none;
+  box-shadow: 0 0 5px #8bc9ff;
 }
 
 .stock-chart-chart-type-dropdown-container option {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 .stock-chart-chart-type-dropdown-container span {
-    color: black;
-    padding: 0 10px;
+  color: black;
+  padding: 0 10px;
 }
 
 .stock-chart-chart-type-dropdown-container select::-ms-expand {
-    display: none;
+  display: none;
 }
 
 .stock-chart-chart-type-dropdown-container select::-webkit-scrollbar {
-    width: 0.5em;
+  width: 0.5em;
 }
 
 .stock-chart-chart-type-dropdown-container select::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 1rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
 }
 
 .stock-chart-chart-type-dropdown-container select::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
-    border-radius: 1rem;
+  background-color: #f1f1f1;
+  border-radius: 1rem;
+}
+@media (max-width: 575.98px) {
+  .stock-chart-filter-buttons-main-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
