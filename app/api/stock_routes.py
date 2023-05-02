@@ -7,8 +7,8 @@ import time
 from datetime import datetime, timedelta
 import finnhub
 import pytz
-import pandas_market_calendars as mcal
-import pandas as pd
+# import pandas_market_calendars as mcal
+# import pandas as pd
 
 stock_routes = Blueprint('stocks', __name__)
 
