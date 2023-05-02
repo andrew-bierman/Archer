@@ -26,8 +26,8 @@
     "yahoo-finance": "^0.3.8"
   },
   "scripts": {
-    "start": "npm run css-watch & react-scripts start",
-    "build": "CI=false npm run build:css && react-scripts build",
+    "start": "react-scripts start",
+    "build": "CI=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "css-build": "node-sass src/bulma/sass/mystyles.scss src/bulma/css/mystyles.css",
